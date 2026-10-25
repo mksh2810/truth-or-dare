@@ -1,41 +1,42 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { StickerAvatar } from '../../components/StickerAvatar';
 import { RankLabel, XpBar } from '../../components/RankLabel';
 import { Chit } from '../../components/Chit';
 import { Button } from '../../components/Button';
 import { BottomNav } from '../../components/BottomNav';
-import { MOCK_USER } from '../../data/mock';
+import { useAuthStore } from '../auth/authStore';
+import { xpForNext } from '../../game/xp';
 
-export interface HomeScreenProps {
-  user?: typeof MOCK_USER;
-  onPlayFriends?: () => void;
-  onOpenDailyChit?: () => void;
-  onDailySpin?: () => void;
-  onMyChits?: () => void;
-}
+export const HomeScreen: React.FC = () => {
+  const navigate = useNavigate();
+  const { profile } = useAuthStore();
 
-export const HomeScreen: React.FC<HomeScreenProps> = ({
-  user = MOCK_USER,
-  onPlayFriends,
-  onOpenDailyChit,
-  onDailySpin,
-  onMyChits,
-}) => {
+  const userLevel = profile?.level || 1;
+  const currentXp = profile?.xp || 0;
+  const neededXp = xpForNext(userLevel);
+  const displayName = profile?.displayName || 'Player';
+  const avatarId = profile?.avatarId || 'fox';
+
   return (
     <div className="w-full flex-1 flex flex-col justify-between pb-24 max-w-[390px] mx-auto">
       {/* Top Row: User status WITHOUT a card box (Section 3.2 Spacious rule) */}
       <div className="pt-2 pb-4 space-y-3">
         <div className="flex items-center gap-3">
-          <StickerAvatar avatarId={user.avatarId} size="md" />
+          <StickerAvatar
+            avatarId={avatarId}
+            size="md"
+            onClick={() => navigate('/setup')}
+          />
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between">
               <h2 className="font-display text-xl font-black text-ink truncate">
-                {user.displayName}
+                {displayName}
               </h2>
-              <RankLabel level={user.level} />
+              <RankLabel level={userLevel} />
             </div>
             <div className="mt-1">
-              <XpBar currentXp={user.xp} neededXp={user.neededXp} />
+              <XpBar currentXp={currentXp} neededXp={neededXp} />
             </div>
           </div>
         </div>
@@ -57,9 +58,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               variant="primary"
               size="md"
               fullWidth
-              onClick={onOpenDailyChit}
+              onClick={() => navigate('/create')}
             >
-              Open It
+              Start Table Pass
             </Button>
           </div>
         </div>
@@ -75,27 +76,38 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 Friends Table
               </h3>
             </div>
-            <span className="text-2xl">🍻</span>
+            <span className="text-2xl">🎲</span>
           </div>
 
           <p className="font-sans text-sm text-ink-muted">
             Write chits, spin, get judged by the owl.
           </p>
 
-          <Button
-            variant="secondary"
-            size="md"
-            fullWidth
-            onClick={onPlayFriends}
-          >
-            Play Table
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="secondary"
+              size="md"
+              fullWidth
+              onClick={() => navigate('/create')}
+            >
+              Create
+            </Button>
+            <Button
+              variant="quiet"
+              size="md"
+              className="border-2 border-ink bg-chit-shade"
+              fullWidth
+              onClick={() => navigate('/join')}
+            >
+              Join
+            </Button>
+          </div>
         </div>
 
         {/* Block 3: Row of Two Small Square Tiles (Icon and Title only) */}
         <div className="grid grid-cols-2 gap-3">
           <button
-            onClick={onDailySpin}
+            onClick={() => navigate('/table/local/write')}
             className="p-4 bg-chit border-2 border-ink shadow-hard-sm rounded-btn flex flex-col items-center justify-center gap-1.5 btn-press"
           >
             <span className="text-2xl">🎯</span>
@@ -105,12 +117,12 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           </button>
 
           <button
-            onClick={onMyChits}
+            onClick={() => navigate('/loot')}
             className="p-4 bg-chit border-2 border-ink shadow-hard-sm rounded-btn flex flex-col items-center justify-center gap-1.5 btn-press"
           >
-            <span className="text-2xl">📝</span>
+            <span className="text-2xl">🍾</span>
             <span className="font-mono text-xs font-bold uppercase text-ink">
-              My Chits
+              Loot Shelf
             </span>
           </button>
         </div>

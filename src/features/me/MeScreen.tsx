@@ -1,30 +1,42 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { StickerAvatar } from '../../components/StickerAvatar';
 import { RankLabel, XpBar } from '../../components/RankLabel';
 import { BottomNav } from '../../components/BottomNav';
 import { Sheet } from '../../components/Sheet';
-import { MOCK_USER } from '../../data/mock';
+import { useAuthStore } from '../auth/authStore';
+import { xpForNext } from '../../game/xp';
 
-export interface MeScreenProps {
-  user?: typeof MOCK_USER;
-  onEditProfile?: () => void;
-  onSignOut?: () => void;
-  onDeleteData?: () => void;
-}
-
-export const MeScreen: React.FC<MeScreenProps> = ({
-  user = MOCK_USER,
-  onEditProfile,
-  onSignOut,
-  onDeleteData,
-}) => {
+export const MeScreen: React.FC = () => {
+  const navigate = useNavigate();
+  const { profile, logout, deleteUserAndData } = useAuthStore();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
 
-  const passRate = user.gamesPlayed > 0
-    ? Math.round((user.passes / (user.passes + user.fails)) * 100)
-    : 0;
+  const level = profile?.level || 1;
+  const xp = profile?.xp || 0;
+  const neededXp = xpForNext(level);
+  const gamesPlayed = profile?.gamesPlayed || 0;
+  const passes = profile?.passes || 0;
+  const fails = profile?.fails || 0;
+  const bestStreak = profile?.bestStreak || 0;
+
+  const passRate = gamesPlayed > 0
+    ? Math.round((passes / Math.max(1, passes + fails)) * 100)
+    : 100;
+
+  const handleSignOut = async () => {
+    await logout();
+    navigate('/');
+  };
+
+  const handleDelete = async () => {
+    if (window.confirm('Are you sure you want to delete all your game data? This cannot be undone.')) {
+      await deleteUserAndData();
+      navigate('/');
+    }
+  };
 
   return (
     <div className="w-full flex-1 flex flex-col justify-between pb-24 max-w-[390px] mx-auto">
@@ -32,21 +44,21 @@ export const MeScreen: React.FC<MeScreenProps> = ({
         {/* User Card */}
         <div className="p-5 bg-chit border-2 border-ink shadow-hard rounded-btn space-y-4">
           <div className="flex items-center gap-4">
-            <StickerAvatar avatarId={user.avatarId} size="lg" />
+            <StickerAvatar avatarId={profile?.avatarId || 'owl'} size="lg" />
             <div className="flex-1 min-w-0">
               <h2 className="font-display text-2xl font-black text-ink truncate">
-                {user.displayName}
+                {profile?.displayName || 'Player'}
               </h2>
               <div className="mt-1">
-                <RankLabel level={user.level} />
+                <RankLabel level={level} />
               </div>
             </div>
           </div>
 
-          <XpBar currentXp={user.xp} neededXp={user.neededXp} />
+          <XpBar currentXp={xp} neededXp={neededXp} />
 
           <button
-            onClick={onEditProfile}
+            onClick={() => navigate('/setup')}
             className="w-full py-2 bg-chit-shade text-ink border border-ink rounded font-mono text-xs font-bold uppercase btn-press"
           >
             Edit Persona
@@ -56,7 +68,7 @@ export const MeScreen: React.FC<MeScreenProps> = ({
         {/* 3 Stats in Mono (Games, Pass Rate, Best Streak) */}
         <div className="grid grid-cols-3 gap-2">
           <div className="p-3 bg-chit border-2 border-ink shadow-hard-sm rounded-btn text-center">
-            <div className="font-mono text-2xl font-black text-ink">{user.gamesPlayed}</div>
+            <div className="font-mono text-2xl font-black text-ink">{gamesPlayed}</div>
             <div className="font-mono text-[10px] uppercase text-ink-muted">Games</div>
           </div>
           <div className="p-3 bg-chit border-2 border-ink shadow-hard-sm rounded-btn text-center">
@@ -64,12 +76,12 @@ export const MeScreen: React.FC<MeScreenProps> = ({
             <div className="font-mono text-[10px] uppercase text-ink-muted">Pass Rate</div>
           </div>
           <div className="p-3 bg-chit border-2 border-ink shadow-hard-sm rounded-btn text-center">
-            <div className="font-mono text-2xl font-black text-dare">{user.bestStreak}</div>
+            <div className="font-mono text-2xl font-black text-dare">{bestStreak}</div>
             <div className="font-mono text-[10px] uppercase text-ink-muted">Streak</div>
           </div>
         </div>
 
-        {/* Settings & Danger Zone */}
+        {/* Settings & Account row */}
         <div className="p-4 bg-chit border-2 border-ink shadow-hard-sm rounded-btn space-y-3">
           <button
             onClick={() => setIsSettingsOpen(true)}
@@ -115,13 +127,13 @@ export const MeScreen: React.FC<MeScreenProps> = ({
 
           <div className="pt-4 border-t-2 border-ink space-y-2">
             <button
-              onClick={onSignOut}
+              onClick={handleSignOut}
               className="w-full h-11 bg-chit-shade text-ink border-2 border-ink rounded-btn font-mono text-xs font-bold uppercase btn-press"
             >
               Sign Out
             </button>
             <button
-              onClick={onDeleteData}
+              onClick={handleDelete}
               className="w-full h-11 bg-fail text-white border-2 border-ink rounded-btn font-mono text-xs font-bold uppercase btn-press"
             >
               Delete My Data

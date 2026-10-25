@@ -11,15 +11,13 @@ import { JoinTableScreen } from '../features/table/JoinTableScreen';
 import { LobbyScreen } from '../features/table/LobbyScreen';
 import { WriteChitsScreen } from '../features/write/WriteChitsScreen';
 import { SpinScreen } from '../features/play/SpinScreen';
-import { PerformTruthScreen } from '../features/play/PerformTruthScreen';
-import { PerformDareScreen } from '../features/play/PerformDareScreen';
-import { VoteScreen } from '../features/vote/VoteScreen';
-import { ResultScreen } from '../features/vote/ResultScreen';
 import { SummaryScreen } from '../features/table/SummaryScreen';
 import { LootScreen } from '../features/loot/LootScreen';
 import { MeScreen } from '../features/me/MeScreen';
+import { AuthGuard } from '../features/auth/AuthGuard';
 
 export const routes: RouteObject[] = [
+  // Public Routes
   {
     path: '/',
     element: <SplashScreen />,
@@ -29,44 +27,8 @@ export const routes: RouteObject[] = [
     element: <OnboardingScreen />,
   },
   {
-    path: '/setup',
-    element: <ProfileSetupScreen />,
-  },
-  {
-    path: '/home',
-    element: <HomeScreen />,
-  },
-  {
-    path: '/create',
-    element: <CreateTableScreen />,
-  },
-  {
     path: '/join/:code?',
-    element: <JoinTableScreen />,
-  },
-  {
-    path: '/table/:code',
-    element: <LobbyScreen />,
-  },
-  {
-    path: '/table/:code/write',
-    element: <WriteChitsScreen />,
-  },
-  {
-    path: '/table/:code/play',
-    element: <SpinScreen />,
-  },
-  {
-    path: '/table/:code/summary',
-    element: <SummaryScreen />,
-  },
-  {
-    path: '/loot',
-    element: <LootScreen />,
-  },
-  {
-    path: '/me',
-    element: <MeScreen />,
+    element: <JoinTableScreen isGuest />,
   },
   {
     path: '/dev/kit',
@@ -75,5 +37,81 @@ export const routes: RouteObject[] = [
   {
     path: '/dev/screens',
     element: <DevScreens />,
+  },
+
+  // Profile Setup (requires sign-in, but gates other routes)
+  {
+    path: '/setup',
+    element: (
+      <AuthGuard>
+        <ProfileSetupScreen />
+      </AuthGuard>
+    ),
+  },
+
+  // Protected In-App Routes
+  {
+    path: '/home',
+    element: (
+      <AuthGuard>
+        <HomeScreen />
+      </AuthGuard>
+    ),
+  },
+  {
+    path: '/create',
+    element: (
+      <AuthGuard>
+        <CreateTableScreen />
+      </AuthGuard>
+    ),
+  },
+  {
+    path: '/table/:code',
+    element: (
+      <AuthGuard>
+        <LobbyScreen />
+      </AuthGuard>
+    ),
+  },
+  {
+    path: '/table/:code/write',
+    element: (
+      <AuthGuard>
+        <WriteChitsScreen />
+      </AuthGuard>
+    ),
+  },
+  {
+    path: '/table/:code/play',
+    element: (
+      <AuthGuard>
+        <SpinScreen />
+      </AuthGuard>
+    ),
+  },
+  {
+    path: '/table/:code/summary',
+    element: (
+      <AuthGuard>
+        <SummaryScreen />
+      </AuthGuard>
+    ),
+  },
+  {
+    path: '/loot',
+    element: (
+      <AuthGuard>
+        <LootScreen />
+      </AuthGuard>
+    ),
+  },
+  {
+    path: '/me',
+    element: (
+      <AuthGuard>
+        <MeScreen />
+      </AuthGuard>
+    ),
   },
 ];

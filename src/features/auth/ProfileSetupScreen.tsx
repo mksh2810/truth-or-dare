@@ -1,24 +1,20 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../../components/Button';
 import { StickerAvatar, STICKER_LIST } from '../../components/StickerAvatar';
+import { useAuthStore } from './authStore';
 
-export interface ProfileSetupScreenProps {
-  initialName?: string;
-  initialAvatarId?: string;
-  onSave?: (name: string, avatarId: string) => void;
-}
+export const ProfileSetupScreen: React.FC = () => {
+  const navigate = useNavigate();
+  const { profile, saveProfile, agreedConsent, setAgreedConsent } = useAuthStore();
 
-export const ProfileSetupScreen: React.FC<ProfileSetupScreenProps> = ({
-  initialName = '',
-  initialAvatarId = 'owl',
-  onSave,
-}) => {
-  const [name, setName] = useState(initialName);
-  const [selectedAvatar, setSelectedAvatar] = useState(initialAvatarId);
-  const [is18Plus, setIs18Plus] = useState(true);
+  const [name, setName] = useState(profile?.displayName || '');
+  const [selectedAvatar, setSelectedAvatar] = useState(profile?.avatarId || 'owl');
+  const [is18Plus, setIs18Plus] = useState(agreedConsent);
   const [error, setError] = useState('');
+  const [saving, setSaving] = useState(false);
 
-  const handleDone = () => {
+  const handleDone = async () => {
     const trimmed = name.trim();
     if (trimmed.length < 2) {
       setError('Name must be at least 2 characters');
@@ -33,7 +29,16 @@ export const ProfileSetupScreen: React.FC<ProfileSetupScreenProps> = ({
       return;
     }
     setError('');
-    onSave?.(trimmed, selectedAvatar);
+    setSaving(true);
+    setAgreedConsent(true);
+    try {
+      await saveProfile(trimmed, selectedAvatar);
+      navigate('/home');
+    } catch (err: any) {
+      setError(err.message || 'Failed to save profile');
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -115,8 +120,8 @@ export const ProfileSetupScreen: React.FC<ProfileSetupScreenProps> = ({
       </div>
 
       <div className="pt-6">
-        <Button fullWidth onClick={handleDone}>
-          Done
+        <Button fullWidth disabled={saving} onClick={handleDone}>
+          {saving ? 'Saving...' : 'Done'}
         </Button>
       </div>
     </div>
