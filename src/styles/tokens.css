@@ -1,0 +1,87 @@
+:root {
+  /* Colors */
+  --color-paper: #FFF8F5;
+  --color-chit: #FFFFFF;
+  --color-chit-shade: #F3ECE8;
+  --color-ink: #1C1917;
+  --color-ink-muted: #6B5B53;
+  --color-dare: #B91C14;
+  --color-truth: #2757D6;
+  --color-highlighter: #F6C244;
+  --color-peach: #FFDDB0;
+  --color-pass: #2F8F5B;
+  --color-fail: #B91C14;
+
+  /* Fonts */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-handwriting: 'Newsreader', Georgia, serif;
+  --font-mono: 'DM Mono', monospace;
+
+  /* Borders & Shadows */
+  --border-ink: 2px solid #1C1917;
+  --shadow-hard: 4px 4px 0px 0px #1C1917;
+  --shadow-hard-pressed: 1px 1px 0px 0px #1C1917;
+  --shadow-hard-sm: 2px 2px 0px 0px #1C1917;
+  --shadow-hard-lg: 6px 6px 0px 0px #1C1917;
+
+  /* Radii */
+  --radius-button: 8px;
+  --radius-chit: 4px;
+}
+
+/* Hard shadow utility */
+.shadow-hard {
+  box-shadow: 4px 4px 0px 0px #1C1917;
+}
+
+.shadow-hard-sm {
+  box-shadow: 2px 2px 0px 0px #1C1917;
+}
+
+.shadow-hard-lg {
+  box-shadow: 6px 6px 0px 0px #1C1917;
+}
+
+/* Pressed button effect */
+.btn-press {
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+.btn-press:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0px 0px #1C1917;
+}
+
+/* Chit cut corner */
+.chit-clipped {
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+}
+
+/* Lined paper texture background */
+.lined-paper {
+  background-color: #FFFFFF;
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 27px,
+    #E8E2DD 27px,
+    #E8E2DD 28px
+  );
+  line-height: 28px;
+}
+
+/* Paper grain overlay */
+.paper-grain {
+  background-color: #FFF8F5;
+  background-image: radial-gradient(rgba(28, 25, 23, 0.04) 1px, transparent 0);
+  background-size: 8px 8px;
+}
+
+/* Safe areas */
+.safe-top {
+  padding-top: max(env(safe-area-inset-top), 16px);
+}
+.safe-bottom {
+  padding-bottom: max(env(safe-area-inset-bottom), 16px);
+}
+.h-dvh-safe {
+  height: 100dvh;
+}
