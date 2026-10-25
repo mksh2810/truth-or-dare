@@ -1,34 +1,79 @@
 import React from 'react';
 import type { RouteObject } from 'react-router-dom';
 import DevKit from '../dev/DevKit';
-
-const HomePlaceholder = () => (
-  <div className="flex flex-col items-center justify-center min-h-[80dvh] text-center gap-6">
-    <div className="w-16 h-16 bg-peach border-2 border-ink shadow-hard rounded-btn flex items-center justify-center font-display text-2xl font-bold">
-      🎲
-    </div>
-    <h1 className="font-display text-3xl font-bold tracking-tight text-ink">
-      Truth or Dare
-    </h1>
-    <p className="font-handwriting text-xl text-ink-muted italic">
-      Write it. Do it. Get judged.
-    </p>
-    <a
-      href="/dev/kit"
-      className="inline-flex items-center justify-center h-14 px-8 bg-dare text-white font-mono font-bold uppercase rounded-btn border-2 border-ink shadow-hard btn-press text-sm"
-    >
-      Open Dev Kit
-    </a>
-  </div>
-);
+import DevScreens from '../dev/DevScreens';
+import { SplashScreen } from '../features/auth/SplashScreen';
+import { OnboardingScreen } from '../features/auth/OnboardingScreen';
+import { ProfileSetupScreen } from '../features/auth/ProfileSetupScreen';
+import { HomeScreen } from '../features/home/HomeScreen';
+import { CreateTableScreen } from '../features/table/CreateTableScreen';
+import { JoinTableScreen } from '../features/table/JoinTableScreen';
+import { LobbyScreen } from '../features/table/LobbyScreen';
+import { WriteChitsScreen } from '../features/write/WriteChitsScreen';
+import { SpinScreen } from '../features/play/SpinScreen';
+import { PerformTruthScreen } from '../features/play/PerformTruthScreen';
+import { PerformDareScreen } from '../features/play/PerformDareScreen';
+import { VoteScreen } from '../features/vote/VoteScreen';
+import { ResultScreen } from '../features/vote/ResultScreen';
+import { SummaryScreen } from '../features/table/SummaryScreen';
+import { LootScreen } from '../features/loot/LootScreen';
+import { MeScreen } from '../features/me/MeScreen';
 
 export const routes: RouteObject[] = [
   {
     path: '/',
-    element: <HomePlaceholder />,
+    element: <SplashScreen />,
+  },
+  {
+    path: '/welcome',
+    element: <OnboardingScreen />,
+  },
+  {
+    path: '/setup',
+    element: <ProfileSetupScreen />,
+  },
+  {
+    path: '/home',
+    element: <HomeScreen />,
+  },
+  {
+    path: '/create',
+    element: <CreateTableScreen />,
+  },
+  {
+    path: '/join/:code?',
+    element: <JoinTableScreen />,
+  },
+  {
+    path: '/table/:code',
+    element: <LobbyScreen />,
+  },
+  {
+    path: '/table/:code/write',
+    element: <WriteChitsScreen />,
+  },
+  {
+    path: '/table/:code/play',
+    element: <SpinScreen />,
+  },
+  {
+    path: '/table/:code/summary',
+    element: <SummaryScreen />,
+  },
+  {
+    path: '/loot',
+    element: <LootScreen />,
+  },
+  {
+    path: '/me',
+    element: <MeScreen />,
   },
   {
     path: '/dev/kit',
     element: <DevKit />,
+  },
+  {
+    path: '/dev/screens',
+    element: <DevScreens />,
   },
 ];
