@@ -5,7 +5,7 @@ import { RankLabel, XpBar } from '../../components/RankLabel';
 import { BottomNav } from '../../components/BottomNav';
 import { Sheet } from '../../components/Sheet';
 import { useAuthStore } from '../auth/authStore';
-import { xpForNext } from '../../game/xp';
+import { progress, legacyToTotalXp } from '../../game/xp';
 
 export const MeScreen: React.FC = () => {
   const navigate = useNavigate();
@@ -14,9 +14,12 @@ export const MeScreen: React.FC = () => {
   const [reduceMotion, setReduceMotion] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
 
-  const level = profile?.level || 1;
-  const xp = profile?.xp || 0;
-  const neededXp = xpForNext(level);
+  const totalXp = profile?.totalXp ?? (profile ? legacyToTotalXp(profile.level || 1, profile.xp || 0) : 0);
+  const xpInfo = progress(totalXp);
+  const level = xpInfo.level;
+  const xpInLevel = xpInfo.xpInLevel;
+  const neededXp = xpInfo.neededForNext;
+
   const gamesPlayed = profile?.gamesPlayed || 0;
   const passes = profile?.passes || 0;
   const fails = profile?.fails || 0;
@@ -55,7 +58,7 @@ export const MeScreen: React.FC = () => {
             </div>
           </div>
 
-          <XpBar currentXp={xp} neededXp={neededXp} />
+          <XpBar currentXp={xpInLevel} neededXp={neededXp} />
 
           <button
             onClick={() => navigate('/setup')}

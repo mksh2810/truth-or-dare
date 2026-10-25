@@ -55,8 +55,9 @@ export interface UserProfile {
   displayName: string;
   avatarId: string;
   isGuest: boolean;
-  level: number;
-  xp: number;
+  totalXp: number; // Source of truth for XP and level progression (XP-4)
+  level?: number; // Deprecated, derived via levelFromTotal(totalXp)
+  xp?: number; // Deprecated, derived via progress(totalXp).xpInLevel
   gamesPlayed: number;
   passes: number;
   fails: number;
@@ -67,6 +68,7 @@ export interface UserProfile {
     stamp: string;
   };
   dailyLast?: string;
+  shareChitsForLearning?: boolean; // LEARN-1 opt-out toggle (default true)
   createdAt: any;
 }
 

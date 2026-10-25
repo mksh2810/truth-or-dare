@@ -113,7 +113,8 @@ Stranger matchmaking, sponsor or cash rewards, recording or replaying video, nat
 | Daily Spin | +25 |
 
 #### Levels and ranks
-- XP needed to go from level L to L+1 is `100 + 75 * (L - 1)`.
+- XP needed to go from level L to L+1 is calculated exponentially: `xpForNext(L) = round to nearest 5 of BASE * GROWTH^(L-1)` where `BASE = 100` and `GROWTH = 1.25` (**XP-4**).
+- Total cumulative XP (`totalXp`) is stored on `users/{uid}` and player documents. Level is never stored as the source of truth; it is derived via `levelFromTotal(totalXp)` and `progress(totalXp)`.
 - Ranks: Lv 1-2 Fresh Chit, 3-4 Table Warmer, 5-7 Mild Troublemaker, 8-10 Certified Menace, 11-14 Spice Merchant, 15-19 Dare Devil, 20+ Legend of the Table.
 - Unlocks: Lv 2 Green Glass bottle, Lv 4 Amber bottle, Lv 6 Chit colour pack, Lv 8 Extra stamp pack, Lv 10 Golden bottle.
 
@@ -182,6 +183,17 @@ Mild, Spicy or Legend. The tier tells the Judge how bold a chit must be. A chit 
 - **XP-1**: Award XP and update level & rank (P0)
 - **XP-2**: Summary shows XP earned, passes, fails, best streak, unlock (P0)
 - **XP-3**: Equip unlocked cosmetics from Loot (P1)
+- **XP-4**: Exponential XP with BASE=100, GROWTH=1.25. Derive level from totalXp (P0)
+- **NAV-1**: Fixed 4-column bottom nav with no horizontal overflow at 360, 390, 430px (P0)
+- **LEARN-1**: User consent for anonymous learning with opt-out toggle (P0)
+- **LEARN-2**: Candidate storage in learning/chits on FINE stamps with counters (P0)
+- **LEARN-3**: Gemini embeddings with trigram fallback and cosine duplicate merge (P0)
+- **LEARN-4**: One-tap voter chit rating (Fire, Mid, Too Much) after turn (P0)
+- **LEARN-5**: Promotion to Community Deck on Wilson score and Judge pass (P0)
+- **LEARN-6**: Swap suggestions & fallback draw from Community Deck with logistic ranker (P1)
+- **LEARN-7**: Player Owl takes (roast under 80 chars) on revealed chits (P1)
+- **LEARN-8**: Moderation and voting (Nailed it / Meh) on Judge lines (P1)
+- **LEARN-9**: Promoted lines used as style examples and 20% verbatim reuse (P1)
 - **SAFE-1**: Reachable Report action on every in-game screen (P0)
 - **SAFE-2**: Consent screen before camera turned on in Remote Live (P0)
 - **SAFE-3**: Never record or store audio or video (P0)
@@ -254,12 +266,17 @@ vite.config.ts
 ```
 
 ### 5.5 Firestore Data Model
-- `users/{uid}`: displayName, avatarId, isGuest, level, xp, gamesPlayed, passes, fails, bestStreak, unlocked[], equipped{bottle, stamp}, dailyLast (YYYY-MM-DD), createdAt
+- `users/{uid}`: displayName, avatarId, isGuest, totalXp (source of truth for XP & level), gamesPlayed, passes, fails, bestStreak, unlocked[], equipped{bottle, stamp}, dailyLast (YYYY-MM-DD), shareChitsForLearning (boolean, default true), createdAt
 - `rooms/{code}`: hostUid, status, settings{maxPlayers, tier, timer, rounds, dareMode}, round, bag[], currentTurnId, writingDeadline, createdAt
-- `rooms/{code}/players/{uid}`: name, avatarId, ready, joinedAt, lastSeen, swapsLeft, streak, xpGame, passes, fails, votesCast, chitsOk{truth, dare}, kicked
+- `rooms/{code}/players/{uid}`: name, avatarId, ready, joinedAt, lastSeen, totalXp, swapsLeft, streak, xpGame, passes, fails, votesCast, chitsOk{truth, dare}, kicked
 - `rooms/{code}/entries/{id}`: authorUid, type, text, tier, used, createdAt. (Written only by server /api/judge)
 - `rooms/{code}/turns/{turnId}`: index, performerUid, type, entryId, entryText, phase, phaseStartedAt, phaseDeadline, targetAngle, answerText, done, tieBreakBy, result, xpAwarded
 - `rooms/{code}/turns/{turnId}/votes/{uid}`: value ('pass' | 'fail'), at
+- `rooms/{code}/turns/{turnId}/ratings/{uid}`: value ('fire' | 'mid' | 'tooMuch'), at
+- `rooms/{code}/turns/{turnId}/takes/{takeId}`: authorUid, text, up, down, at
+- `learning/chits/{chitId}`: text, normalisedText, type, tier, authorUid, embedding: number[], plays, passes, fails, fire, mid, tooMuch, distinctRaters, raterUids[], reports, status ('candidate' | 'promoted' | 'rejected'), createdAt
+- `learning/judgeLines/{lineId}`: text, language ('en' | 'hi'), verdictContext, tier, embedding: number[], up, down, distinctRaters, voterUids[], uses, lastUsedAt, status ('candidate' | 'promoted' | 'retired' | 'rejected'), createdAt
+- `community/deck/{id}`: type, text, tier, fireScore, plays, promotedAt
 - `reports/{id}`: roomCode, reporterUid, targetUid, reason, note, turnId, createdAt
 
 ---

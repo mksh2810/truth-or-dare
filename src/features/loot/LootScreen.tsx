@@ -4,18 +4,20 @@ import { Sheet } from '../../components/Sheet';
 import { Button } from '../../components/Button';
 import { BottomNav } from '../../components/BottomNav';
 import { MOCK_BOTTLES } from '../../data/mock';
+import { useAuthStore } from '../auth/authStore';
+import { levelFromTotal, legacyToTotalXp } from '../../game/xp';
 
 export interface LootScreenProps {
   onEquipBottle?: (id: string) => void;
-  userLevel?: number;
 }
 
-export const LootScreen: React.FC<LootScreenProps> = ({
-  onEquipBottle,
-  userLevel = 6,
-}) => {
+export const LootScreen: React.FC<LootScreenProps> = ({ onEquipBottle }) => {
+  const { profile } = useAuthStore();
+  const totalXp = profile?.totalXp ?? (profile ? legacyToTotalXp(profile.level || 1, profile.xp || 0) : 0);
+  const userLevel = levelFromTotal(totalXp);
+
   const [selectedBottle, setSelectedBottle] = useState<typeof MOCK_BOTTLES[0] | null>(null);
-  const [equippedId, setEquippedId] = useState('green');
+  const [equippedId, setEquippedId] = useState(profile?.equipped?.bottle || 'green');
 
   return (
     <div className="w-full flex-1 flex flex-col justify-between pb-24 max-w-[390px] mx-auto">

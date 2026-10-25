@@ -6,15 +6,17 @@ import { Chit } from '../../components/Chit';
 import { Button } from '../../components/Button';
 import { BottomNav } from '../../components/BottomNav';
 import { useAuthStore } from '../auth/authStore';
-import { xpForNext } from '../../game/xp';
+import { progress, legacyToTotalXp } from '../../game/xp';
 
 export const HomeScreen: React.FC = () => {
   const navigate = useNavigate();
   const { profile } = useAuthStore();
 
-  const userLevel = profile?.level || 1;
-  const currentXp = profile?.xp || 0;
-  const neededXp = xpForNext(userLevel);
+  const totalXp = profile?.totalXp ?? (profile ? legacyToTotalXp(profile.level || 1, profile.xp || 0) : 0);
+  const xpInfo = progress(totalXp);
+  const userLevel = xpInfo.level;
+  const currentXp = xpInfo.xpInLevel;
+  const neededXp = xpInfo.neededForNext;
   const displayName = profile?.displayName || 'Player';
   const avatarId = profile?.avatarId || 'fox';
 

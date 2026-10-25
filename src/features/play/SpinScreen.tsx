@@ -24,14 +24,14 @@ export const SpinScreen: React.FC<SpinScreenProps> = ({
     if (phase === 'spinning') return;
     setPhase('spinning');
 
-    // Pick target player randomly (e.g. Aman, index 2)
-    const targetIdx = 2;
+    // Pick target player randomly
+    const targetIdx = Math.floor(Math.random() * players.length);
     const targetPlayer = players[targetIdx] || players[0];
     const totalSlots = Math.max(players.length, 6);
-    // Angle in degrees corresponding to target slot
-    const targetAngle = (targetIdx / totalSlots) * 360;
-    // 4 full turns + target angle + small wobble
-    const finalRot = 360 * 4 + targetAngle + 10;
+    // Angle in degrees corresponding to target slot (offset by 90deg for top center orientation)
+    const targetAngle = (targetIdx / totalSlots) * 360 + 90;
+    // Accumulate 5 full turns (1800 deg) plus target angle
+    const finalRot = rotation + 1800 + targetAngle;
     setRotation(finalRot);
 
     setTimeout(() => {
