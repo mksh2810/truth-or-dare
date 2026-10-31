@@ -13,7 +13,8 @@
     "test:e2e": "npx tsx scripts/overflow-check.ts",
     "test:redteam": "npx tsx scripts/redteam.ts",
     "seed:community": "npx tsx scripts/seed-community-deck.ts",
-    "db:migrate": "npx tsx scripts/migrate-postgres.ts"
+    "db:migrate": "npx tsx scripts/migrate-postgres.ts",
+    "test:neon": "npx tsx scripts/test-neon-e2e.ts"
   },
   "dependencies": {
     "@neon/config": "^1.10.0",

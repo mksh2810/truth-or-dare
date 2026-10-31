@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { query } from '../api/_db';
 
 /**
  * Seed script for initial Community Deck items (LEARN-5, LEARN-6).
@@ -90,7 +91,7 @@ export const SEED_COMMUNITY_CHITS = [
   },
 ];
 
-export function generateSeedJson() {
+export async function generateSeedJson() {
   const output = SEED_COMMUNITY_CHITS.map((chit, idx) => ({
     id: `seed-chit-${idx + 1}`,
     ...chit,
@@ -101,8 +102,27 @@ export function generateSeedJson() {
   const outPath = path.resolve('src/data/seed-community-deck.json');
   fs.writeFileSync(outPath, JSON.stringify(output, null, 2));
   console.log(`✅ Generated seed community deck file at: ${outPath} (${output.length} items)`);
+
+  // If PostgreSQL is reachable, seed into community_deck table
+  try {
+    const existing = await query('SELECT count(*)::int as count FROM community_deck');
+    if (existing && existing[0]?.count === 0) {
+      console.log('🌱 Seeding PostgreSQL community_deck table...');
+      for (const item of SEED_COMMUNITY_CHITS) {
+        await query(
+          'INSERT INTO community_deck (text, type, tier, fire_score, plays) VALUES ($1, $2, $3, $4, $5)',
+          [item.text, item.type, item.tier, item.fireScore, item.plays]
+        );
+      }
+      console.log(`✅ Seeded ${SEED_COMMUNITY_CHITS.length} chits into Neon PostgreSQL community_deck table!`);
+    } else if (existing) {
+      console.log(`ℹ️ PostgreSQL community_deck already has ${existing[0]?.count} rows.`);
+    }
+  } catch (err) {
+    console.warn('PostgreSQL seed skipped or failed:', err);
+  }
 }
 
 if (process.argv[1]?.endsWith('seed-community-deck.ts')) {
-  generateSeedJson();
+  generateSeedJson().catch(console.error);
 }
