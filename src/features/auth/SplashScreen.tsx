@@ -68,16 +68,16 @@ export const SplashScreen: React.FC = () => {
           </div>
         )}
 
-        {/* 18+ & Camera Consent Checkbox (AUTH-2) */}
+        {/* 18+ & Camera Consent Checkbox (AUTH-2, LEARN-1) */}
         <label className="flex items-center justify-center gap-3 cursor-pointer text-left px-2">
           <input
             type="checkbox"
             checked={agreedConsent}
             onChange={(e) => setAgreedConsent(e.target.checked)}
-            className="w-5 h-5 rounded border-2 border-ink text-dare focus:ring-0 focus:outline-none cursor-pointer"
+            className="w-5 h-5 rounded border-2 border-ink text-dare focus:ring-0 focus:outline-none cursor-pointer flex-shrink-0"
           />
           <span className="font-mono text-xs text-ink leading-tight select-none">
-            I'm 18+ and I know my friends can see me on camera.
+            I'm 18+ and understand friends see me on camera. Chits and ratings may be used anonymously to improve the game.
           </span>
         </label>
 

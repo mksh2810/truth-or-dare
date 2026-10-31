@@ -23,6 +23,7 @@ interface AuthState {
   loginGoogle: () => Promise<void>;
   loginGuest: (name: string, avatarId?: string) => Promise<void>;
   saveProfile: (name: string, avatarId: string) => Promise<void>;
+  toggleShareChits: (enabled: boolean) => Promise<void>;
   logout: () => Promise<void>;
   deleteUserAndData: () => Promise<void>;
   initAuthListener: () => () => void;
@@ -133,10 +134,22 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         bestStreak: 0,
         unlocked: ['bottle-default'],
         equipped: { bottle: 'default', stamp: 'FINE' },
+        shareChitsForLearning: true,
         createdAt: new Date().toISOString(),
       }),
       displayName: displayName.trim(),
       avatarId,
+    };
+    await saveUserProfile(updated);
+    set({ profile: updated });
+  },
+
+  toggleShareChits: async (enabled: boolean) => {
+    const { profile } = get();
+    if (!profile) return;
+    const updated: UserProfile = {
+      ...profile,
+      shareChitsForLearning: enabled,
     };
     await saveUserProfile(updated);
     set({ profile: updated });

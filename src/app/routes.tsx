@@ -14,6 +14,7 @@ import { SpinScreen } from '../features/play/SpinScreen';
 import { SummaryScreen } from '../features/table/SummaryScreen';
 import { LootScreen } from '../features/loot/LootScreen';
 import { MeScreen } from '../features/me/MeScreen';
+import { DebugLearning } from '../features/debug/DebugLearning';
 import { AuthGuard } from '../features/auth/AuthGuard';
 
 export const routes: RouteObject[] = [
@@ -37,6 +38,10 @@ export const routes: RouteObject[] = [
   {
     path: '/dev/screens',
     element: <DevScreens />,
+  },
+  {
+    path: '/debug/learning',
+    element: <DebugLearning />,
   },
 
   // Profile Setup (requires sign-in, but gates other routes)

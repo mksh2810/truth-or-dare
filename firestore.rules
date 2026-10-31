@@ -18,6 +18,17 @@ service cloud.firestore {
       allow create: if signedIn() && request.resource.data.reporterUid == request.auth.uid;
     }
 
+    // Community Deck (LEARN-5, LEARN-6)
+    match /community/deck/{id} {
+      allow read: if signedIn();
+      allow write: if false; // Server-only Admin SDK
+    }
+
+    // Learning Candidate Collections (LEARN-2, LEARN-7)
+    match /learning/{collection}/{docId} {
+      allow read, write: if false; // Server-only Admin SDK
+    }
+
     match /rooms/{code} {
       allow read: if signedIn();
       allow create: if signedIn() && request.resource.data.hostUid == request.auth.uid;
@@ -32,7 +43,7 @@ service cloud.firestore {
 
       match /entries/{id} {
         allow read: if signedIn() && isMember(code);
-        allow write: if false; // server only
+        allow write: if false; // Server only
       }
 
       match /turns/{turnId} {
@@ -42,6 +53,18 @@ service cloud.firestore {
         match /votes/{uid} {
           allow read: if signedIn() && isMember(code);
           allow write: if signedIn() && isMember(code) && request.auth.uid == uid;
+        }
+
+        // 1-Tap Voter Chit Ratings (LEARN-4) - One rating per voter per turn
+        match /ratings/{uid} {
+          allow read: if signedIn() && isMember(code);
+          allow create, update: if signedIn() && isMember(code) && request.auth.uid == uid;
+        }
+
+        // Optional Owl Roast Takes (LEARN-7)
+        match /takes/{takeId} {
+          allow read: if signedIn() && isMember(code);
+          allow create: if signedIn() && isMember(code) && request.resource.data.authorUid == request.auth.uid;
         }
       }
     }

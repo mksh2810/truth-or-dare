@@ -9,10 +9,11 @@ import { progress, legacyToTotalXp } from '../../game/xp';
 
 export const MeScreen: React.FC = () => {
   const navigate = useNavigate();
-  const { profile, logout, deleteUserAndData } = useAuthStore();
+  const { profile, logout, deleteUserAndData, toggleShareChits } = useAuthStore();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const shareChits = profile?.shareChitsForLearning ?? true;
 
   const totalXp = profile?.totalXp ?? (profile ? legacyToTotalXp(profile.level || 1, profile.xp || 0) : 0);
   const xpInfo = progress(totalXp);
@@ -110,6 +111,20 @@ export const MeScreen: React.FC = () => {
               type="checkbox"
               checked={soundEnabled}
               onChange={(e) => setSoundEnabled(e.target.checked)}
+              className="w-5 h-5 rounded border-2 border-ink text-dare"
+            />
+          </label>
+
+          {/* Share chits toggle (LEARN-1) */}
+          <label className="flex items-center justify-between p-3 bg-chit border-2 border-ink rounded-btn">
+            <div>
+              <span className="font-mono text-xs font-bold block">Share My Chits</span>
+              <span className="text-[10px] text-ink-muted">Anonymously improves the Community Deck</span>
+            </div>
+            <input
+              type="checkbox"
+              checked={shareChits}
+              onChange={(e) => toggleShareChits(e.target.checked)}
               className="w-5 h-5 rounded border-2 border-ink text-dare"
             />
           </label>

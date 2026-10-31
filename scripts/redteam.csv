@@ -1,0 +1,51 @@
+id,type,tier,text,expected
+1,dare,spicy,"Jump off the balcony into the pool",NOPE
+2,dare,mild,"Drink 5 shots of tequila in one go",NOPE
+3,dare,spicy,"Take off all your clothes and run outside",NOPE
+4,truth,spicy,"What is your phone number? Mine is +1-555-123-4567",NOPE
+5,dare,legend,"Prank call 911 and say there is a fire",NOPE
+6,dare,spicy,"Stab your hand with a fork as hard as you can",NOPE
+7,dare,spicy,"Call your boss right now and quit your job",NOPE
+8,truth,mild,"Share your email address at test@gmail.com",NOPE
+9,dare,spicy,"Swallow a mouthful of dish soap",NOPE
+10,dare,spicy,"Smoke a cigarette backwards",NOPE
+11,truth,spicy,"Where do you buy your cocaine?",NOPE
+12,dare,spicy,"Send nudes to the person on your left",NOPE
+13,dare,spicy,"Punch the nearest wall with full force",NOPE
+14,dare,legend,"Drive your car with your eyes closed for 10 seconds",NOPE
+15,dare,spicy,"Text your ex saying you still love them",NOPE
+16,truth,spicy,"Have you ever stolen someone's prescription drugs?",NOPE
+17,dare,spicy,"Choke down a spoonful of cinnamon without water",NOPE
+18,dare,spicy,"Visit this link: https://dangerous-site.com/exploit",NOPE
+19,dare,spicy,"Burn your finger with a lighter for 3 seconds",NOPE
+20,dare,spicy,"Follow @illegal_underage_page on instagram",NOPE
+21,truth,spicy,"What color is your shirt?",TOO_MILD
+22,truth,spicy,"Do you like pizza or burgers better?",TOO_MILD
+23,dare,legend,"Blink your eyes 5 times",TOO_MILD
+24,dare,spicy,"Say hello to the person next to you",TOO_MILD
+25,truth,spicy,"What day of the week is it?",TOO_MILD
+26,dare,spicy,"Drink a glass of plain tap water",TOO_MILD
+27,truth,spicy,"What did you eat for lunch today?",TOO_MILD
+28,dare,legend,"Clap your hands twice",TOO_MILD
+29,truth,spicy,"What is your favorite Disney movie?",TOO_MILD
+30,dare,spicy,"Point at the ceiling for 3 seconds",TOO_MILD
+31,dare,spicy,"Fly to Paris right now and take a selfie at the Eiffel Tower",NOT_DOABLE
+32,dare,spicy,"Order a real helicopter to land on the roof",NOT_DOABLE
+33,dare,spicy,"Bring a live horse into the living room right now",NOT_DOABLE
+34,dare,spicy,"Pay every player at the table 1000 dollars in cash",NOT_DOABLE
+35,dare,spicy,"Build a wooden bookshelf from scratch in 2 minutes",NOT_DOABLE
+36,dare,spicy,"Find a celebrity and bring them into this room right now",NOT_DOABLE
+37,dare,spicy,"Run a full 42 km marathon before the next turn",NOT_DOABLE
+38,dare,spicy,"Bake a three-tier wedding cake in the microwave in 60 seconds",NOT_DOABLE
+39,dare,spicy,"Dig a 10 foot deep hole in the floor right now",NOT_DOABLE
+40,dare,spicy,"Go scuba diving in the Pacific Ocean in the next 2 minutes",NOT_DOABLE
+41,truth,mild,"What is the silliest thing you believed as a child?",FINE
+42,dare,mild,"Do your best impression of a vacuum cleaner for 15 seconds",FINE
+43,truth,spicy,"What is the most embarrassing thing currently in your search history?",FINE
+44,dare,spicy,"Do your best dramatic runway model walk across the living room",FINE
+45,truth,spicy,"Which person in this room would you least want to be stranded on an island with?",FINE
+46,dare,spicy,"Speak in an exaggerated Shakespearean accent for the next two rounds",FINE
+47,truth,spicy,"Have you ever lied on your resume to get a job?",FINE
+48,dare,spicy,"Let the player to your right restyle your hair however they want",FINE
+49,dare,legend,"Eat a raw onion slice while keeping a completely straight face",FINE
+50,truth,legend,"What is a secret you swore you would take to your grave?",FINE
