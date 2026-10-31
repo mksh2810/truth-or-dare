@@ -243,6 +243,14 @@ Borders & Shadows:
 - Pressed state: `translate(3px, 3px)` and shadow `1px 1px 0px 0px #1C1917`
 - Radius: Buttons 8px, chits 4px with clipped corner, avatars irregular blobs
 
+### 3.4 Mobile Viewport & Bottom Navigation (NAV-1)
+- Target Viewports: Mobile first, 360px (minimum Android), 390px (iPhone 13/14), 430px (iPhone Pro Max).
+- Zero Horizontal Overflow: Document `scrollWidth` must strictly equal `window.innerWidth`. No elements can protrude or cause horizontal scrolling. Never use `overflow-x: hidden` on `html` or `body` to mask layout overflow.
+- Bottom Nav Architecture: Fixed positioning (`bottom: 0`, `left: 0`, `right: 0`), max-width 430px, centered (`mx-auto`), box-sizing border-box, with `env(safe-area-inset-bottom)` padding.
+- Grid Structure: 4-column grid (`grid-cols-4`) with `min-w-0` on each cell and truncated text labels.
+- Page Padding: All main page layouts have `pb-20` bottom padding ensuring content is never hidden behind the navbar.
+- Automated Audit: `scripts/overflow-check.ts` runs via Playwright across all 26 screens on 360px, 390px, and 430px viewport widths to enforce 0px overflow.
+
 ---
 
 ## 4. Architecture and TRD Details
@@ -253,17 +261,38 @@ truth-or-dare/
 AGENTS.md
 docs/PACK.md
 design/ (Stitch screenshots, exported html, tokens)
-api/ (Vercel functions: judge.ts, livekit-token.ts)
+api/ (Vercel functions: judge.ts, judge-lines.ts, learn-promote.ts, user-sync.ts, community-deck.ts, _db.ts, _embed.ts, _blocklist.ts)
+migrations/ (0001_init_postgres.sql)
 src/
   app/ (routes, providers)
-  components/ (design system)
-  features/ (auth, home, table, write, play, vote, loot, me, daily)
-  game/ (pure rules: bag.ts, draw.ts, vote.ts, xp.ts, phases.ts)
+  components/ (design system: Chit, Bottle, Stamp, TableView, BottomNav, etc.)
+  features/ (auth, home, table, write, play, vote, loot, me, daily, debug)
+  game/ (pure rules: bag.ts, draw.ts, vote.ts, xp.ts, phases.ts, wilson.ts, similarity.ts, learning-rules.ts, line-moderation.ts)
   lib/ (firebase.ts, time.ts, presence.ts, sound.ts, haptics.ts)
-  data/ (judgesDeck.ts, dailyDeck.ts, ranks.ts)
+  data/ (judgesDeck.ts, dailyDeck.ts, ranks.ts, seed-community-deck.json)
+scripts/ (overflow-check.ts, redteam.ts, train-ranker.ts, migrate-postgres.ts, seed-community-deck.ts)
 firestore.rules
 vite.config.ts
 ```
+
+### 5.4 Learning Engine & Retrieval Architecture (LEARN-1 to LEARN-6)
+1. **Consent & Privacy (LEARN-1)**:
+   - 18+ splash screen and privacy policy explicitly disclose that chits and ratings are used anonymously to improve the game.
+   - User profile settings include a "Share my chits to improve the deck" toggle (`shareChitsForLearning`, default `true`).
+   - "Delete My Data" purges all contributions and candidates attributed to the user. Users who opt out are never recorded in `learning/chits`.
+2. **Candidate Collection (LEARN-2)**:
+   - When a chit receives a `FINE` verdict, an entry is created in `learning/chits` with normalized text, type, tier, authorUid, Gemini embedding vector, and tracking counters (plays, passes, fails, fire, mid, tooMuch, distinctRaters, reports). NOPE chits are never retained for learning.
+3. **Embeddings & Deduplication (LEARN-3)**:
+   - `api/_embed.ts` uses Google Gemini `text-embedding-004` (free tier) with fallback to character trigram vectorization when quota or offline limits are encountered.
+   - Cosine similarity threshold of 0.9 identifies duplicates, merging counters instead of creating duplicate records.
+4. **Post-Turn Voter Ratings (LEARN-4)**:
+   - Every voter receives a 1-tap rating choice after turn resolution: 🔥 Fire, 😐 Mid, or 💥 Too Much. Each rater can submit once per turn.
+5. **Promotion Rules (LEARN-5)**:
+   - Criteria: `plays >= 3`, `distinctRaters >= 5`, `fire / (fire + mid + tooMuch) >= 0.6`, `tooMuch / total < 0.15`, `reports == 0`, and passes Judge re-evaluation at its tier.
+   - Promoted items move to `community/deck` (or Postgres `community_deck`). Admin review interface available at `/debug/learning`.
+6. **Community Deck Retrieval & Ranker (LEARN-6)**:
+   - Swap suggestions and Daily Spin draw from promoted Community Deck chits ranked by the Wilson score lower bound on the fire ratio.
+   - `scripts/train-ranker.ts` trains a logistic regression model once 300+ rated plays exist, outputting weights for serverless ranking in `api/judge.ts`.
 
 ### 5.5 Firestore Data Model
 - `users/{uid}`: displayName, avatarId, isGuest, totalXp (source of truth for XP & level), gamesPlayed, passes, fails, bestStreak, unlocked[], equipped{bottle, stamp}, dailyLast (YYYY-MM-DD), shareChitsForLearning (boolean, default true), createdAt
@@ -278,6 +307,30 @@ vite.config.ts
 - `learning/judgeLines/{lineId}`: text, language ('en' | 'hi'), verdictContext, tier, embedding: number[], up, down, distinctRaters, voterUids[], uses, lastUsedAt, status ('candidate' | 'promoted' | 'retired' | 'rejected'), createdAt
 - `community/deck/{id}`: type, text, tier, fireScore, plays, promotedAt
 - `reports/{id}`: roomCode, reporterUid, targetUid, reason, note, turnId, createdAt
+
+### 5.7 Owl Roast & Judge Lines Engine (LEARN-7 to LEARN-9)
+1. **Player Owl Takes (LEARN-7)**:
+   - After a chit is revealed, non-author players can submit an optional Owl take (<= 80 characters) roasting the chit in the Owl's voice via a bottom sheet. Max 1 take per player per turn.
+2. **Moderation Pipeline (LEARN-8)**:
+   - Two-tier filter in `api/_blocklist.ts` and `api/judge-lines.ts`: blocks attacks on players, real names, PII, slurs, sexual references, prompt injection, and NOPE triggers. The take must mock the chit, never the player.
+3. **Line Voting & Promotion**:
+   - Judge lines display "Nailed it" (up) and "Meh" (down) voting triggers for non-authors.
+   - Promotion threshold: `up >= 3`, `up / (up + down) >= 0.7`, and 0 reports. Retirement threshold: `ratio < 0.4` after 8+ votes.
+4. **Judging Time Usage (LEARN-9)**:
+   - Up to 3 top promoted lines for matching verdict context and language act as style exemplars in the Gemini prompt.
+   - 20% probabilistic verbatim reuse if cosine similarity > 0.75 and line has not yet been used in the active room.
+   - Feature flag `LEARNING_ENABLED` acts as a fail-safe kill switch.
+
+### 5.8 Hybrid PostgreSQL Scaling Architecture (Option A)
+- **Architecture**: Dual-layer architecture combining Firebase Firestore for ephemeral real-time game coordination with Neon Serverless PostgreSQL for persistent, high-volume entities.
+- **PostgreSQL Persistence Entities**:
+  - `users`: Persistent account profiles, cumulative XP (`total_xp`), win/loss records, settings (`share_chits_for_learning`), unlocked cosmetics.
+  - `learning_chits`: Long-term candidate pool, normalized embeddings, rating counters (`fire`, `mid`, `too_much`).
+  - `community_deck`: Curated community-promoted truths and dares.
+  - `judge_lines`: Owl roast candidates, up/down votes, and approval states.
+  - `reports`: Safety violation logs.
+- **Firestore Ephemeral Entities**: Real-time room lifecycle (`rooms/{code}`, active players, turns, heartbeat sync).
+- **Graceful Fallback**: Serverless endpoints (`api/_db.ts`, `api/community-deck.ts`) automatically fall back to static seed data (`src/data/seed-community-deck.json`) when `DATABASE_URL` is omitted.
 
 ---
 
