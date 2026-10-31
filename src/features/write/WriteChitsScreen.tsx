@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Chit } from '../../components/Chit';
 import { JudgeBubble, JudgeExpression } from '../../components/JudgeBubble';
 import { Button } from '../../components/Button';
@@ -18,13 +19,18 @@ export interface WriteChitsScreenProps {
 }
 
 export const WriteChitsScreen: React.FC<WriteChitsScreenProps> = ({
-  step = 1,
+  step: propStep = 1,
   state: externalState = 'idle',
   initialText = '',
   onSubmitForReview,
   onNext,
   onBack,
 }) => {
+  const navigate = useNavigate();
+  const params = useParams<{ code?: string }>();
+  const [internalStep, setInternalStep] = useState<1 | 2>(propStep);
+  const step = onNext ? propStep : internalStep;
+
   const isTruth = step === 1;
   const maxChars = isTruth ? 120 : 140;
   const chitType = isTruth ? 'truth' : 'dare';
@@ -74,15 +80,35 @@ export const WriteChitsScreen: React.FC<WriteChitsScreenProps> = ({
 
   const handleAction = () => {
     if (state === 'FINE') {
-      onNext?.();
+      if (onNext) {
+        onNext();
+      } else if (step === 1) {
+        setInternalStep(2);
+        setText('Do your best runway model walk across the room while giving a dramatic speech.');
+        setInternalState('FINE');
+      } else {
+        const code = params.code || 'local';
+        navigate(`/table/${code}/play`);
+      }
     } else {
       if (onSubmitForReview) {
         onSubmitForReview(text);
       } else {
-        // Toggle simulation for static review
+        // Instant simulated review for fluid testing
         setInternalState('judging');
-        setTimeout(() => setInternalState('FINE'), 1000);
+        setTimeout(() => setInternalState('FINE'), 600);
       }
+    }
+  };
+
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else if (step === 2) {
+      setInternalStep(1);
+    } else {
+      const code = params.code || 'local';
+      navigate(`/table/${code}`);
     }
   };
 
@@ -91,7 +117,7 @@ export const WriteChitsScreen: React.FC<WriteChitsScreenProps> = ({
       {/* Top Header */}
       <div className="flex items-center justify-between pb-2">
         <button
-          onClick={onBack}
+          onClick={handleBack}
           className="font-mono text-xs font-bold text-ink hover:text-dare"
         >
           ← Back

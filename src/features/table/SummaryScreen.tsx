@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { StickerAvatar } from '../../components/StickerAvatar';
 import { RankLabel } from '../../components/RankLabel';
 import { Button } from '../../components/Button';
@@ -19,6 +20,23 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({
   newLevel = 7,
   unlockedItem = { name: 'Green Glass Bottle', type: 'Bottle Skin' },
 }) => {
+  const navigate = useNavigate();
+
+  const handlePlayAgain = () => {
+    if (onPlayAgain) {
+      onPlayAgain();
+    } else {
+      navigate('/create');
+    }
+  };
+
+  const handleBackHome = () => {
+    if (onBackHome) {
+      onBackHome();
+    } else {
+      navigate('/home');
+    }
+  };
   return (
     <div className="w-full flex-1 flex flex-col justify-between py-6 max-w-[390px] mx-auto text-center">
       <div>
@@ -102,11 +120,11 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({
 
       {/* Action Buttons */}
       <div className="pt-6 space-y-3">
-        <Button fullWidth onClick={onPlayAgain}>
+        <Button fullWidth onClick={handlePlayAgain}>
           Play Again
         </Button>
         <button
-          onClick={onBackHome}
+          onClick={handleBackHome}
           className="font-mono text-xs font-bold text-ink underline underline-offset-4 hover:text-dare block mx-auto"
         >
           ← Back to Home

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { TableView, TablePlayer } from '../../components/TableView';
 import { Bottle } from '../../components/Bottle';
 import { Button } from '../../components/Button';
@@ -16,6 +17,8 @@ export const SpinScreen: React.FC<SpinScreenProps> = ({
   onLanded,
   onProceedToPerform,
 }) => {
+  const navigate = useNavigate();
+  const params = useParams<{ code?: string }>();
   const [phase, setPhase] = useState<'idle' | 'spinning' | 'landed'>('idle');
   const [rotation, setRotation] = useState(0);
   const [landedPerformer, setLandedPerformer] = useState<TablePlayer | null>(null);
@@ -106,7 +109,17 @@ export const SpinScreen: React.FC<SpinScreenProps> = ({
           </Button>
         )}
         {phase === 'landed' && (
-          <Button fullWidth onClick={onProceedToPerform}>
+          <Button
+            fullWidth
+            onClick={() => {
+              if (onProceedToPerform) {
+                onProceedToPerform();
+              } else {
+                const code = params.code || 'local';
+                navigate(`/table/${code}/summary`);
+              }
+            }}
+          >
             Perform Dare →
           </Button>
         )}
