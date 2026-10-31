@@ -28,12 +28,13 @@ export const TableView: React.FC<TableViewProps> = ({
   onSeatClick,
 }) => {
   const totalSlots = Math.max(players.length, Math.min(maxPlayers, 8));
-  const radius = 115; // px from center to seat center
+  const center = 145;
+  const radius = 102; // px from center to seat center
 
   return (
-    <div className={`relative w-[320px] h-[320px] mx-auto select-none ${className}`}>
+    <div className={`relative w-[290px] h-[290px] mx-auto select-none ${className}`}>
       {/* Wood-textured or circular felt party table surface */}
-      <div className="absolute inset-4 rounded-full border-4 border-ink bg-[#F5EDE6] shadow-hard flex items-center justify-center">
+      <div className="absolute inset-3 rounded-full border-4 border-ink bg-[#F5EDE6] shadow-hard flex items-center justify-center">
         {/* Subtle table rim groove */}
         <div className="absolute inset-2 rounded-full border border-ink/20 pointer-events-none" />
 
@@ -53,11 +54,11 @@ export const TableView: React.FC<TableViewProps> = ({
         // Calculate angle around circle
         const angle = (i / totalSlots) * 2 * Math.PI - Math.PI / 2;
         // Deterministic offset to look natural and slightly messy
-        const offsetDist = getSeededTilt(`seat-${i}`, -6, 6);
+        const offsetDist = getSeededTilt(`seat-${i}`, -4, 4);
         const effectiveRadius = radius + offsetDist;
 
-        const x = 160 + effectiveRadius * Math.cos(angle);
-        const y = 160 + effectiveRadius * Math.sin(angle);
+        const x = center + effectiveRadius * Math.cos(angle);
+        const y = center + effectiveRadius * Math.sin(angle);
 
         if (!player) {
           // Empty seat (dashed circle)

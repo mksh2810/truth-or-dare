@@ -39,22 +39,25 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   };
 
   return (
-    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-chit border-t-2 border-x-2 border-ink shadow-hard-lg rounded-t-xl z-40 safe-bottom">
-      <div className="flex items-center justify-around h-16 px-2">
+    <nav
+      style={{ boxSizing: 'border-box' }}
+      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-chit border-t-2 border-ink z-40 pb-[env(safe-area-inset-bottom,0px)]"
+    >
+      <div className="grid grid-cols-4 w-full h-16 px-1">
         {tabs.map((tab) => {
           const isSelected = active === tab.id;
           return (
             <button
               key={tab.id}
               onClick={() => handleSelect(tab)}
-              className={`flex-1 flex flex-col items-center justify-center py-1 transition-all btn-press ${
+              className={`min-w-0 w-full flex flex-col items-center justify-center py-1 transition-all btn-press ${
                 isSelected
-                  ? 'text-dare font-black scale-105'
+                  ? 'text-dare font-black'
                   : 'text-ink-muted font-normal hover:text-ink'
               }`}
             >
-              <span className="text-xl select-none">{tab.icon}</span>
-              <span className="font-mono text-[10px] uppercase tracking-wider mt-0.5">
+              <span className="text-xl select-none leading-none">{tab.icon}</span>
+              <span className="font-mono text-[10px] uppercase tracking-wider mt-1 truncate w-full text-center px-1">
                 {tab.label}
               </span>
             </button>

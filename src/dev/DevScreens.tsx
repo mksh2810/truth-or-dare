@@ -146,8 +146,8 @@ export default function DevScreens() {
 
       {/* Viewport Frame */}
       <div
-        style={{ width: viewportWidth }}
-        className="min-h-[780px] bg-paper border-2 border-ink/40 shadow-hard-lg rounded-2xl p-4 flex flex-col justify-between overflow-x-hidden transition-all duration-200"
+        style={{ width: `min(100%, ${viewportWidth})` }}
+        className="min-h-[780px] max-w-full bg-paper border-2 border-ink/40 shadow-hard-lg rounded-2xl p-4 flex flex-col justify-between transition-all duration-200"
       >
         {renderScreen()}
       </div>

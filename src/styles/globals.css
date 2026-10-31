@@ -5,7 +5,8 @@
 @tailwind utilities;
 
 @layer base {
-  * {
+  *, *::before, *::after {
+    box-sizing: border-box;
     border-color: #1C1917;
     -webkit-tap-highlight-color: transparent;
   }
@@ -20,7 +21,7 @@
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
-    overflow-x: hidden;
+    /* Never use overflow-x: hidden on html or body per NAV-1 */
   }
 
   input, textarea {
