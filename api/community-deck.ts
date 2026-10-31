@@ -59,3 +59,17 @@ export async function getCommunityChits(
       plays: item.plays,
     }));
 }
+
+export default async function handler(req: any, res: any) {
+  try {
+    const { type, tier, limit } = req.query || {};
+    const chits = await getCommunityChits(
+      type as any,
+      tier as any,
+      limit ? parseInt(limit as string, 10) : 4
+    );
+    return res.status(200).json({ chits });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message || 'Server error' });
+  }
+}
