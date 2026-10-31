@@ -1,0 +1,112 @@
+[
+  {
+    "id": "seed-chit-1",
+    "type": "truth",
+    "tier": "mild",
+    "text": "What is the silliest lie you believed as a child?",
+    "fireScore": 0.88,
+    "plays": 12,
+    "promotedAt": "2026-10-31T09:34:18.408Z",
+    "status": "promoted"
+  },
+  {
+    "id": "seed-chit-2",
+    "type": "truth",
+    "tier": "mild",
+    "text": "What is your absolute guiltiest comfort food?",
+    "fireScore": 0.82,
+    "plays": 8,
+    "promotedAt": "2026-10-31T09:34:18.409Z",
+    "status": "promoted"
+  },
+  {
+    "id": "seed-chit-3",
+    "type": "dare",
+    "tier": "mild",
+    "text": "Do your best runway model walk across the room while giving a dramatic speech.",
+    "fireScore": 0.91,
+    "plays": 15,
+    "promotedAt": "2026-10-31T09:34:18.409Z",
+    "status": "promoted"
+  },
+  {
+    "id": "seed-chit-4",
+    "type": "dare",
+    "tier": "mild",
+    "text": "Speak in an exaggerated Shakespearean accent for the next 2 turns.",
+    "fireScore": 0.85,
+    "plays": 10,
+    "promotedAt": "2026-10-31T09:34:18.409Z",
+    "status": "promoted"
+  },
+  {
+    "id": "seed-chit-5",
+    "type": "truth",
+    "tier": "spicy",
+    "text": "What is the most embarrassing thing currently in your search history?",
+    "fireScore": 0.95,
+    "plays": 24,
+    "promotedAt": "2026-10-31T09:34:18.409Z",
+    "status": "promoted"
+  },
+  {
+    "id": "seed-chit-6",
+    "type": "truth",
+    "tier": "spicy",
+    "text": "Have you ever stalked an ex on a fake social media account?",
+    "fireScore": 0.89,
+    "plays": 18,
+    "promotedAt": "2026-10-31T09:34:18.409Z",
+    "status": "promoted"
+  },
+  {
+    "id": "seed-chit-7",
+    "type": "truth",
+    "tier": "spicy",
+    "text": "Which person at this table would survive the longest in a zombie apocalypse?",
+    "fireScore": 0.86,
+    "plays": 14,
+    "promotedAt": "2026-10-31T09:34:18.409Z",
+    "status": "promoted"
+  },
+  {
+    "id": "seed-chit-8",
+    "type": "dare",
+    "tier": "spicy",
+    "text": "Let the person to your left restyle your hair however they want for the rest of the game.",
+    "fireScore": 0.93,
+    "plays": 20,
+    "promotedAt": "2026-10-31T09:34:18.409Z",
+    "status": "promoted"
+  },
+  {
+    "id": "seed-chit-9",
+    "type": "dare",
+    "tier": "spicy",
+    "text": "Give an impassioned graduation speech to a houseplant or empty chair.",
+    "fireScore": 0.87,
+    "plays": 11,
+    "promotedAt": "2026-10-31T09:34:18.409Z",
+    "status": "promoted"
+  },
+  {
+    "id": "seed-chit-10",
+    "type": "truth",
+    "tier": "legend",
+    "text": "What is a secret you swore you would take to the grave?",
+    "fireScore": 0.96,
+    "plays": 28,
+    "promotedAt": "2026-10-31T09:34:18.409Z",
+    "status": "promoted"
+  },
+  {
+    "id": "seed-chit-11",
+    "type": "dare",
+    "tier": "legend",
+    "text": "Attempt to breakdance for 30 seconds with complete dramatic seriousness.",
+    "fireScore": 0.92,
+    "plays": 22,
+    "promotedAt": "2026-10-31T09:34:18.409Z",
+    "status": "promoted"
+  }
+]
