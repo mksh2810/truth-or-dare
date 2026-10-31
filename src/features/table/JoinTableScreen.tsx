@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CodeBoxes } from '../../components/CodeBoxes';
 import { Button } from '../../components/Button';
+import { useAuthStore } from '../auth/authStore';
+import { joinRoom, sanitizeRoomCode } from '../../lib/firestore-room';
 
 export interface JoinTableScreenProps {
   initialCode?: string;
@@ -15,21 +18,68 @@ export const JoinTableScreen: React.FC<JoinTableScreenProps> = ({
   onJoin,
   error: serverError = null,
 }) => {
-  const [code, setCode] = useState(initialCode);
-  const [guestName, setGuestName] = useState('');
-  const [localError, setLocalError] = useState('');
+  const navigate = useNavigate();
+  const params = useParams<{ code?: string }>();
+  const { profile, loginGuest, saveProfile } = useAuthStore();
 
-  const handleJoin = () => {
-    if (code.length < 6) {
-      setLocalError('Please enter a 6-letter room code');
+  const [code, setCode] = useState(params.code ? sanitizeRoomCode(params.code) : initialCode);
+  const [guestName, setGuestName] = useState(profile?.displayName || '');
+  const [localError, setLocalError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (params.code) {
+      setCode(sanitizeRoomCode(params.code));
+    }
+  }, [params.code]);
+
+  const handleJoin = async () => {
+    const cleanCode = sanitizeRoomCode(code);
+    if (cleanCode.length < 6) {
+      setLocalError('Please enter a 6-character room code');
       return;
     }
-    if (isGuest && guestName.trim().length < 2) {
-      setLocalError('Please enter your name (min 2 characters)');
+
+    if (onJoin) {
+      if (isGuest && guestName.trim().length < 2) {
+        setLocalError('Please enter your name (min 2 characters)');
+        return;
+      }
+      setLocalError('');
+      onJoin(cleanCode, guestName.trim());
       return;
     }
+
+    // Direct routing flow
+    let currentProfile = profile;
+    if (!currentProfile) {
+      const name = guestName.trim() || 'Guest';
+      await loginGuest(name);
+      currentProfile = useAuthStore.getState().profile;
+    } else if (guestName.trim() && guestName.trim() !== currentProfile.displayName) {
+      await saveProfile(guestName.trim(), currentProfile.avatarId);
+      currentProfile = useAuthStore.getState().profile;
+    }
+
+    if (!currentProfile) {
+      setLocalError('Failed to initialize player session.');
+      return;
+    }
+
+    setLoading(true);
     setLocalError('');
-    onJoin?.(code, guestName.trim());
+    try {
+      const res = await joinRoom(cleanCode, currentProfile);
+      if (res.success) {
+        navigate(`/table/${cleanCode}`);
+      } else {
+        setLocalError(res.error || 'Failed to join table');
+      }
+    } catch (err: any) {
+      setLocalError(err.message || 'Error joining table');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const displayError = localError || serverError;
@@ -60,8 +110,8 @@ export const JoinTableScreen: React.FC<JoinTableScreenProps> = ({
           />
         </div>
 
-        {/* Name input if Guest */}
-        {isGuest && (
+        {/* Name input if Guest without profile */}
+        {(!profile || isGuest) && !profile?.displayName && (
           <div className="space-y-2 text-left">
             <label className="font-mono text-xs font-bold uppercase text-ink">
               Your Name

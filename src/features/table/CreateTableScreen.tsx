@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../../components/Button';
+import { useAuthStore } from '../auth/authStore';
+import { createRoom } from '../../lib/firestore-room';
 
 export interface CreateTableScreenProps {
   onCreate?: (settings: {
@@ -14,25 +17,67 @@ export interface CreateTableScreenProps {
 
 export const CreateTableScreen: React.FC<CreateTableScreenProps> = ({
   onCreate,
-  createdCode,
+  createdCode: propCreatedCode,
   onEnterLobby,
 }) => {
+  const navigate = useNavigate();
+  const { profile } = useAuthStore();
   const [players, setPlayers] = useState(4);
   const [tier, setTier] = useState<'mild' | 'spicy' | 'legend'>('spicy');
   const [timer, setTimer] = useState<'short' | 'normal' | 'long'>('normal');
   const [dareMode, setDareMode] = useState<'room' | 'live'>('room');
   const [copied, setCopied] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [internalCode, setInternalCode] = useState<string | null>(null);
+
+  const activeCode = propCreatedCode || internalCode;
+
+  const handleCreate = async () => {
+    if (onCreate) {
+      onCreate({
+        maxPlayers: players,
+        tier,
+        timer,
+        dareMode,
+      });
+      return;
+    }
+
+    if (!profile) return;
+    setLoading(true);
+    try {
+      const code = await createRoom(profile, {
+        maxPlayers: players,
+        tier,
+        timer,
+        dareMode,
+      });
+      setInternalCode(code);
+    } catch (err) {
+      console.error('Failed to create room:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleCopy = () => {
-    if (createdCode) {
-      navigator.clipboard.writeText(createdCode);
+    if (activeCode) {
+      navigator.clipboard.writeText(activeCode);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
   };
 
+  const handleGoToLobby = () => {
+    if (onEnterLobby) {
+      onEnterLobby();
+    } else if (activeCode) {
+      navigate(`/table/${activeCode}`);
+    }
+  };
+
   // Frame 2: After table creation
-  if (createdCode) {
+  if (activeCode) {
     return (
       <div className="w-full flex-1 flex flex-col justify-between py-6 max-w-[390px] mx-auto text-center">
         <div className="space-y-6 pt-4">
@@ -47,7 +92,7 @@ export const CreateTableScreen: React.FC<CreateTableScreenProps> = ({
           <div className="relative p-6 bg-chit border-2 border-ink shadow-hard rounded-btn space-y-4">
             <div className="font-mono text-xs text-ink-muted uppercase">Party Code</div>
             <div className="font-mono text-5xl font-black tracking-widest text-dare py-2">
-              {createdCode}
+              {activeCode}
             </div>
 
             <div className="flex gap-2">
@@ -62,8 +107,8 @@ export const CreateTableScreen: React.FC<CreateTableScreenProps> = ({
                   if (navigator.share) {
                     navigator.share({
                       title: 'Join my Chit Table!',
-                      text: `Join our Truth or Dare table with code: ${createdCode}`,
-                      url: `${window.location.origin}/join/${createdCode}`,
+                      text: `Join our Truth or Dare table with code: ${activeCode}`,
+                      url: `${window.location.origin}/join/${activeCode}`,
                     }).catch(() => {});
                   } else {
                     handleCopy();
@@ -78,7 +123,7 @@ export const CreateTableScreen: React.FC<CreateTableScreenProps> = ({
         </div>
 
         <div className="pt-6">
-          <Button fullWidth onClick={onEnterLobby}>
+          <Button fullWidth onClick={handleGoToLobby}>
             Go to Lobby
           </Button>
         </div>
@@ -204,16 +249,10 @@ export const CreateTableScreen: React.FC<CreateTableScreenProps> = ({
 
         <Button
           fullWidth
-          onClick={() =>
-            onCreate?.({
-              maxPlayers: players,
-              tier,
-              timer,
-              dareMode,
-            })
-          }
+          disabled={loading}
+          onClick={handleCreate}
         >
-          Create Table
+          {loading ? 'Setting Table...' : 'Create Table'}
         </Button>
       </div>
     </div>

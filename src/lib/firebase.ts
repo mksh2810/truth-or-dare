@@ -9,6 +9,7 @@ import {
   onAuthStateChanged,
   User as FirebaseUser,
   Auth,
+  connectAuthEmulator,
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -18,6 +19,7 @@ import {
   deleteDoc,
   serverTimestamp,
   Firestore,
+  connectFirestoreEmulator,
 } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -41,6 +43,19 @@ try {
   app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
   auth = getAuth(app);
   db = getFirestore(app);
+
+  if (import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true') {
+    try {
+      connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
+    } catch {
+      // Ignored if already connected
+    }
+    try {
+      connectFirestoreEmulator(db, 'localhost', 8080);
+    } catch {
+      // Ignored if already connected
+    }
+  }
 } catch (err) {
   console.warn('Firebase initialization error, fallback enabled:', err);
   app = null as unknown as FirebaseApp;
