@@ -1,0 +1,22 @@
+{
+  "name": "vowlet",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Vowlet — A little truth, a little trouble. Mobile-first PWA multiplayer Truth-or-Dare party game.",
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "emulators": "firebase emulators:start --config firebase/firebase.json",
+    "emulators:exec": "firebase emulators:exec --config firebase/firebase.json"
+  }
+}

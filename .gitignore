@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+.vercel/
+*.tsbuildinfo
+
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+
+# Firebase & emulators
+firebase-debug.log
+firestore-debug.log
+database-debug.log
+ui-debug.log
+.firebase/
+
+# Testing & coverage
+coverage/
+playwright-report/
+test-results/
+blob-report/
+
+# OS & editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/

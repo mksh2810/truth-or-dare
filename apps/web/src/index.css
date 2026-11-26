@@ -1,0 +1,70 @@
+@import 'tailwindcss';
+
+/* Evening Table — Design Tokens (/docs/design/tokens.md) */
+:root {
+  /* Core Surface & Ink */
+  --color-linen: #f6f1e9;
+  --color-cream: #fffdf9;
+  --color-ink: #23201c;
+
+  /* Semantic & Accent (fills, seals, borders, icons) */
+  --color-truth-teal: #2e5e6b;
+  --color-dare-terracotta: #c4552d;
+  --color-brass: #b8893b;
+  --color-sage: #5b8c5a;
+  --color-brick: #a33a2c;
+
+  /* Text-Safe Variants (WCAG AA >= 4.5:1 on Linen/Cream) */
+  --color-brass-text: #8a6420;
+  --color-sage-text: #3f6b3e;
+  --color-terracotta-text: #a9441f;
+
+  /* Lamplit Scene Tokens */
+  --color-lamplit-bg: #1a1410;
+  --color-lamplit-amber: #2a1d14;
+  --scrim-lamplit: linear-gradient(
+    180deg,
+    rgba(20, 15, 11, 0.65) 0%,
+    rgba(20, 15, 11, 0.78) 100%
+  );
+  --color-lamplit-text: #fffdf9;
+  --color-lamplit-muted: rgba(255, 253, 249, 0.78);
+  --border-lamplit-hairline: 1px solid rgba(255, 253, 249, 0.18);
+
+  /* Typography */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-chit: 'Kalam', cursive, sans-serif;
+
+  /* Shape, Borders, & Elevation */
+  --radius-card: 18px;
+  --radius-control: 14px;
+  --radius-pill: 9999px;
+  --border-ink-hairline: 1px solid rgba(35, 32, 28, 0.14);
+  --border-ink-strong: 1px solid rgba(35, 32, 28, 0.28);
+  --border-focus: 2px solid #2e5e6b;
+  --shadow-card: 0 1px 2px rgba(35, 32, 28, 0.08), 0 8px 24px rgba(35, 32, 28, 0.08);
+  --shadow-sheet: 0 2px 6px rgba(35, 32, 28, 0.12), 0 16px 40px rgba(35, 32, 28, 0.16);
+  --shadow-seal: 0 1px 3px rgba(35, 32, 28, 0.18), 0 4px 12px rgba(35, 32, 28, 0.14);
+
+  /* Layout & Safe-Area */
+  --viewport-min: 360px;
+  --viewport-max-shell: 430px;
+  --space-page-x: 16px;
+  --space-section: 20px;
+  --touch-min: 44px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background-color: var(--color-linen);
+  color: var(--color-ink);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
