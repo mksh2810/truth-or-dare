@@ -1,13 +1,13 @@
 # VOWLET ORCHESTRATION STATUS
 
-**Current Phase**: Phase 2 — Robustness, Trust and Safety
-**Previous Phase**: Phase 1 — **PASS** (`/docs/orchestration/gates/phase-1.md`)
+**Current Phase**: Phase 3 — Retention, Growth and Validation Readiness
+**Previous Phase**: Phase 2 — **PASS** (`/docs/orchestration/gates/phase-2.md`)
 
-## Phase 2 Task Cards
+## Phase 3 Task Cards
 
 | ID | Title | Owner | Reviewers | Status | Outputs |
 |---|---|---|---|---|---|
-| P2-AI | Judge Owl LLM Pipeline, Adapter, Verdict Cache, Roast Templates & 300+ Calibration Set + Eval Harness | AI, CW | SEC, LEG | DOING | `/content/tier-rubric.md`, `/content/calibration-set.json`, `/api/judge/*`, `/packages/shared/src/moderation.ts` |
-| P2-BERE | Host Migration (D5), Reconnect & Leaver Rules (D20), Version Skew (D16), Report/Block, Delete-My-Data, Remote Config Flags | BE, RT | SEC, ARCH | DOING | `/api/room/migrate.ts`, `/api/report.ts`, `/api/user/delete.ts`, `/api/_lib/flags.ts` |
-| P2-FE | Code-Splitting (<=200KB gzip), Legal Pages (DRAFT), Consent/Report/Delete-Data/Profile UI, Version-Skew Toast, A11y & Motion Polish | FE1, FE2, UX | PERF | DOING | `/apps/web/src/legal/*`, `/apps/web/src/screens/*`, `/apps/web/vite.config.ts` |
-| P2-QA-SEC-PERF | 14 Chaos Scenarios (Section 9.2), Rules Emulator Tests, Security Audit, Axe A11y & PWA Support Matrix (B14), Sentry Privacy Scrubber | QA, SEC, PERF, OPS | ORCH | TODO | `/e2e/src/tests/chaos.spec.ts`, `/docs/quality/{a11y-audit.md,pwa-matrix.md}`, `/docs/security/phase2-audit.md` |
+| P3-CW | Expand Starter Deck to 450+ Prompts (5 Packs) & 150+ Owl Lines | CW | LEG, AI | DOING | `/content/starter-deck.json`, `/content/owl-lines.json` |
+| P3-BE-AI | Server-side Exponential XP/Levels/Skins (`B12`), Opt-In Community Deck (`D28`), Ratings with Wilson Lower-Bound & Near-Duplicate Hashing (`D19`, `B9`), `x-test-uid` prod guard | BE, AI | SEC, QA | DOING | `/api/prompts/{community,rate,delete}.ts`, `/api/game/finish.ts`, `/api/_lib/middleware.ts` |
+| P3-FE | Summary/Loot Screen (XP, Level-Up, Skins), Table Mode & Pass-the-Phone (`B4`), Night Recap Share Card + Web Share (`B2`, `D23`), Rematch & Saved Tables, Landing Page (`noindex`, `B8`), Analytics Events (`B13`) | FE1, FE2, UX | PERF, BIZ | DOING | `/apps/web/src/screens/{SummaryLootScreen,TableModeScreen,LandingSection}.tsx`, `/apps/web/src/analytics/events.ts` |
+| P3-BIZ-QA | Analytics Event Spec, KPI Dashboard Spec, Validation Protocol, 3-Question Survey, Creator Kit (`B8`, `B13`) + Phase 3 E2E Verification | BIZ, QA | PM, ORCH | DOING | `/docs/business/{analytics-spec,kpi-dashboard,validation-protocol,survey,creator-kit,landing-copy}.md`, `/e2e/src/tests/phase3.spec.ts` |

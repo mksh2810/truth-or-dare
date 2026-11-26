@@ -1,25 +1,63 @@
-import { useEffect } from 'react';
+import { Suspense, lazy, useEffect, useMemo } from 'react';
 import { MotionConfig } from 'framer-motion';
 import { subscribeAuth } from './auth/firebase';
+import { detectInAppBrowser } from './pwa/inAppBrowser';
 import { useGameStore } from './state/useGameStore';
 import { ConsentScreen } from './screens/ConsentScreen';
 import { HomeScreen } from './screens/HomeScreen';
-import { CreateTableScreen } from './screens/CreateTableScreen';
-import { JoinTableScreen } from './screens/JoinTableScreen';
-import { LobbyScreen } from './screens/LobbyScreen';
-import { WriteChitsScreen } from './screens/WriteChitsScreen';
-import { BottleSpinScreen } from './screens/BottleSpinScreen';
-import { ChosenScreen } from './screens/ChosenScreen';
-import { PerformScreen } from './screens/PerformScreen';
-import { VoteScreen } from './screens/VoteScreen';
-import { ResultScreen } from './screens/ResultScreen';
-import { PodiumScreen } from './screens/PodiumScreen';
-import { RoomClosedScreen } from './screens/RoomClosedScreen';
 import { ReconnectingBanner } from './screens/ReconnectingBanner';
-import { InAppBrowserHelp } from './screens/InAppBrowserHelp';
 import { UpdateAvailableToast } from './screens/UpdateAvailableToast';
 
+const CreateTableScreen = lazy(() =>
+  import('./screens/CreateTableScreen').then((m) => ({ default: m.CreateTableScreen })),
+);
+const JoinTableScreen = lazy(() =>
+  import('./screens/JoinTableScreen').then((m) => ({ default: m.JoinTableScreen })),
+);
+const LobbyScreen = lazy(() =>
+  import('./screens/LobbyScreen').then((m) => ({ default: m.LobbyScreen })),
+);
+const WriteChitsScreen = lazy(() =>
+  import('./screens/WriteChitsScreen').then((m) => ({ default: m.WriteChitsScreen })),
+);
+const BottleSpinScreen = lazy(() =>
+  import('./screens/BottleSpinScreen').then((m) => ({ default: m.BottleSpinScreen })),
+);
+const ChosenScreen = lazy(() =>
+  import('./screens/ChosenScreen').then((m) => ({ default: m.ChosenScreen })),
+);
+const PerformScreen = lazy(() =>
+  import('./screens/PerformScreen').then((m) => ({ default: m.PerformScreen })),
+);
+const VoteScreen = lazy(() =>
+  import('./screens/VoteScreen').then((m) => ({ default: m.VoteScreen })),
+);
+const ResultScreen = lazy(() =>
+  import('./screens/ResultScreen').then((m) => ({ default: m.ResultScreen })),
+);
+const PodiumScreen = lazy(() =>
+  import('./screens/PodiumScreen').then((m) => ({ default: m.PodiumScreen })),
+);
+const RoomClosedScreen = lazy(() =>
+  import('./screens/RoomClosedScreen').then((m) => ({ default: m.RoomClosedScreen })),
+);
+const InAppBrowserHelp = lazy(() =>
+  import('./screens/InAppBrowserHelp').then((m) => ({ default: m.InAppBrowserHelp })),
+);
+
 export const VOWLET_TAGLINE = 'A little truth, a little trouble';
+
+function ScreenFallback() {
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      className="flex min-h-dvh w-full items-center justify-center px-4 text-sm font-medium opacity-70"
+    >
+      Setting the table…
+    </div>
+  );
+}
 
 export function App() {
   const setAuth = useGameStore((s) => s.setAuth);
@@ -29,6 +67,7 @@ export function App() {
   const room = useGameStore((s) => s.room);
   const toast = useGameStore((s) => s.toast);
   const reducedMotionOverride = useGameStore((s) => s.reducedMotionOverride);
+  const isInApp = useMemo(() => detectInAppBrowser().isInApp, []);
 
   useEffect(() => {
     const unsub = subscribeAuth((profile) => {
@@ -95,8 +134,12 @@ export function App() {
     <MotionConfig reducedMotion={reducedMotionOverride ? 'always' : 'user'}>
       <div className="min-h-dvh w-full overflow-x-hidden">
         <ReconnectingBanner />
-        <InAppBrowserHelp />
-        {renderContent()}
+        {isInApp && (
+          <Suspense fallback={null}>
+            <InAppBrowserHelp />
+          </Suspense>
+        )}
+        <Suspense fallback={<ScreenFallback />}>{renderContent()}</Suspense>
 
         {toast && (
           <div

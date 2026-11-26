@@ -24,6 +24,7 @@ export function ReportBlockSheet({
   targetName,
 }: ReportBlockSheetProps) {
   const submitReport = useGameStore((s) => s.submitReport);
+  const showToast = useGameStore((s) => s.showToast);
   const [reason, setReason] = useState(REASONS[0] ?? 'Other');
   const [details, setDetails] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -38,6 +39,8 @@ export function ReportBlockSheet({
       });
       setDetails('');
       onClose();
+    } catch {
+      showToast('Could not submit report. Please try again.', 'error');
     } finally {
       setSubmitting(false);
     }

@@ -1,11 +1,32 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { RoomCodeSchema } from '@vowlet/shared';
+import { RoomCodeSchema, SCHEMA_VERSION } from '@vowlet/shared';
+import { getFeatureFlags } from '../_lib/flags.js';
 import { withArbiterGet } from '../_lib/middleware.js';
 import { requireRoom } from '../_lib/roomHelpers.js';
 import { ArbiterError } from '../_lib/store.js';
 
 export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
   await withArbiterGet(req, res, async ({ req: r, uid, store }) => {
+    const rawSchema = r.query.schemaVersion ?? r.headers['x-schema-version'];
+    const schemaStr = Array.isArray(rawSchema) ? rawSchema[0] : rawSchema;
+    const flags = getFeatureFlags();
+    const clientSchemaVersion =
+      schemaStr !== undefined && String(schemaStr).trim().length > 0
+        ? Number(schemaStr)
+        : SCHEMA_VERSION;
+
+    if (!Number.isInteger(clientSchemaVersion) || clientSchemaVersion < 0) {
+      throw new ArbiterError(400, 'VALIDATION_ERROR', 'Invalid schemaVersion parameter');
+    }
+
+    if (clientSchemaVersion < flags.min_schema_version) {
+      throw new ArbiterError(
+        426,
+        'SCHEMA_MISMATCH',
+        `Client schemaVersion ${clientSchemaVersion} is below minimum required ${flags.min_schema_version}`,
+      );
+    }
+
     const rawCode = r.query.roomCode ?? r.query.code;
     const codeStr = Array.isArray(rawCode) ? rawCode[0] : rawCode;
     const parsedCode = RoomCodeSchema.safeParse(codeStr);

@@ -20,6 +20,24 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (/[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/.test(id)) {
+            return 'vendor-react';
+          }
+          if (/[\\/]node_modules[\\/]framer-motion[\\/]/.test(id)) {
+            return 'vendor-motion';
+          }
+          if (/[\\/]node_modules[\\/](firebase|@firebase)[\\/]/.test(id)) {
+            return 'vendor-firebase';
+          }
+          return undefined;
+        },
+      },
+    },
+  },
   server: {
     port: 5173,
     proxy: {

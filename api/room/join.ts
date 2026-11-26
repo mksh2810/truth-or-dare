@@ -5,6 +5,7 @@ import {
   validatePlayerName,
 } from '@vowlet/shared';
 import { withArbiterAuth } from '../_lib/middleware.js';
+import { getFeatureFlags } from '../_lib/flags.js';
 import { refreshRoomTimestamps, requireRoom } from '../_lib/roomHelpers.js';
 import { ArbiterError } from '../_lib/store.js';
 
@@ -14,11 +15,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     res,
     JoinRoomSchema,
     async ({ uid, body, store }) => {
-      if (body.schemaVersion !== SCHEMA_VERSION) {
+      const flags = getFeatureFlags();
+      if (body.schemaVersion < flags.min_schema_version || body.schemaVersion !== SCHEMA_VERSION) {
         throw new ArbiterError(
-          409,
+          426,
           'SCHEMA_MISMATCH',
-          `Client schemaVersion ${body.schemaVersion} does not match server ${SCHEMA_VERSION}`,
+          `Client schemaVersion ${body.schemaVersion} is incompatible (minimum required: ${flags.min_schema_version}, server: ${SCHEMA_VERSION})`,
         );
       }
 

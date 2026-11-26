@@ -1,8 +1,12 @@
-import { useState } from 'react';
+import { Suspense, lazy, useState } from 'react';
 import { ShieldCheck } from 'lucide-react';
 import { Button, OwlMascot, SurfaceCard, VowletWordmark } from '../design';
 import { useGameStore } from '../state/useGameStore';
-import { LegalSheet, type LegalTab } from './LegalSheet';
+import type { LegalTab } from '../legal/policies';
+
+const LegalSheet = lazy(() =>
+  import('./LegalSheet').then((m) => ({ default: m.LegalSheet })),
+);
 
 export function ConsentScreen() {
   const acceptConsent = useGameStore((s) => s.acceptConsent);
@@ -61,8 +65,15 @@ export function ConsentScreen() {
           </button>
           <button
             type="button"
+            onClick={() => setLegalTab('content')}
+            className="min-h-[44px] min-w-[44px] font-semibold text-[var(--color-truth-teal)] underline"
+          >
+            Content (DRAFT)
+          </button>
+          <button
+            type="button"
             onClick={() => setLegalTab('safe-dares')}
-            className="min-h-[44px] font-semibold text-[var(--color-truth-teal)] underline"
+            className="min-h-[44px] min-w-[44px] font-semibold text-[var(--color-truth-teal)] underline"
           >
             Safe Dares (DRAFT)
           </button>
@@ -94,11 +105,15 @@ export function ConsentScreen() {
         Private Beta • DRAFT policies not yet legally reviewed
       </p>
 
-      <LegalSheet
-        open={legalTab !== null}
-        onClose={() => setLegalTab(null)}
-        initialTab={legalTab ?? 'terms'}
-      />
+      {legalTab !== null && (
+        <Suspense fallback={null}>
+          <LegalSheet
+            open={legalTab !== null}
+            onClose={() => setLegalTab(null)}
+            initialTab={legalTab ?? 'terms'}
+          />
+        </Suspense>
+      )}
     </main>
   );
 }

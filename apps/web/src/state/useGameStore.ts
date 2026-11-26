@@ -170,6 +170,7 @@ export interface GameState {
   shareSheetOpen: boolean;
   toast: ToastMessage | null;
   pendingAction: boolean;
+  schemaMismatch: boolean;
 
   // Timing
   clockOffsetMs: number;
@@ -195,6 +196,7 @@ export interface GameState {
   clearToast: () => void;
   saveCurrentTable: () => void;
   deleteLocalUserData: () => void;
+  deleteUserData: () => Promise<void>;
 
   // Room & Turn Actions
   subscribeToRoom: (code: string) => () => void;
@@ -305,6 +307,26 @@ function persistPrefs(state: Pick<GameState, 'displayName' | 'soundEnabled' | 'r
 const initialPrefs = loadPrefs();
 let roomUnsubscribers: Unsubscribe[] = [];
 
+class ArbiterError extends Error {
+  status: number;
+  code?: string;
+
+  constructor(message: string, status: number, code?: string) {
+    super(message);
+    this.name = 'ArbiterError';
+    this.status = status;
+    this.code = code;
+  }
+}
+
+function isExpectedConflict(err: unknown): boolean {
+  return (
+    err instanceof ArbiterError &&
+    err.status === 409 &&
+    (err.code === 'VERSION_MISMATCH' || err.code === 'DEADLINE_NOT_REACHED' || !err.code)
+  );
+}
+
 export const useGameStore = create<GameState>((set, get) => {
   async function callArbiter<TResponse>(
     path: string,
@@ -350,19 +372,52 @@ export const useGameStore = create<GameState>((set, get) => {
       };
 
       if (!res.ok) {
-        if (res.status === 409 && json.error?.currentState && get().room) {
-          const cur = get().room!;
-          if (json.error.currentState.turnVersion >= cur.turnVersion) {
-            set({
-              room: {
-                ...cur,
-                phase: json.error.currentState.phase,
-                turnVersion: json.error.currentState.turnVersion,
-              },
-            });
-          }
+        if (res.status === 426 || json.error?.code === 'SCHEMA_MISMATCH') {
+          set({
+            schemaMismatch: true,
+            syncState: 'synced',
+            pendingAction: false,
+          });
+          get().showToast(
+            'Update required: a newer version of Vowlet is live. Please reload.',
+            'error',
+          );
+          throw new ArbiterError(
+            json.error?.message || 'App update required.',
+            426,
+            'SCHEMA_MISMATCH',
+          );
         }
-        throw new Error(json.error?.message || `Request failed (${res.status})`);
+
+        if (res.status === 409) {
+          if (json.error?.currentState && get().room) {
+            const cur = get().room!;
+            if (json.error.currentState.turnVersion >= cur.turnVersion) {
+              set({
+                room: {
+                  ...cur,
+                  phase: json.error.currentState.phase,
+                  turnVersion: json.error.currentState.turnVersion,
+                },
+              });
+            }
+          }
+          const activeCode = get().room?.code;
+          if (isLocalApiMode && activeCode) {
+            void pollRoomState(activeCode);
+          }
+          throw new ArbiterError(
+            json.error?.message || 'State conflict',
+            409,
+            json.error?.code,
+          );
+        }
+
+        throw new ArbiterError(
+          json.error?.message || `Request failed (${res.status})`,
+          res.status,
+          json.error?.code,
+        );
       }
 
       set({ syncState: 'synced', pendingAction: false });
@@ -430,6 +485,11 @@ export const useGameStore = create<GameState>((set, get) => {
       if (!data.ok || !data.room) return;
 
       if (data.room.schemaVersion !== SCHEMA_VERSION) {
+        set({ schemaMismatch: true });
+        get().showToast(
+          'Update required: a newer version of Vowlet is live. Please reload.',
+          'error',
+        );
         get().leaveRoomLocally('Version mismatch — please reload Vowlet.');
         return;
       }
@@ -520,6 +580,7 @@ export const useGameStore = create<GameState>((set, get) => {
     shareSheetOpen: false,
     toast: null,
     pendingAction: false,
+    schemaMismatch: false,
 
     clockOffsetMs: 0,
 
@@ -612,6 +673,20 @@ export const useGameStore = create<GameState>((set, get) => {
         savedTables: [],
       });
       get().showToast('Your local data has been cleared.', 'info');
+    },
+
+    deleteUserData: async () => {
+      try {
+        await callArbiter('/api/user/delete', {});
+      } catch (err) {
+        if (
+          !(err instanceof Error && err.message === 'LOCAL_FALLBACK') &&
+          !(err instanceof ArbiterError && err.status === 404)
+        ) {
+          // Even if remote delete fails in dev/offline, proceed with local cleanup
+        }
+      }
+      get().deleteLocalUserData();
     },
 
     leaveRoomLocally: (reason = null) => {
@@ -712,6 +787,11 @@ export const useGameStore = create<GameState>((set, get) => {
         }
         const incoming = snap.data() as RoomDoc;
         if (incoming.schemaVersion !== SCHEMA_VERSION) {
+          set({ schemaMismatch: true });
+          get().showToast(
+            'Update required: a newer version of Vowlet is live. Please reload.',
+            'error',
+          );
           get().leaveRoomLocally('Version mismatch — please reload Vowlet.');
           return;
         }
@@ -1000,6 +1080,9 @@ export const useGameStore = create<GameState>((set, get) => {
           ...patch,
         });
       } catch (err) {
+        if (isExpectedConflict(err) || (err instanceof ArbiterError && err.status === 426)) {
+          return;
+        }
         if (!(err instanceof Error && err.message === 'LOCAL_FALLBACK')) throw err;
         const bundle = readLocalBundle(room.code);
         if (!bundle) return;
@@ -1170,6 +1253,9 @@ export const useGameStore = create<GameState>((set, get) => {
           expectedVersion: room.turnVersion,
         });
       } catch (err) {
+        if (isExpectedConflict(err) || (err instanceof ArbiterError && err.status === 426)) {
+          return;
+        }
         if (!(err instanceof Error && err.message === 'LOCAL_FALLBACK')) throw err;
         const bundle = readLocalBundle(room.code);
         if (!bundle) return;

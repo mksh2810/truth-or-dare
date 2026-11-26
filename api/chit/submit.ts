@@ -1,12 +1,8 @@
 import { randomUUID } from 'node:crypto';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { z } from 'zod';
-import {
-  checkDeterministicModeration,
-  fnv1aHash,
-  PhaseSchema,
-  SubmitChitSchema,
-} from '@vowlet/shared';
+import { PhaseSchema, SubmitChitSchema } from '@vowlet/shared';
+import { runJudgePipeline } from '../judge/pipeline.js';
 import { withArbiterAuth } from '../_lib/middleware.js';
 import {
   assertExpectedState,
@@ -24,6 +20,16 @@ const SubmitChitRequestSchema = SubmitChitSchema.and(
 
 export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
   await withArbiterAuth(req, res, SubmitChitRequestSchema, async ({ uid, body, store }) => {
+    const requestedDareType = body.kind === 'DARE' ? body.dareType : null;
+
+    // Run Judge Owl pipeline outside the Firestore transaction so network/LLM calls never hold tx locks.
+    const judge = await runJudgePipeline({
+      text: body.text,
+      kind: body.kind,
+      tier: body.tier,
+      dareType: requestedDareType,
+    });
+
     const result = await store.runTransaction(async (tx) => {
       const nowMs = tx.now();
       const room = await requireRoom(tx, body.roomCode);
@@ -47,33 +53,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
         throw new ArbiterError(403, 'FORBIDDEN', 'Only active players can submit chits');
       }
 
-      const mod = checkDeterministicModeration(body.text);
       const chitId = `chit_${randomUUID().replace(/-/g, '').slice(0, 12)}`;
 
-      if (!mod.allowed) {
+      if (judge.outcome !== 'APPROVED' || judge.verdict !== 'FINE') {
         return {
           ok: true,
           chitId,
-          verdict: 'NOPE' as const,
-          tier: body.tier,
-          dareType: body.kind === 'DARE' ? body.dareType : null,
-          owlReason: mod.reason ?? 'The Owl says this prompt needs a rewrite.',
-          status: 'REJECTED' as const,
+          verdict: judge.verdict,
+          tier: judge.tier,
+          dareType: judge.dareType,
+          owlReason: judge.owlReason,
+          status: judge.status,
+          fallbackAction: judge.fallbackAction,
         };
       }
-
-      const dareType = body.kind === 'DARE' ? body.dareType : null;
-      const owlReason = 'Owl approves! Sealed onto the table.';
 
       // Public chit doc: never stores text or authorUid (D9)
       tx.setChit(body.roomCode, {
         id: chitId,
         kind: body.kind,
-        tier: body.tier,
-        dareType,
+        tier: judge.tier,
+        dareType: judge.dareType,
         status: 'SEALED',
         judgeVerdict: 'FINE',
-        owlReason,
+        owlReason: judge.owlReason,
       });
 
       // Secret doc: strictly server-only
@@ -81,7 +84,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
         text: body.text.trim(),
         authorUid: uid,
         verdict: 'FINE',
-        normalizedHash: fnv1aHash(body.text),
+        normalizedHash: judge.normalizedHash,
       });
 
       tx.setRoom(body.roomCode, refreshRoomTimestamps(room, nowMs));
@@ -90,10 +93,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
         ok: true,
         chitId,
         verdict: 'FINE' as const,
-        tier: body.tier,
-        dareType,
-        owlReason,
+        tier: judge.tier,
+        dareType: judge.dareType,
+        owlReason: judge.owlReason,
         status: 'SEALED' as const,
+        fallbackAction: 'NONE' as const,
       };
     });
 

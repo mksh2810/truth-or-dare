@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { Suspense, lazy, useState } from 'react';
 import { Award, LogIn, Plus, Settings, Users } from 'lucide-react';
 import { Button, OwlMascot, VowletWordmark } from '../design';
 import { signInWithGoogle } from '../auth/firebase';
 import { useGameStore } from '../state/useGameStore';
-import { ProfileSettingsSheet } from './ProfileSettingsSheet';
+
+const ProfileSettingsSheet = lazy(() =>
+  import('./ProfileSettingsSheet').then((m) => ({ default: m.ProfileSettingsSheet })),
+);
 
 export function HomeScreen() {
   const auth = useGameStore((s) => s.auth);
@@ -105,7 +108,11 @@ export function HomeScreen() {
         </Button>
       </section>
 
-      <ProfileSettingsSheet open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      {settingsOpen && (
+        <Suspense fallback={null}>
+          <ProfileSettingsSheet open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+        </Suspense>
+      )}
     </main>
   );
 }

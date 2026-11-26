@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { Suspense, lazy, useState } from 'react';
 import { LogIn, LogOut, Trash2, Volume2, VolumeX } from 'lucide-react';
 import { BottomSheet, Button } from '../design';
 import { signInWithGoogle, signOutToGuest } from '../auth/firebase';
 import { useGameStore } from '../state/useGameStore';
-import { LegalSheet, type LegalTab } from './LegalSheet';
+import type { LegalTab } from '../legal/policies';
+
+const LegalSheet = lazy(() =>
+  import('./LegalSheet').then((m) => ({ default: m.LegalSheet })),
+);
 
 export interface ProfileSettingsSheetProps {
   open: boolean;
@@ -21,11 +25,12 @@ export function ProfileSettingsSheet({ open, onClose }: ProfileSettingsSheetProp
   const setReducedMotionOverride = useGameStore((s) => s.setReducedMotionOverride);
   const level = useGameStore((s) => s.level);
   const lifetimeXp = useGameStore((s) => s.lifetimeXp);
-  const deleteLocalUserData = useGameStore((s) => s.deleteLocalUserData);
+  const deleteUserData = useGameStore((s) => s.deleteUserData);
   const showToast = useGameStore((s) => s.showToast);
 
   const [legalTab, setLegalTab] = useState<LegalTab | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const isSignedIn = Boolean(auth && !auth.isAnonymous);
 
@@ -148,6 +153,13 @@ export function ProfileSettingsSheet({ open, onClose }: ProfileSettingsSheetProp
             </button>
             <button
               type="button"
+              onClick={() => setLegalTab('content')}
+              className="min-h-[44px] underline"
+            >
+              Content (DRAFT)
+            </button>
+            <button
+              type="button"
               onClick={() => setLegalTab('safe-dares')}
               className="min-h-[44px] underline"
             >
@@ -175,10 +187,14 @@ export function ProfileSettingsSheet({ open, onClose }: ProfileSettingsSheetProp
                 <Button
                   variant="danger"
                   fullWidth
+                  loading={deleting}
                   onClick={() => {
-                    deleteLocalUserData();
-                    setConfirmDelete(false);
-                    onClose();
+                    setDeleting(true);
+                    void deleteUserData().finally(() => {
+                      setDeleting(false);
+                      setConfirmDelete(false);
+                      onClose();
+                    });
                   }}
                 >
                   Confirm Delete
@@ -192,11 +208,15 @@ export function ProfileSettingsSheet({ open, onClose }: ProfileSettingsSheetProp
         </div>
       </BottomSheet>
 
-      <LegalSheet
-        open={legalTab !== null}
-        onClose={() => setLegalTab(null)}
-        initialTab={legalTab ?? 'terms'}
-      />
+      {legalTab !== null && (
+        <Suspense fallback={null}>
+          <LegalSheet
+            open={legalTab !== null}
+            onClose={() => setLegalTab(null)}
+            initialTab={legalTab ?? 'terms'}
+          />
+        </Suspense>
+      )}
     </>
   );
 }

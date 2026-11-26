@@ -112,9 +112,10 @@ export function LobbyScreen() {
         <div className="flex items-center gap-1.5">
           <button
             type="button"
+            aria-label={`Copy room code ${room.code}`}
             data-testid="copy-room-code"
             onClick={() => void handleCopyCode()}
-            className="tabular-nums inline-flex min-h-[44px] items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 text-sm font-bold tracking-[0.18em] text-[var(--color-cream)]"
+            className="tabular-nums inline-flex min-h-[44px] min-w-[44px] items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 text-sm font-bold tracking-[0.18em] text-[var(--color-cream)]"
           >
             <span data-testid="room-code-text">{room.code}</span>
             {copied ? <Check className="h-4 w-4 text-[#A7D7A6]" aria-hidden="true" /> : <Copy className="h-4 w-4" aria-hidden="true" />}

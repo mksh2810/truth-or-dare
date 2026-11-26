@@ -54,7 +54,11 @@ export function ResultScreen() {
         <SyncIndicator state={syncState} />
       </header>
 
-      <section className="my-auto flex flex-col items-center gap-5 text-center">
+      <section
+        aria-live="polite"
+        aria-label={`Result: ${stamp}, ${deltaLabel}`}
+        className="my-auto flex flex-col items-center gap-5 text-center"
+      >
         <WaxSeal stamp={stamp} size="lg" />
 
         <SurfaceCard className="w-full space-y-2">
