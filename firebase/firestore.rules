@@ -1,10 +1,114 @@
 rules_version = '2';
 
-// Vowlet Firestore Security Rules (Phase 0 deny-by-default placeholder)
-// Full collection rules and emulator tests are owned by the RT lane (Phase 1).
+// Vowlet Firestore Security Rules
+// Baseline: deny-by-default. Server Arbiter (/api/* via firebase-admin) performs all state writes,
+// except client vote submission during VOTE and client abuse report creation.
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function roomPath(code) {
+      return /databases/$(database)/documents/rooms/$(code);
+    }
+
+    function playerPath(code, uid) {
+      return /databases/$(database)/documents/rooms/$(code)/players/$(uid);
+    }
+
+    function turnPath(code) {
+      return /databases/$(database)/documents/rooms/$(code)/turn/current;
+    }
+
+    function isRoomMember(code) {
+      return isSignedIn() && exists(playerPath(code, request.auth.uid));
+    }
+
+    function getRoom(code) {
+      return get(roomPath(code));
+    }
+
+    function getTurn(code) {
+      return get(turnPath(code));
+    }
+
+    function getPlayer(code, uid) {
+      return get(playerPath(code, uid));
+    }
+
+    // Deny-by-default baseline for all unmatched paths
     match /{document=**} {
+      allow read, write: if false;
+    }
+
+    match /rooms/{code} {
+      allow read: if isRoomMember(code);
+      allow write: if false;
+
+      match /players/{uid} {
+        allow read: if isRoomMember(code);
+        allow write: if false;
+      }
+
+      match /turn/current {
+        allow read: if isRoomMember(code);
+        allow write: if false;
+      }
+
+      match /votes/{uid} {
+        allow read: if isRoomMember(code);
+        allow create, update: if isRoomMember(code)
+          && request.auth.uid == uid
+          && !(getPlayer(code, uid).data.get('banned', false))
+          && !(getPlayer(code, uid).data.get('spectator', false))
+          && getRoom(code).data.phase == 'VOTE'
+          && getTurn(code).data.performerUid != uid
+          && request.resource.data.turnVersion == getRoom(code).data.turnVersion
+          && request.resource.data.verdict in ['APPROVE', 'REJECT']
+          && request.resource.data.keys().hasOnly(['verdict', 'turnVersion', 'votedAt']);
+        allow delete: if false;
+      }
+
+      // Public chit metadata only (never text, never authorUid)
+      match /chits/{id} {
+        allow read: if isRoomMember(code);
+        allow write: if false;
+      }
+
+      // D9: Sealed chit text and authorUid — zero client access
+      match /secret/{id} {
+        allow read, write: if false;
+      }
+
+      // D8: Sealed prompt delivered exclusively to active performer after CHOOSE
+      match /private/{uid} {
+        allow read: if isSignedIn()
+          && request.auth.uid == uid
+          && getTurn(code).data.performerUid == uid
+          && getRoom(code).data.phase in ['PERFORM', 'VOTE', 'RESULT'];
+        allow write: if false;
+      }
+    }
+
+    match /users/{uid} {
+      allow read: if isSignedIn() && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    match /prompts/{id} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+
+    match /reports/{id} {
+      allow create: if isSignedIn()
+        && request.resource.data.reporterUid == request.auth.uid;
+      allow read, update, delete: if false;
+    }
+
+    // Server-only Judge Owl verdict cache
+    match /verdictCache/{normalizedHash} {
       allow read, write: if false;
     }
   }

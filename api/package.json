@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "dev:api": "node dev-server.ts"
   },
   "dependencies": {
     "@vowlet/shared": "workspace:*",

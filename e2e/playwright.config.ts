@@ -7,11 +7,11 @@ export default defineConfig({
   fullyParallel: false, // Multi-context room tests share emulator/app state per test
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: 1,
   reporter: [['list'], ['html', { open: 'never' }]],
-  timeout: 60_000,
+  timeout: 90_000,
   expect: {
-    timeout: 10_000,
+    timeout: 15_000,
   },
   use: {
     baseURL,
@@ -21,12 +21,23 @@ export default defineConfig({
   },
   webServer: process.env.BASE_URL
     ? undefined
-    : {
-        command: 'pnpm --filter @vowlet/web dev --port 5173',
-        url: 'http://localhost:5173',
-        reuseExistingServer: !process.env.CI,
-        timeout: 30_000,
-      },
+    : [
+        {
+          command: 'pnpm --filter @vowlet/api dev:api',
+          url: 'http://localhost:3001/api/health',
+          reuseExistingServer: !process.env.CI,
+          timeout: 30_000,
+        },
+        {
+          command: 'pnpm --filter @vowlet/web dev --port 5173',
+          url: 'http://localhost:5173',
+          reuseExistingServer: !process.env.CI,
+          timeout: 30_000,
+          env: {
+            VITE_LOCAL_API: 'true',
+          },
+        },
+      ],
   projects: [
     {
       name: 'mobile-chromium-360',

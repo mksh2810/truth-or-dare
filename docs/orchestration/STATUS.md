@@ -1,14 +1,13 @@
 # VOWLET ORCHESTRATION STATUS
 
-**Current Phase**: Phase 1 — Core In-Person Loop
-**Previous Phase**: Phase 0 — **PASS** (`/docs/orchestration/gates/phase-0.md`)
+**Current Phase**: Phase 2 — Robustness, Trust and Safety
+**Previous Phase**: Phase 1 — **PASS** (`/docs/orchestration/gates/phase-1.md`)
 
-## Phase 1 Task Cards
+## Phase 2 Task Cards
 
 | ID | Title | Owner | Reviewers | Status | Outputs |
 |---|---|---|---|---|---|
-| P1-CW | 150+ Curated Prompts (Mild/Spicy/Legend) + 75+ Owl Lines + Safe UI Copy | CW | LEG, AI | DOING | `/content/starter-deck.json`, `/content/owl-lines.json` |
-| P1-RT | Deny-by-Default Firestore & RTDB Rules + Rules Unit Tests + Presence/Host Helpers | RT | SEC, ARCH | DOING | `/firebase/firestore.rules`, `/firebase/database.rules.json`, `/packages/shared/src/presence.ts` |
-| P1-BE | Arbiter API Routes (room/*, chit/*, turn/*, game/finish) + Auth/AppCheck/RateLimit/Idempotency | BE | SEC, QA | DOING | `/api/room/*.ts`, `/api/chit/*.ts`, `/api/turn/*.ts`, `/api/game/finish.ts`, `/api/_lib/*.ts` |
-| P1-UXFE | Design System Components + App Shell + Auth/Sync + All P1 Screens (1-9 + Create/Join/Perform/Consent) | UX, FE1, FE2 | PERF, QA | DOING | `/apps/web/src/{design,app,state,auth,pwa,screens,game}/*` |
-| P1-QA | Bot-Driven 4-Player Full Game E2E (20x) + API/Rules Tests | QA | ORCH | TODO | `/e2e/src/tests/phase1-game.spec.ts` |
+| P2-AI | Judge Owl LLM Pipeline, Adapter, Verdict Cache, Roast Templates & 300+ Calibration Set + Eval Harness | AI, CW | SEC, LEG | DOING | `/content/tier-rubric.md`, `/content/calibration-set.json`, `/api/judge/*`, `/packages/shared/src/moderation.ts` |
+| P2-BERE | Host Migration (D5), Reconnect & Leaver Rules (D20), Version Skew (D16), Report/Block, Delete-My-Data, Remote Config Flags | BE, RT | SEC, ARCH | DOING | `/api/room/migrate.ts`, `/api/report.ts`, `/api/user/delete.ts`, `/api/_lib/flags.ts` |
+| P2-FE | Code-Splitting (<=200KB gzip), Legal Pages (DRAFT), Consent/Report/Delete-Data/Profile UI, Version-Skew Toast, A11y & Motion Polish | FE1, FE2, UX | PERF | DOING | `/apps/web/src/legal/*`, `/apps/web/src/screens/*`, `/apps/web/vite.config.ts` |
+| P2-QA-SEC-PERF | 14 Chaos Scenarios (Section 9.2), Rules Emulator Tests, Security Audit, Axe A11y & PWA Support Matrix (B14), Sentry Privacy Scrubber | QA, SEC, PERF, OPS | ORCH | TODO | `/e2e/src/tests/chaos.spec.ts`, `/docs/quality/{a11y-audit.md,pwa-matrix.md}`, `/docs/security/phase2-audit.md` |

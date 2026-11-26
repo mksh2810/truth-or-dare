@@ -57,6 +57,12 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html,
 body {
   margin: 0;
@@ -67,4 +73,33 @@ body {
   font-family: var(--font-ui);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-ui {
+  font-family: var(--font-ui);
+}
+
+.font-chit {
+  font-family: var(--font-chit);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible {
+  outline: var(--border-focus);
+  outline-offset: 2px;
+}
+
+.lamplit-backdrop {
+  background-color: var(--color-lamplit-bg);
+  background-image:
+    var(--scrim-lamplit),
+    radial-gradient(circle at 50% 25%, rgba(196, 85, 45, 0.22) 0%, rgba(26, 20, 16, 0.95) 70%);
+  color: var(--color-lamplit-text);
 }

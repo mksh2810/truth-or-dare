@@ -1,0 +1,112 @@
+{
+  "verdict_fine": [
+    "Sealed with a wink. That chit is ready for the table.",
+    "Oh, this is good. The bottle is going to love it.",
+    "Approved! Just enough spice to wake the room up.",
+    "Clean, clever, and trouble-ready. Into the bowl it goes.",
+    "Ekdum solid. Folded, stamped, and waiting for its victim.",
+    "The Owl nods approvingly. Nice bit of mischief.",
+    "Now that is a proper party prompt. Sealed!",
+    "Short, sharp, and table-safe. You know how to play."
+  ],
+  "verdict_too_mild": [
+    "Sweet, but a little sleepy—give it a tiny pinch of spice!",
+    "My monocle barely twitched. Turn the heat up just a notch?",
+    "Safe for a library, sure—try making it a bit more playful for the table!",
+    "Thoda aur masala, please! Give your friends something to react to.",
+    "Almost there! Add a fun twist so nobody coasts through it.",
+    "Cute, but we can do bolder without crossing any lines. Try again!",
+    "That one feels like a warm-up. Want to spice it up or grab a starter?",
+    "The Owl wants a little more drama—keep it kind, just make it juicier."
+  ],
+  "verdict_nope": [
+    "Whoa—let's keep the table safe and fun. Try a different angle!",
+    "My top hat says no to that one. Keep it alcohol-free and consent-safe.",
+    "A little too risky for this table. Let's swap it for harmless trouble.",
+    "Nahi yaar, that crosses the line. Rewrite it or pick a starter prompt!",
+    "Vowlet rules: tease friends, never harm or corner them. Give it another go.",
+    "Nope! No unsafe dares, no private info, no real harm. Fresh chit?",
+    "The Owl drew a polite boundary there. Keep it witty, keep it safe.",
+    "That one stays outside the room. Try something playful everyone can enjoy."
+  ],
+  "result_passed": [
+    "Stamp it PASSED! The table has spoken—and applauded.",
+    "Clean execution, zero hesitation. Respect.",
+    "Kya baat hai! Points on the board and streak intact.",
+    "The witnesses are impressed. Vowlet tips the top hat.",
+    "Nailed it! That is how you own the spotlight.",
+    "Approved by the table! Take a bow before the bottle spins again.",
+    "Bold, funny, and completely worth the points. PASSED!",
+    "Look at that—effortless. The streak lives on!"
+  ],
+  "result_not_it": [
+    "Oof, tough crowd! The table says NOT IT—better luck next spin.",
+    "Close, but the witnesses weren't quite convinced. Shake it off!",
+    "A valiant attempt, even if the jury raised an eyebrow.",
+    "Arre, thoda aur effort chahiye tha! Next round is yours.",
+    "NOT IT this time—no shame, the spotlight comes back around.",
+    "The table wanted a little more commit. Dust yourself off!",
+    "Voted down, spirits still high. Ready for the comeback?",
+    "Hey, at least you tried it instead of hiding. Next turn!"
+  ],
+  "result_split": [
+    "A dead heat! Half points, streak saved—the Owl calls it a draw.",
+    "The room couldn't decide, so you keep your streak and half the spoils.",
+    "Split decision! Diplomatic chaos at its finest.",
+    "50-50! Even the witnesses are arguing—half XP for the show.",
+    "SPLIT! Nobody won the argument, so everybody moves on.",
+    "A tie at the table means your streak lives to fight another spin.",
+    "Half the room loved it, half wanted more. Fair compromise!",
+    "No quorum, no problem—take half the points and keep rolling."
+  ],
+  "result_skipped": [
+    "Skipped with grace. Boundaries always beat awkwardness.",
+    "Fair pass on that one—a tiny point dip, zero judgement.",
+    "Chalo, next! Knowing when to skip is part of the game.",
+    "No pressure at this table. Take the -30 and breathe easy.",
+    "SKIPPED! Every player gets to say no—the Owl respects it.",
+    "Smart call. Save your energy for a prompt that actually fits.",
+    "Skipped cleanly. The bottle keeps spinning, no hard feelings.",
+    "Consent first, points second. Always okay to skip."
+  ],
+  "result_stalled": [
+    "Time's up on the clock—the table nudged this one to a vote!",
+    "A little too much suspense! Let's see what the witnesses think.",
+    "Bas, bahut wait ho gaya! Over to the table for the verdict.",
+    "The Owl tapped its pocket watch—vote is open now.",
+    "Stalled out! Witnesses, weigh in on what we saw so far.",
+    "Clock kept ticking, so the room called time. Vote away!",
+    "Sometimes the hesitation IS the performance. Cast your votes!",
+    "The table got antsy—let's settle this one at the ballot."
+  ],
+  "lobby_idle": [
+    "Fluffing my feathers... waiting for everyone to tap Ready.",
+    "Grab your seats and settle in—the bottle is warming up.",
+    "Sab aa gaye? Tap Ready when the snacks are within reach.",
+    "Quiet before the storm. Someone check if everyone's battery is charged!",
+    "The Evening Table is set. Waiting on a few more thumbs.",
+    "No rush—good mischief takes a second to gather.",
+    "Chai, water, comfy spot? Hit Ready whenever you're set.",
+    "Three or more makes a proper table. Almost time to spin!"
+  ],
+  "podium_winner": [
+    "Crown the champion! What a run—Vowlet bows to the top spot.",
+    "Undefeated energy at the table tonight. Well played!",
+    "Kamaal kar diya! Take the trophy and the bragging rights.",
+    "Top of the podium! Everyone else, demand a rematch immediately.",
+    "Gold-sealed performance from start to finish. Bravo!",
+    "The Owl's official MVP of the night. Who's challenging them next?",
+    "Points stacked, streaks protected, crown earned. Legend status!",
+    "What a finish! Same table, rematch in ten seconds?"
+  ],
+  "swap_used": [
+    "One free swap, coming right up! Fresh chit from the bowl.",
+    "Fair trade! Let's see if the next card treats you kinder.",
+    "Swap used! Keep that one secret—new prompt incoming.",
+    "Chalo, ek chance aur! Remember, you only get one swap per game.",
+    "Trading fate for a fresh fold. Good luck with the new draw!",
+    "The Owl swaps your card with a knowing grin. No take-backs now!",
+    "New chit, clean slate. Hope this one suits your style!",
+    "Free swap spent wisely! Now let's see what you drew."
+  ]
+}
