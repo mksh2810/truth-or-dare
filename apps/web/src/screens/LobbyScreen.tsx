@@ -4,6 +4,7 @@ import {
   Copy,
   ExternalLink,
   LogOut,
+  Monitor,
   Play,
   QrCode,
   Share2,
@@ -27,6 +28,9 @@ export function LobbyScreen() {
   const leaveRoom = useGameStore((s) => s.leaveRoom);
   const kickPlayer = useGameStore((s) => s.kickPlayer);
   const setShareSheetOpen = useGameStore((s) => s.setShareSheetOpen);
+  const passThePhone = useGameStore((s) => s.passThePhone);
+  const setPassThePhone = useGameStore((s) => s.setPassThePhone);
+  const setTableDisplayActive = useGameStore((s) => s.setTableDisplayActive);
   const showToast = useGameStore((s) => s.showToast);
 
   const [copied, setCopied] = useState(false);
@@ -251,6 +255,49 @@ export function LobbyScreen() {
             <span>Quick Play (skip writing chits)</span>
             <span>{room.settings.quickPlay ? 'ON' : 'OFF'}</span>
           </button>
+        )}
+
+        {isHost && (
+          <button
+            type="button"
+            role="switch"
+            aria-checked={room.settings.tableMode}
+            data-testid="lobby-tablemode-toggle"
+            onClick={() =>
+              void updateSettings({
+                settings: { tableMode: !room.settings.tableMode },
+              })
+            }
+            className="flex min-h-[44px] w-full items-center justify-between rounded-[14px] border border-white/15 bg-white/5 px-3 py-2 text-xs font-semibold"
+          >
+            <span>Table Mode (shared screen)</span>
+            <span>{room.settings.tableMode ? 'ON' : 'OFF'}</span>
+          </button>
+        )}
+
+        <button
+          type="button"
+          role="switch"
+          aria-checked={passThePhone}
+          data-testid="lobby-passthephone-toggle"
+          onClick={() => setPassThePhone(!passThePhone)}
+          className="flex min-h-[44px] w-full items-center justify-between rounded-[14px] border border-white/15 bg-white/5 px-3 py-2 text-xs font-semibold"
+        >
+          <span>Pass-the-Phone (single-device)</span>
+          <span>{passThePhone ? 'ON' : 'OFF'}</span>
+        </button>
+
+        {room.settings.tableMode && (
+          <Button
+            variant="secondary"
+            surface="lamplit"
+            fullWidth
+            data-testid="open-table-display-btn"
+            onClick={() => setTableDisplayActive(true)}
+          >
+            <Monitor className="h-4 w-4" aria-hidden="true" />
+            Open Table Display
+          </Button>
         )}
 
         <div className="flex gap-2">

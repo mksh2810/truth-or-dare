@@ -7,4 +7,5 @@ export * from './TimerRing';
 export * from './ElapsedStopwatch';
 export * from './RadialTable';
 export * from './BottleSpinner';
+export * from './bottleSkins';
 export * from './sound';

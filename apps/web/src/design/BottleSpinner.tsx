@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { computeTargetAngle, type Timestamp } from '@vowlet/shared';
 import { toMillis } from './TimerRing';
 import { playSpinLandingChime } from './sound';
+import { getBottleSkin, type BottleSkinId } from './bottleSkins';
 
 export interface BottleSpinnerProps {
   targetSeatIndex: number | null;
@@ -13,6 +14,7 @@ export interface BottleSpinnerProps {
   turnVersion: number;
   soundEnabled?: boolean;
   reducedMotionOverride?: boolean;
+  skin?: BottleSkinId;
   onSpinComplete?: () => void;
 }
 
@@ -25,8 +27,10 @@ export function BottleSpinner({
   turnVersion,
   soundEnabled = false,
   reducedMotionOverride = false,
+  skin = 'amber',
   onSpinComplete,
 }: BottleSpinnerProps) {
+  const skinMeta = getBottleSkin(skin);
   const osReducedMotion = useReducedMotion();
   const reducedMotion = Boolean(osReducedMotion || reducedMotionOverride);
 
@@ -106,7 +110,7 @@ export function BottleSpinner({
         style={{ originX: '50%', originY: '50%' }}
         className="flex items-center justify-center"
       >
-        {/* Amber glass bottle pointing UP (0 deg = 12 o'clock, so 180 deg = 6 o'clock) */}
+        {/* Bottle pointing UP (0 deg = 12 o'clock, so 180 deg = 6 o'clock) */}
         <svg
           width="44"
           height="104"
@@ -114,30 +118,30 @@ export function BottleSpinner({
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           role="img"
-          aria-label="Spinning bottle"
+          aria-label={`Spinning ${skinMeta.name} bottle`}
           style={{ filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.45))' }}
         >
           {/* Cork / Cap */}
-          <rect x="17" y="4" width="10" height="8" rx="2" fill="#B8893B" stroke="#23201C" strokeWidth="1.5" />
+          <rect x="17" y="4" width="10" height="8" rx="2" fill={skinMeta.capFill} stroke="#23201C" strokeWidth="1.5" />
           {/* Neck */}
           <path
             d="M17 12 L27 12 L28 32 L35 44 L35 92 C35 96.5 31.5 100 27 100 L17 100 C12.5 100 9 96.5 9 92 L9 44 L16 32 Z"
-            fill="#8A4A1C"
+            fill={skinMeta.bodyFill}
             stroke="#FFFDF9"
             strokeOpacity="0.45"
             strokeWidth="1.5"
           />
-          {/* Amber highlight */}
+          {/* Highlight */}
           <path
             d="M15 46 L15 90"
-            stroke="#F4C97A"
+            stroke={skinMeta.highlightStroke}
             strokeOpacity="0.45"
             strokeWidth="3"
             strokeLinecap="round"
           />
           {/* Cream Vowlet label */}
           <rect x="12" y="54" width="20" height="26" rx="4" fill="#F6F1E9" stroke="#23201C" strokeWidth="1.2" />
-          <circle cx="22" cy="67" r="5" fill="#C4552D" />
+          <circle cx="22" cy="67" r="5" fill={skinMeta.sealFill} />
         </svg>
       </motion.div>
     </div>

@@ -7,7 +7,13 @@
     "Ekdum solid. Folded, stamped, and waiting for its victim.",
     "The Owl nods approvingly. Nice bit of mischief.",
     "Now that is a proper party prompt. Sealed!",
-    "Short, sharp, and table-safe. You know how to play."
+    "Short, sharp, and table-safe. You know how to play.",
+    "Folded crisp and tucked into the bowl. Someone is going to squirm.",
+    "That one has just the right amount of mischief. Approved!",
+    "Wah! Clever, kind, and spicy enough to wake up the quietest player.",
+    "Rubber-stamped by the Owl. May the bottle spare whoever wrote it.",
+    "Zero red flags, maximum giggles. Straight into the deck!",
+    "Now that is how you stir the pot without spilling it. Sealed!"
   ],
   "verdict_too_mild": [
     "Sweet, but a little sleepy—give it a tiny pinch of spice!",
@@ -17,7 +23,13 @@
     "Almost there! Add a fun twist so nobody coasts through it.",
     "Cute, but we can do bolder without crossing any lines. Try again!",
     "That one feels like a warm-up. Want to spice it up or grab a starter?",
-    "The Owl wants a little more drama—keep it kind, just make it juicier."
+    "The Owl wants a little more drama—keep it kind, just make it juicier.",
+    "Too polite! Even my feathers didn't ruffle. Add a little twist!",
+    "Boring nahi, bas thoda gentle hai. Give it a sharper punchline!",
+    "Feels like a warm-up stretch. Make it playful enough for a gasp!",
+    "Nice thought, tiny spark—turn it into a proper table moment.",
+    "The Owl wants a grin, not a polite nod. Spice it up safely!",
+    "Almost! One specific detail will turn this into instant gold."
   ],
   "verdict_nope": [
     "Whoa—let's keep the table safe and fun. Try a different angle!",
@@ -27,7 +39,13 @@
     "Vowlet rules: tease friends, never harm or corner them. Give it another go.",
     "Nope! No unsafe dares, no private info, no real harm. Fresh chit?",
     "The Owl drew a polite boundary there. Keep it witty, keep it safe.",
-    "That one stays outside the room. Try something playful everyone can enjoy."
+    "That one stays outside the room. Try something playful everyone can enjoy.",
+    "Arre, brake lagao! Keep it fun, consent-safe, and free of real harm.",
+    "My top hat says pass on that one—let's keep every player comfortable.",
+    "Too sharp for a party table. Swap it for harmless chaos instead!",
+    "No personal info, no risky stunts, no regrets. Fresh chit, please!",
+    "Vowlet protects the vibe: tease lightly, never corner anyone.",
+    "That one belongs off the table. Try a witty twist everyone can laugh at!"
   ],
   "result_passed": [
     "Stamp it PASSED! The table has spoken—and applauded.",
@@ -37,7 +55,13 @@
     "Nailed it! That is how you own the spotlight.",
     "Approved by the table! Take a bow before the bottle spins again.",
     "Bold, funny, and completely worth the points. PASSED!",
-    "Look at that—effortless. The streak lives on!"
+    "Look at that—effortless. The streak lives on!",
+    "Stuck the landing! The table tips its hat to that performance.",
+    "Zero hesitation, full commitment. That is how you earn the seal!",
+    "Shabaash! The witnesses loved it and your streak marches on.",
+    "Pure gold! Even the toughest critic at the table smiled.",
+    "PASSED with flying feathers! Take your points and breathe.",
+    "Clean, bold, and unforgettable. The bottle approves!"
   ],
   "result_not_it": [
     "Oof, tough crowd! The table says NOT IT—better luck next spin.",
@@ -47,7 +71,13 @@
     "NOT IT this time—no shame, the spotlight comes back around.",
     "The table wanted a little more commit. Dust yourself off!",
     "Voted down, spirits still high. Ready for the comeback?",
-    "Hey, at least you tried it instead of hiding. Next turn!"
+    "Hey, at least you tried it instead of hiding. Next turn!",
+    "Tough jury tonight! Shake it off—your next spin is waiting.",
+    "A brave swing, even if the table wanted a bit more drama.",
+    "Koi baat nahi! Every legend has one round the crowd debates.",
+    "NOT IT this time, but full marks for stepping up to the mic.",
+    "The witnesses held out for extra flair. Come back swinging!",
+    "Close call! Dust off the top hat and claim the next round."
   ],
   "result_split": [
     "A dead heat! Half points, streak saved—the Owl calls it a draw.",
@@ -57,7 +87,13 @@
     "SPLIT! Nobody won the argument, so everybody moves on.",
     "A tie at the table means your streak lives to fight another spin.",
     "Half the room loved it, half wanted more. Fair compromise!",
-    "No quorum, no problem—take half the points and keep rolling."
+    "No quorum, no problem—take half the points and keep rolling.",
+    "Deadlocked! Half the table cheered, half blinked—split the spoils!",
+    "A classic tie! Keep your streak warm and pocket half the XP.",
+    "Equal parts chaos and charm. The Owl rules it an official SPLIT.",
+    "Fifty-fifty! Even the jury couldn't agree, so nobody loses the streak.",
+    "No clear verdict, no problem—half points and onward we spin!",
+    "Balanced on a razor's edge. Take the half-win and keep rolling!"
   ],
   "result_skipped": [
     "Skipped with grace. Boundaries always beat awkwardness.",
@@ -67,7 +103,13 @@
     "SKIPPED! Every player gets to say no—the Owl respects it.",
     "Smart call. Save your energy for a prompt that actually fits.",
     "Skipped cleanly. The bottle keeps spinning, no hard feelings.",
-    "Consent first, points second. Always okay to skip."
+    "Consent first, points second. Always okay to skip.",
+    "Boundaries respected, no questions asked. On to the next spin!",
+    "Smart skip! Saving your energy for a prompt that fits is pro play.",
+    "Bilkul theek hai—everyone owns their comfort zone at this table.",
+    "A tiny -30 nibble, zero drama. The Owl salutes a clean pass.",
+    "Skipped with style. Plenty more mischief left in the bowl!",
+    "No guilt, no pressure. Consent comes first, points come second."
   ],
   "result_stalled": [
     "Time's up on the clock—the table nudged this one to a vote!",
@@ -77,7 +119,13 @@
     "Stalled out! Witnesses, weigh in on what we saw so far.",
     "Clock kept ticking, so the room called time. Vote away!",
     "Sometimes the hesitation IS the performance. Cast your votes!",
-    "The table got antsy—let's settle this one at the ballot."
+    "The table got antsy—let's settle this one at the ballot.",
+    "The hourglass ran dry! Witnesses, judge what you saw so far.",
+    "Suspense is fun, until the clock says time's up. Vote away!",
+    "Chalo, faisla ho jaye! The room called time—cast your ballots.",
+    "A little too much dramatic pausing! Over to the table for the call.",
+    "Clocked out! Sometimes the stall itself tells the whole story.",
+    "The Owl tapped the table—time to let the witnesses decide!"
   ],
   "lobby_idle": [
     "Fluffing my feathers... waiting for everyone to tap Ready.",
@@ -87,7 +135,13 @@
     "The Evening Table is set. Waiting on a few more thumbs.",
     "No rush—good mischief takes a second to gather.",
     "Chai, water, comfy spot? Hit Ready whenever you're set.",
-    "Three or more makes a proper table. Almost time to spin!"
+    "Three or more makes a proper table. Almost time to spin!",
+    "Snacks within reach? Tap Ready and let the bottle do its thing.",
+    "Adjusting my monocle... waiting on the last few Ready taps.",
+    "Chai garam, table ready—just need everyone locked in!",
+    "Good trouble starts with three or more. Almost time to spin!",
+    "Check your volume, silence your excuses, and hit Ready.",
+    "The bowl is hungry for chits. Ready up when the room is settled!"
   ],
   "podium_winner": [
     "Crown the champion! What a run—Vowlet bows to the top spot.",
@@ -97,7 +151,13 @@
     "Gold-sealed performance from start to finish. Bravo!",
     "The Owl's official MVP of the night. Who's challenging them next?",
     "Points stacked, streaks protected, crown earned. Legend status!",
-    "What a finish! Same table, rematch in ten seconds?"
+    "What a finish! Same table, rematch in ten seconds?",
+    "Bow to the champion! That was a masterclass in party chaos.",
+    "Kya performance thi! Top of the podium and zero regrets.",
+    "Crown earned, streaks guarded, bragging rights secured for the week.",
+    "The Owl's golden feather goes to tonight's undisputed MVP!",
+    "From first spin to final seal—unstoppable! Rematch to defend it?",
+    "Victory tastes sweet! Who is brave enough to challenge the champ next?"
   ],
   "swap_used": [
     "One free swap, coming right up! Fresh chit from the bowl.",
@@ -107,6 +167,12 @@
     "Trading fate for a fresh fold. Good luck with the new draw!",
     "The Owl swaps your card with a knowing grin. No take-backs now!",
     "New chit, clean slate. Hope this one suits your style!",
-    "Free swap spent wisely! Now let's see what you drew."
+    "Free swap spent wisely! Now let's see what you drew.",
+    "Fresh card, fresh luck! That free swap just paid for itself.",
+    "Swapped! Let's see if the bowl deals you something kinder.",
+    "Ek aur mauka! One swap per game—use this new draw wisely.",
+    "Tucking that old chit away. Here comes your mystery replacement!",
+    "Plot twist! Trade complete—now show the table what you got.",
+    "The Owl shuffles the deck with a wink. New prompt, same spotlight!"
   ]
 }

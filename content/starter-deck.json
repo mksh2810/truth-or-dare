@@ -1278,5 +1278,2405 @@
     "pack": "hinglish",
     "dareType": "instant",
     "text": "Poore table ko ek saath 'Group Selfie' ke liye ajeeb poses direct karo jaise pro photographer ho."
+  },
+  {
+    "id": "sd-161",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "friends",
+    "dareType": null,
+    "text": "What is the most unnecessary thing you bought at 2 AM and still defend?"
+  },
+  {
+    "id": "sd-162",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "friends",
+    "dareType": null,
+    "text": "Which friend here would you trust least to parallel park your car?"
+  },
+  {
+    "id": "sd-163",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "friends",
+    "dareType": null,
+    "text": "What is a childhood rumour you believed for way too many years?"
+  },
+  {
+    "id": "sd-164",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "friends",
+    "dareType": null,
+    "text": "If your search history from this week became a movie title, what would it be?"
+  },
+  {
+    "id": "sd-165",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "friends",
+    "dareType": null,
+    "text": "Who in this room takes the longest to reply to a simple yes-or-no text?"
+  },
+  {
+    "id": "sd-166",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "friends",
+    "dareType": null,
+    "text": "What is your go-to fake laugh situation when you completely missed what someone said?"
+  },
+  {
+    "id": "sd-167",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "friends",
+    "dareType": null,
+    "text": "Which fictional character does everyone say you remind them of, and do you agree?"
+  },
+  {
+    "id": "sd-168",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "friends",
+    "dareType": null,
+    "text": "What is the weirdest alarm tone or ringtone you have ever used unironically?"
+  },
+  {
+    "id": "sd-169",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "friends",
+    "dareType": null,
+    "text": "Have you ever rehearsed a comeback in the shower days after an argument ended?"
+  },
+  {
+    "id": "sd-170",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "friends",
+    "dareType": null,
+    "text": "Which snack in this house would you secretly hide so nobody else finishes it?"
+  },
+  {
+    "id": "sd-171",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": null,
+    "text": "Who in this room is most likely to accidentally reply-all to a private rant?"
+  },
+  {
+    "id": "sd-172",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": null,
+    "text": "What is the most chaotic thing you did just to avoid an awkward conversation?"
+  },
+  {
+    "id": "sd-173",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": null,
+    "text": "Have you ever cropped someone out of a group photo before posting it?"
+  },
+  {
+    "id": "sd-174",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": null,
+    "text": "Which friend here would survive five minutes on a reality dating show?"
+  },
+  {
+    "id": "sd-175",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": null,
+    "text": "What is the pettiest hill you are still willing to die on in this group?"
+  },
+  {
+    "id": "sd-176",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": null,
+    "text": "Have you ever stalked someone's profile so deep you almost liked a four-year-old post?"
+  },
+  {
+    "id": "sd-177",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": null,
+    "text": "Who in this room gives the best pep talks while their own life is on fire?"
+  },
+  {
+    "id": "sd-178",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": null,
+    "text": "What is a trend you mocked publicly and then secretly tried at home?"
+  },
+  {
+    "id": "sd-179",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": null,
+    "text": "Have you ever blamed bad Wi-Fi to escape a call you simply didn't want?"
+  },
+  {
+    "id": "sd-180",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": null,
+    "text": "Which person at this table would you never share a hotel room with on a budget trip?"
+  },
+  {
+    "id": "sd-181",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": null,
+    "text": "What is the most dramatic overreaction you had to a completely tiny inconvenience?"
+  },
+  {
+    "id": "sd-182",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": null,
+    "text": "Have you ever sent a risky message and immediately turned on airplane mode?"
+  },
+  {
+    "id": "sd-183",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "friends",
+    "dareType": null,
+    "text": "What is one honest first impression you had of someone here that turned out totally wrong?"
+  },
+  {
+    "id": "sd-184",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "friends",
+    "dareType": null,
+    "text": "Which secret talent or weird habit of yours would shock everyone at this table?"
+  },
+  {
+    "id": "sd-185",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "friends",
+    "dareType": null,
+    "text": "If you had to delete one contact from your phone right now, who crosses your mind first?"
+  },
+  {
+    "id": "sd-186",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "friends",
+    "dareType": null,
+    "text": "What is the biggest white lie you told this group that nobody ever caught?"
+  },
+  {
+    "id": "sd-187",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "friends",
+    "dareType": null,
+    "text": "Who in this room do you think secretly judges everyone else's playlist?"
+  },
+  {
+    "id": "sd-188",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "friends",
+    "dareType": null,
+    "text": "What is the most embarrassing screenshot currently sitting in your camera roll?"
+  },
+  {
+    "id": "sd-189",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "friends",
+    "dareType": null,
+    "text": "If someone read your pinned notes app aloud right now, how fast would you panic?"
+  },
+  {
+    "id": "sd-190",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "friends",
+    "dareType": null,
+    "text": "Which past version of yourself do you owe the biggest apology to?"
+  },
+  {
+    "id": "sd-191",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Speak in a dramatic movie-trailer voice until the next bottle spin finishes."
+  },
+  {
+    "id": "sd-192",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Let the player on your left pick a new nickname for you for the next three rounds."
+  },
+  {
+    "id": "sd-193",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Do your best impression of a friend in this room ordering food while hangry."
+  },
+  {
+    "id": "sd-194",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Balance a spoon or pen on the back of your hand for fifteen seconds without dropping it."
+  },
+  {
+    "id": "sd-195",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Hum the chorus of a Bollywood or pop song until someone at the table guesses it."
+  },
+  {
+    "id": "sd-196",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Give a thirty-second Oscar acceptance speech thanking everyone in this room."
+  },
+  {
+    "id": "sd-197",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Keep a completely straight face while the group tries for twenty seconds to make you laugh."
+  },
+  {
+    "id": "sd-198",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Mime your morning routine in fast-forward in fifteen seconds."
+  },
+  {
+    "id": "sd-199",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "friends",
+    "dareType": "social",
+    "text": "Send a friend outside this room a text saying 'I just remembered that thing' with no context."
+  },
+  {
+    "id": "sd-200",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "friends",
+    "dareType": "social",
+    "text": "Post a five-second close-up selfie of your forehead on your story with zero caption."
+  },
+  {
+    "id": "sd-201",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Read the last three emojis you used aloud and invent a dramatic backstory for them."
+  },
+  {
+    "id": "sd-202",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Let the group choose a random photo from your last ten camera-roll pictures to describe."
+  },
+  {
+    "id": "sd-203",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Compliment every single person at the table in a different accent."
+  },
+  {
+    "id": "sd-204",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Do a slow-motion catwalk across the room like you are debuting a luxury jacket."
+  },
+  {
+    "id": "sd-205",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Let the person across from you type one completely wholesome sentence in your notes app."
+  },
+  {
+    "id": "sd-206",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Freestyle a four-line rap about the last snack you ate."
+  },
+  {
+    "id": "sd-207",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Act out a soap-opera betrayal scene using a water bottle as your co-star."
+  },
+  {
+    "id": "sd-208",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Hold eye contact with the person to your right and deliver a cheesy weather forecast."
+  },
+  {
+    "id": "sd-209",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Swap one accessory—watch, ring, or cap—with another willing player for two rounds."
+  },
+  {
+    "id": "sd-210",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": "social",
+    "text": "Send a dramatic voice note to your sibling or best friend singing 'Happy Birthday' off-key."
+  },
+  {
+    "id": "sd-211",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": "social",
+    "text": "Text your group chat 'Big news tomorrow, don't ask' and mute notifications for ten minutes."
+  },
+  {
+    "id": "sd-212",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "friends",
+    "dareType": "social",
+    "text": "Change your messaging status to 'Currently taking life advice from an owl' for one hour."
+  },
+  {
+    "id": "sd-213",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Show the group your screen-time breakdown from today and defend your top app."
+  },
+  {
+    "id": "sd-214",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Let the table compose a polite two-line bio for your dating or social profile—read it aloud."
+  },
+  {
+    "id": "sd-215",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Perform a thirty-second motivational TED Talk about why socks with sandals are elite."
+  },
+  {
+    "id": "sd-216",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Roast everyone at the table in one playful rhyme each without repeating a punchline."
+  },
+  {
+    "id": "sd-217",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "friends",
+    "dareType": "instant",
+    "text": "Speak only in questions until your next turn comes around."
+  },
+  {
+    "id": "sd-218",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "friends",
+    "dareType": "social",
+    "text": "Call a close friend on speaker and convince them you just adopted a pet pigeon."
+  },
+  {
+    "id": "sd-219",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "friends",
+    "dareType": "social",
+    "text": "Reply to an old friend's story with a wildly enthusiastic 'THIS CHANGED MY LIFE' message."
+  },
+  {
+    "id": "sd-220",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "friends",
+    "dareType": "social",
+    "text": "Share the weirdest meme saved in your phone to your close-friends story right now."
+  },
+  {
+    "id": "sd-221",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "couples",
+    "dareType": null,
+    "text": "What is the tiniest habit of your partner's that secretly makes you smile every time?"
+  },
+  {
+    "id": "sd-222",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "couples",
+    "dareType": null,
+    "text": "Who is more likely to fall asleep ten minutes into a movie you both picked?"
+  },
+  {
+    "id": "sd-223",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "couples",
+    "dareType": null,
+    "text": "What was the first thing you noticed about your partner when you met?"
+  },
+  {
+    "id": "sd-224",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "couples",
+    "dareType": null,
+    "text": "If you two opened a tiny cafe together, who would run the kitchen and who would greet guests?"
+  },
+  {
+    "id": "sd-225",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "couples",
+    "dareType": null,
+    "text": "Which song instantly reminds you of your favourite trip or date together?"
+  },
+  {
+    "id": "sd-226",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "couples",
+    "dareType": null,
+    "text": "Who takes longer to decide what to order when you get takeout?"
+  },
+  {
+    "id": "sd-227",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "couples",
+    "dareType": null,
+    "text": "What is a compliment your partner gave you that you still remember word for word?"
+  },
+  {
+    "id": "sd-228",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "couples",
+    "dareType": null,
+    "text": "Which cheesy rom-com trope do you secretly wish happened to you two?"
+  },
+  {
+    "id": "sd-229",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "couples",
+    "dareType": null,
+    "text": "Who is better at keeping secrets when planning a surprise gift?"
+  },
+  {
+    "id": "sd-230",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "couples",
+    "dareType": null,
+    "text": "What is your partner's funniest sleepy-morning habit?"
+  },
+  {
+    "id": "sd-231",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": null,
+    "text": "When did you first realise you were way more into your partner than you were letting on?"
+  },
+  {
+    "id": "sd-232",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": null,
+    "text": "What is one harmless white lie you told your partner early on to seem cooler?"
+  },
+  {
+    "id": "sd-233",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": null,
+    "text": "Which outfit of your partner's makes you do a double take every single time?"
+  },
+  {
+    "id": "sd-234",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": null,
+    "text": "What is a small disagreement you two had that now feels hilariously dramatic?"
+  },
+  {
+    "id": "sd-235",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": null,
+    "text": "Who is more likely to hog all the blankets by 3 AM?"
+  },
+  {
+    "id": "sd-236",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": null,
+    "text": "What is one thing on your couple bucket list you haven't admitted out loud yet?"
+  },
+  {
+    "id": "sd-237",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": null,
+    "text": "If you could relive one single date night word for word, which one is it?"
+  },
+  {
+    "id": "sd-238",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": null,
+    "text": "Who says 'I'm not mad' when they are definitely a little bit mad?"
+  },
+  {
+    "id": "sd-239",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": null,
+    "text": "What is the most romantic thing your partner did without even realising it?"
+  },
+  {
+    "id": "sd-240",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": null,
+    "text": "Which celebrity hall-pass joke would make your partner pretend not to care?"
+  },
+  {
+    "id": "sd-241",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": null,
+    "text": "What is the funniest miscommunication you two had in your first month together?"
+  },
+  {
+    "id": "sd-242",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": null,
+    "text": "Who is more competitive during board games or trivia nights?"
+  },
+  {
+    "id": "sd-243",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "couples",
+    "dareType": null,
+    "text": "What is one fear about the future that your partner helped you let go of?"
+  },
+  {
+    "id": "sd-244",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "couples",
+    "dareType": null,
+    "text": "If you could freeze one ordinary Sunday morning with your partner forever, what are you doing?"
+  },
+  {
+    "id": "sd-245",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "couples",
+    "dareType": null,
+    "text": "What is a habit you picked up directly from your partner without noticing?"
+  },
+  {
+    "id": "sd-246",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "couples",
+    "dareType": null,
+    "text": "When did your partner last surprise you with how deeply they understood you?"
+  },
+  {
+    "id": "sd-247",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "couples",
+    "dareType": null,
+    "text": "What is one adventure you want to take together before turning forty?"
+  },
+  {
+    "id": "sd-248",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "couples",
+    "dareType": null,
+    "text": "Which photo of the two of you is your absolute favourite and why?"
+  },
+  {
+    "id": "sd-249",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "couples",
+    "dareType": null,
+    "text": "What is something your partner is brilliant at that they underestimate about themselves?"
+  },
+  {
+    "id": "sd-250",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "couples",
+    "dareType": null,
+    "text": "If you wrote a three-word dedication for your story together, what would it say?"
+  },
+  {
+    "id": "sd-251",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Give your partner a genuine thirty-second pep talk like they are about to walk a runway."
+  },
+  {
+    "id": "sd-252",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Do your best impression of how your partner reacts when their food arrives."
+  },
+  {
+    "id": "sd-253",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Hold hands with your partner and guess each other's favourite ice cream flavour on three."
+  },
+  {
+    "id": "sd-254",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Whisper a wildly dramatic fake secret in your partner's ear so the room wonders."
+  },
+  {
+    "id": "sd-255",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Recreate your first-date hello in ten seconds for the table."
+  },
+  {
+    "id": "sd-256",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Let your partner style your hair for the next two rounds—no mirror checks."
+  },
+  {
+    "id": "sd-257",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Name three things you appreciate about your partner without using the word 'nice'."
+  },
+  {
+    "id": "sd-258",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Slow-dance for ten seconds with your partner to whatever song the table hums."
+  },
+  {
+    "id": "sd-259",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "couples",
+    "dareType": "social",
+    "text": "Send your partner a cute two-line text right now as if you haven't seen them all week."
+  },
+  {
+    "id": "sd-260",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "couples",
+    "dareType": "social",
+    "text": "Set your favourite candid photo of your partner as your lock screen for tonight."
+  },
+  {
+    "id": "sd-261",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Look into your partner's eyes for twenty seconds without blinking or laughing."
+  },
+  {
+    "id": "sd-262",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Deliver a cheesy Bollywood romance dialogue to your partner with full hand gestures."
+  },
+  {
+    "id": "sd-263",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Let your partner pick the contact name they get saved under in your phone for a day."
+  },
+  {
+    "id": "sd-264",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Describe your partner's morning mood using only weather sound effects."
+  },
+  {
+    "id": "sd-265",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Give your partner a dramatic forehead kiss like a period-drama farewell."
+  },
+  {
+    "id": "sd-266",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Pitch your partner's best qualities like you are hosting a luxury auction."
+  },
+  {
+    "id": "sd-267",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Serenade your partner with the first two lines of any love song you remember."
+  },
+  {
+    "id": "sd-268",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Let your partner draw a tiny star or heart on the back of your hand with a pen."
+  },
+  {
+    "id": "sd-269",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Play rock-paper-scissors with your partner; the loser owes the winner a back rub later."
+  },
+  {
+    "id": "sd-270",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": "social",
+    "text": "Post a blurry, joyful two-second boomerang of you and your partner on your close-friends story."
+  },
+  {
+    "id": "sd-271",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": "social",
+    "text": "Send a voice note to your partner's best friend thanking them for hyping you up."
+  },
+  {
+    "id": "sd-272",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "couples",
+    "dareType": "social",
+    "text": "Text your partner's mom or sibling a wholesome 'Hope you're having a great week!' message."
+  },
+  {
+    "id": "sd-273",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Compose a four-line poem about your partner on the spot and recite it standing up."
+  },
+  {
+    "id": "sd-274",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Act out how you think your partner will look and act when you are both eighty."
+  },
+  {
+    "id": "sd-275",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Let your partner ask you one bonus yes-or-no question—you must answer honestly."
+  },
+  {
+    "id": "sd-276",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Plan a surprise fictional weekend getaway for you two in thirty seconds with zero budget limit."
+  },
+  {
+    "id": "sd-277",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "couples",
+    "dareType": "instant",
+    "text": "Swap phones' music apps and queue one song you think your partner secretly loves."
+  },
+  {
+    "id": "sd-278",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "couples",
+    "dareType": "social",
+    "text": "Record a ten-second 'Future Us' video together to rewatch on your next anniversary."
+  },
+  {
+    "id": "sd-279",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "couples",
+    "dareType": "social",
+    "text": "Send your partner a calendar invite for a mystery date night next week right now."
+  },
+  {
+    "id": "sd-280",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "couples",
+    "dareType": "social",
+    "text": "Leave a one-line appreciation note in your partner's phone notes for them to find tomorrow."
+  },
+  {
+    "id": "sd-281",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "office",
+    "dareType": null,
+    "text": "What is the funniest background noise that ever interrupted one of your work calls?"
+  },
+  {
+    "id": "sd-282",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "office",
+    "dareType": null,
+    "text": "How many unread emails or Slack messages are sitting in your inbox right now?"
+  },
+  {
+    "id": "sd-283",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "office",
+    "dareType": null,
+    "text": "What is your most overused corporate phrase when you actually have no idea?"
+  },
+  {
+    "id": "sd-284",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "office",
+    "dareType": null,
+    "text": "Have you ever worn formal topwear and pyjama bottoms on a video meeting?"
+  },
+  {
+    "id": "sd-285",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "office",
+    "dareType": null,
+    "text": "Which office snack disappears fastest whenever someone brings a box?"
+  },
+  {
+    "id": "sd-286",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "office",
+    "dareType": null,
+    "text": "What is the weirdest desk item you keep within arm's reach while working?"
+  },
+  {
+    "id": "sd-287",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "office",
+    "dareType": null,
+    "text": "Have you ever nodded thoughtfully on a call while your audio was completely frozen?"
+  },
+  {
+    "id": "sd-288",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "office",
+    "dareType": null,
+    "text": "If your job title was brutally honest, what would it say on LinkedIn?"
+  },
+  {
+    "id": "sd-289",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "office",
+    "dareType": null,
+    "text": "What is your record number of browser tabs open at the exact same time?"
+  },
+  {
+    "id": "sd-290",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "office",
+    "dareType": null,
+    "text": "Which day of the week is your unofficial 'zero-brainpower' day?"
+  },
+  {
+    "id": "sd-291",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": null,
+    "text": "Have you ever typed 'As per my last email' while genuinely seething inside?"
+  },
+  {
+    "id": "sd-292",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": null,
+    "text": "What is the longest you have pretended to look at a spreadsheet while daydreaming?"
+  },
+  {
+    "id": "sd-293",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": null,
+    "text": "Who in this group would accidentally share the wrong screen during a client demo?"
+  },
+  {
+    "id": "sd-294",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": null,
+    "text": "Have you ever scheduled an email for 8:02 AM so it looked like you started early?"
+  },
+  {
+    "id": "sd-295",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": null,
+    "text": "What is the most creative excuse you used to skip a completely pointless meeting?"
+  },
+  {
+    "id": "sd-296",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": null,
+    "text": "Have you ever muted yourself just to sigh dramatically at a colleague's question?"
+  },
+  {
+    "id": "sd-297",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": null,
+    "text": "Which workplace buzzword makes you cringe the hardest when someone says it aloud?"
+  },
+  {
+    "id": "sd-298",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": null,
+    "text": "Have you ever eaten someone else's labelled snack from the office fridge by 'mistake'?"
+  },
+  {
+    "id": "sd-299",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": null,
+    "text": "What is the closest you ever came to hitting Send on a message meant for a different chat?"
+  },
+  {
+    "id": "sd-300",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": null,
+    "text": "If you could delete one recurring meeting from your calendar forever, which one goes?"
+  },
+  {
+    "id": "sd-301",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": null,
+    "text": "Have you ever used 'Sorry, I was on mute' just to buy five seconds to think?"
+  },
+  {
+    "id": "sd-302",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": null,
+    "text": "What is the pettiest Slack emoji reaction you have ever used professionally?"
+  },
+  {
+    "id": "sd-303",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "office",
+    "dareType": null,
+    "text": "What is a career risk you took that terrified you at first and paid off later?"
+  },
+  {
+    "id": "sd-304",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "office",
+    "dareType": null,
+    "text": "What is the boldest boundary you ever set at work—and how did it go?"
+  },
+  {
+    "id": "sd-305",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "office",
+    "dareType": null,
+    "text": "If you won a mystery grant to switch careers tomorrow, what would you do?"
+  },
+  {
+    "id": "sd-306",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "office",
+    "dareType": null,
+    "text": "What is the biggest lesson a terrible boss or tough project taught you?"
+  },
+  {
+    "id": "sd-307",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "office",
+    "dareType": null,
+    "text": "Who at this table would you trust to co-found a startup with—and in what role?"
+  },
+  {
+    "id": "sd-308",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "office",
+    "dareType": null,
+    "text": "What is one unspoken office rule you wish you knew on day one of your first job?"
+  },
+  {
+    "id": "sd-309",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "office",
+    "dareType": null,
+    "text": "Have you ever turned down an opportunity that looked shiny on paper because your gut said no?"
+  },
+  {
+    "id": "sd-310",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "office",
+    "dareType": null,
+    "text": "What is a professional brag you are secretly proud of but rarely get to share?"
+  },
+  {
+    "id": "sd-311",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Deliver a thirty-second quarterly earnings report on your current snack intake."
+  },
+  {
+    "id": "sd-312",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Give a colleague-style 'quick sync' pitch explaining why everyone needs a nap."
+  },
+  {
+    "id": "sd-313",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Read your last sent text message in your sharpest news-anchor voice."
+  },
+  {
+    "id": "sd-314",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Translate 'I am hungry' into pure corporate jargon using at least three buzzwords."
+  },
+  {
+    "id": "sd-315",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Do your best impression of someone desperately trying to stay awake in a 4 PM meeting."
+  },
+  {
+    "id": "sd-316",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Host a ten-second stand-up meeting where every player must share one word."
+  },
+  {
+    "id": "sd-317",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Mime typing furiously on an invisible keyboard while nodding like a movie hacker."
+  },
+  {
+    "id": "sd-318",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Give a polite, overly formal handshake and elevator pitch to the person on your left."
+  },
+  {
+    "id": "sd-319",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "office",
+    "dareType": "social",
+    "text": "React with a dancing parrot or party emoji to a completely normal message in your work chat."
+  },
+  {
+    "id": "sd-320",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "office",
+    "dareType": "social",
+    "text": "Send a coworker a random 'You crushed it this week, just saying' appreciation ping."
+  },
+  {
+    "id": "sd-321",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Sell a crumpled tissue to the table like it is a revolutionary AI gadget."
+  },
+  {
+    "id": "sd-322",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Apologise to an empty chair in the most dramatic 'Per my previous email' tone possible."
+  },
+  {
+    "id": "sd-323",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Give a performance review of the bottle's spinning technique using HR-approved language."
+  },
+  {
+    "id": "sd-324",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Do a twenty-second motivational keynote on why Fridays should start at Thursday noon."
+  },
+  {
+    "id": "sd-325",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Explain the rules of Truth or Dare as if onboarding a brand-new intern."
+  },
+  {
+    "id": "sd-326",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Act out trying to leave a video call when everyone keeps saying 'One last thing!'"
+  },
+  {
+    "id": "sd-327",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Show the table your desk-selfie or desktop wallpaper and explain the chaos."
+  },
+  {
+    "id": "sd-328",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Name five things on your desk or in your bag as if they are luxury startup perks."
+  },
+  {
+    "id": "sd-329",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Speak in polite customer-support voice until the next turn ends."
+  },
+  {
+    "id": "sd-330",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": "social",
+    "text": "Update your Slack or Teams status to 'Consulting with a top-hatted owl' for two hours."
+  },
+  {
+    "id": "sd-331",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": "social",
+    "text": "Drop a wholesome dad joke in your team's casual channel right now."
+  },
+  {
+    "id": "sd-332",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "office",
+    "dareType": "social",
+    "text": "Send a teammate a voice note reviewing today's lunch like a Michelin critic."
+  },
+  {
+    "id": "sd-333",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Pitch a wildly absurd startup idea to the table in forty-five seconds and take Q&A."
+  },
+  {
+    "id": "sd-334",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Conduct a mock job interview for the player across from you for 'Chief Nap Officer'."
+  },
+  {
+    "id": "sd-335",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Recite a fake out-of-office auto-reply that would get you legendary status on Monday."
+  },
+  {
+    "id": "sd-336",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Rate everyone at the table on 'most likely to survive a Monday without coffee'."
+  },
+  {
+    "id": "sd-337",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "office",
+    "dareType": "instant",
+    "text": "Give a dramatic farewell speech as if retiring from spreadsheets forever."
+  },
+  {
+    "id": "sd-338",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "office",
+    "dareType": "social",
+    "text": "Endorse a friend in this room for a completely random real skill on LinkedIn."
+  },
+  {
+    "id": "sd-339",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "office",
+    "dareType": "social",
+    "text": "Send your work bestie a message saying 'Remind me to tell you the owl story tomorrow'."
+  },
+  {
+    "id": "sd-340",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "office",
+    "dareType": "social",
+    "text": "Block fifteen minutes on your calendar tomorrow titled 'Mandatory Joy Break'."
+  },
+  {
+    "id": "sd-341",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "trip",
+    "dareType": null,
+    "text": "Who in this group always overpacks for a two-day trip like they are moving abroad?"
+  },
+  {
+    "id": "sd-342",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "trip",
+    "dareType": null,
+    "text": "What is the strangest souvenir you ever brought back from a vacation?"
+  },
+  {
+    "id": "sd-343",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "trip",
+    "dareType": null,
+    "text": "Window seat, aisle seat, or middle seat—and what is your non-negotiable reason?"
+  },
+  {
+    "id": "sd-344",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "trip",
+    "dareType": null,
+    "text": "Who in this group should never be put in charge of Google Maps navigation?"
+  },
+  {
+    "id": "sd-345",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "trip",
+    "dareType": null,
+    "text": "What is one item you forgot to pack on a trip that caused immediate regret?"
+  },
+  {
+    "id": "sd-346",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "trip",
+    "dareType": null,
+    "text": "Which road-trip snack are you ready to fight the backseat over?"
+  },
+  {
+    "id": "sd-347",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "trip",
+    "dareType": null,
+    "text": "Have you ever pretended to sleep on a train or flight just to avoid chatting?"
+  },
+  {
+    "id": "sd-348",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "trip",
+    "dareType": null,
+    "text": "What is the earliest you have ever arrived at an airport 'just in case'?"
+  },
+  {
+    "id": "sd-349",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "trip",
+    "dareType": null,
+    "text": "Who on this trip takes fifty photos of the exact same sunset?"
+  },
+  {
+    "id": "sd-350",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "trip",
+    "dareType": null,
+    "text": "What is your favourite travel memory that cost practically zero money?"
+  },
+  {
+    "id": "sd-351",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": null,
+    "text": "What is the biggest travel disaster you caused or walked straight into?"
+  },
+  {
+    "id": "sd-352",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": null,
+    "text": "Have you ever lied to a tour guide or hotel staff to get a better spot or upgrade?"
+  },
+  {
+    "id": "sd-353",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": null,
+    "text": "Who in this group slows down the entire morning departure every single time?"
+  },
+  {
+    "id": "sd-354",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": null,
+    "text": "What is the sketchiest roadside food you ate on a trip—and was it worth it?"
+  },
+  {
+    "id": "sd-355",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": null,
+    "text": "Have you ever missed a bus, train, or flight by under five minutes?"
+  },
+  {
+    "id": "sd-356",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": null,
+    "text": "Which destination everyone raves about actually left you secretly underwhelmed?"
+  },
+  {
+    "id": "sd-357",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": null,
+    "text": "Who on this trip is most likely to lose their sunglasses before day two?"
+  },
+  {
+    "id": "sd-358",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": null,
+    "text": "What is the weirdest local custom or language mix-up you ever stumbled into?"
+  },
+  {
+    "id": "sd-359",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": null,
+    "text": "Have you ever secretly disliked the itinerary someone spent weeks planning?"
+  },
+  {
+    "id": "sd-360",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": null,
+    "text": "What is the longest you have gone without a shower on a camping or road trip?"
+  },
+  {
+    "id": "sd-361",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": null,
+    "text": "Who in this room would negotiate hardest at a flea market over fifty rupees?"
+  },
+  {
+    "id": "sd-362",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": null,
+    "text": "Have you ever taken hotel toiletries like you were stocking a small pharmacy?"
+  },
+  {
+    "id": "sd-363",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "trip",
+    "dareType": null,
+    "text": "If we booked a surprise one-way ticket tonight with this exact group, where are we landing?"
+  },
+  {
+    "id": "sd-364",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "trip",
+    "dareType": null,
+    "text": "What is the most breathtaking view you have ever seen that no camera could capture?"
+  },
+  {
+    "id": "sd-365",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "trip",
+    "dareType": null,
+    "text": "Tell the table about a stranger you met while travelling whom you still think about."
+  },
+  {
+    "id": "sd-366",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "trip",
+    "dareType": null,
+    "text": "What is one solo trip you want to take—or already took—that changed your perspective?"
+  },
+  {
+    "id": "sd-367",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "trip",
+    "dareType": null,
+    "text": "Which moment on a trip made you laugh until you literally couldn't breathe?"
+  },
+  {
+    "id": "sd-368",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "trip",
+    "dareType": null,
+    "text": "If you could live in any city you visited for one whole year, which one wins?"
+  },
+  {
+    "id": "sd-369",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "trip",
+    "dareType": null,
+    "text": "What is a bucket-list destination you refuse to visit without the right company?"
+  },
+  {
+    "id": "sd-370",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "trip",
+    "dareType": null,
+    "text": "What is the bravest thing you ever tried while travelling outside your comfort zone?"
+  },
+  {
+    "id": "sd-371",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Give a thirty-second tour-guide speech about the exact room you are sitting in right now."
+  },
+  {
+    "id": "sd-372",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Mime packing a suitcase that is clearly way too small for your clothes."
+  },
+  {
+    "id": "sd-373",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Do your best flight-attendant safety demonstration using imaginary props."
+  },
+  {
+    "id": "sd-374",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Name five countries or cities starting with the first letter of your name in ten seconds."
+  },
+  {
+    "id": "sd-375",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Pose like a travel influencer discovering a puddle for a five-second photo."
+  },
+  {
+    "id": "sd-376",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Act out trying to flag down an auto or taxi in pouring rain."
+  },
+  {
+    "id": "sd-377",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Sing the chorus of your ultimate road-trip anthem at full enthusiasm."
+  },
+  {
+    "id": "sd-378",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Speak like a lost tourist asking the person on your right for directions to the bathroom."
+  },
+  {
+    "id": "sd-379",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "trip",
+    "dareType": "social",
+    "text": "Post a dramatic 'Wish you were here' photo of literally just the table or floor right now."
+  },
+  {
+    "id": "sd-380",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "trip",
+    "dareType": "social",
+    "text": "Text your family group 'Reached safely, vibes are immaculate' even if you are at home."
+  },
+  {
+    "id": "sd-381",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Haggle with the person across from you over the price of a pen—you must get it under ten bucks."
+  },
+  {
+    "id": "sd-382",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Show the last vacation photo in your gallery and narrate it like a nature documentary."
+  },
+  {
+    "id": "sd-383",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Do a dramatic slow-motion montage of waking up late and sprinting for a train."
+  },
+  {
+    "id": "sd-384",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Pitch tomorrow's imaginary itinerary to the table in thirty seconds like a hype man."
+  },
+  {
+    "id": "sd-385",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Balance your backpack or cushion on your head for ten seconds like a mountain trekker."
+  },
+  {
+    "id": "sd-386",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Review the nearest chair or sofa as if it were a five-star boutique hotel."
+  },
+  {
+    "id": "sd-387",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Let the group choose a random city—invent three fake 'must-see' landmarks there."
+  },
+  {
+    "id": "sd-388",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Imitate the loudest snorer or earliest riser you have ever travelled with."
+  },
+  {
+    "id": "sd-389",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Order an imaginary five-course meal in a completely made-up accent."
+  },
+  {
+    "id": "sd-390",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": "social",
+    "text": "Send a friend a voice note pretending you are calling from a windswept mountain top."
+  },
+  {
+    "id": "sd-391",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": "social",
+    "text": "Drop a poll on your story: 'Mountains, Beaches, or Couch?' and defend your pick."
+  },
+  {
+    "id": "sd-392",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "trip",
+    "dareType": "social",
+    "text": "Message your travel buddy 'Pack a jacket, no questions' right now."
+  },
+  {
+    "id": "sd-393",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Plan a realistic three-day group trip under a tight budget in forty-five seconds aloud."
+  },
+  {
+    "id": "sd-394",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Do a full travel-vlog intro for this room, complete with fake drone-view hand gestures."
+  },
+  {
+    "id": "sd-395",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Assign every player at the table their official road-trip role (DJ, Navigator, Snack Boss)."
+  },
+  {
+    "id": "sd-396",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Tell a two-sentence travel ghost story or spooky camp tale with full lighting drama."
+  },
+  {
+    "id": "sd-397",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "trip",
+    "dareType": "instant",
+    "text": "Keep a postcard-perfect smile frozen for twenty seconds while the group tries to crack you up."
+  },
+  {
+    "id": "sd-398",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "trip",
+    "dareType": "social",
+    "text": "Create a group chat named 'Next Trip 100% Happening' with the people in this room."
+  },
+  {
+    "id": "sd-399",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "trip",
+    "dareType": "social",
+    "text": "Post a throwback travel photo you never shared before with a one-word caption."
+  },
+  {
+    "id": "sd-400",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "trip",
+    "dareType": "social",
+    "text": "Call a friend who missed this hangout and give them a ten-second FOMO weather report."
+  },
+  {
+    "id": "sd-401",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Apne friend circle mein sabse bada 'Main bas 5 minute mein nikal raha hoon' jhooth kaun bolta hai?"
+  },
+  {
+    "id": "sd-402",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Kaunsa Bollywood dialogue tum real life mein sabse zyada repeat karte ho?"
+  },
+  {
+    "id": "sd-403",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Ghar ka kaunsa comfort food mil jaye toh tum 5-star dinner bhi cancel kar doge?"
+  },
+  {
+    "id": "sd-404",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Is room mein kaun bina alarm ke kabhi subah time pe nahi uth sakta?"
+  },
+  {
+    "id": "sd-405",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Tumhara sabse weird guilty-pleasure TV serial ya reality show kaunsa raha hai?"
+  },
+  {
+    "id": "sd-406",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Chai ya coffee—aur agar galat bana ho toh chupchaap pi lete ho ya complaint karte ho?"
+  },
+  {
+    "id": "sd-407",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Sabse ajeeb cheez jo tumne kabhi online sale mein sasti dekh kar kharid li?"
+  },
+  {
+    "id": "sd-408",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Is table par kaun sabse zyada dramatic WhatsApp voice notes bhejta hai?"
+  },
+  {
+    "id": "sd-409",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Bachpan ka kaunsa cartoon aaj bhi dekhne ka mann karta hai?"
+  },
+  {
+    "id": "sd-410",
+    "kind": "truth",
+    "tier": "mild",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Shaadi mein sabse pehle tumhara focus dance floor par hota hai ya buffet par?"
+  },
+  {
+    "id": "sd-411",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Family WhatsApp group mein sabse ajeeb 'Good Morning' forward kisne bheja hai?"
+  },
+  {
+    "id": "sd-412",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Kabhi kisi relative ko dekh kar rasta badla hai taaki 'Aage kya plan hai' na sunna pade?"
+  },
+  {
+    "id": "sd-413",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Is room mein kaun sabse bada 'Plan cancel karwaane wala' mastermind hai?"
+  },
+  {
+    "id": "sd-414",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Apne crush ko impress karne ke chakkar mein sabse funny kaam kya kiya hai?"
+  },
+  {
+    "id": "sd-415",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Kabhi kisi dost ke samne fake 'Haan haan, mujhe sab samajh aa gaya' bola hai?"
+  },
+  {
+    "id": "sd-416",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Kaunsa gaana akele gaadi ya bathroom mein gaate waqt tum khud ko Arijit ya Sunidhi samajhte ho?"
+  },
+  {
+    "id": "sd-417",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Is group mein kiski bargaining skills dekh kar dukandaar bhi haar maan le?"
+  },
+  {
+    "id": "sd-418",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Sabse bada bahana jo tumne mummy-papa ko late aane par diya aur woh maan bhi gaye?"
+  },
+  {
+    "id": "sd-419",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Agar tumhare phone ka 'Recently Deleted' folder khul jaye toh sabse pehle kya milega?"
+  },
+  {
+    "id": "sd-420",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Kisi dost ke birthday pe sabse last-minute jugaad gift kya diya hai?"
+  },
+  {
+    "id": "sd-421",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Is room mein sabse bada 'Gossip toh nahi kar raha, bas update de raha hoon' kaun hai?"
+  },
+  {
+    "id": "sd-422",
+    "kind": "truth",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Kabhi restaurant mein menu dekh kar price ki wajah se bina kuch bole order badla hai?"
+  },
+  {
+    "id": "sd-423",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Zindagi ka woh ek moment jab tumne dil ki suni aur log bole 'pagal hai kya'?"
+  },
+  {
+    "id": "sd-424",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Is table par baithe kis insaan par tum aankh band karke 3 AM madad ke liye call kar sakte ho?"
+  },
+  {
+    "id": "sd-425",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Apni ek aisi aadat batao jo tumne doston se chhupa rakhi hai par ab bol sakte ho."
+  },
+  {
+    "id": "sd-426",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Pichle ek saal mein kaunsi ek cheez ne tumhe sabse zyada grow karwaya?"
+  },
+  {
+    "id": "sd-427",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Agar tumhare life ke is chapter par ek film bane, toh title aur hero kaun hoga?"
+  },
+  {
+    "id": "sd-428",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Kaunsa sapna hai jo abhi tak kisi ko seriously nahi bataya par dil mein pakka hai?"
+  },
+  {
+    "id": "sd-429",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Kisi dost ke liye kiya hua sabse crazy par loyal kaam kaunsa tha?"
+  },
+  {
+    "id": "sd-430",
+    "kind": "truth",
+    "tier": "legend",
+    "pack": "hinglish",
+    "dareType": null,
+    "text": "Agar aaj ek time machine mile toh apne 18-saal wale version ko ek line mein kya advice doge?"
+  },
+  {
+    "id": "sd-431",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "15 second tak ekdum filmy villain ki tarah haso jab tak sab na has pade."
+  },
+  {
+    "id": "sd-432",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "Apne bagal wale player ki ek pyaari si tareef pure shayari style mein karo."
+  },
+  {
+    "id": "sd-433",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "Bina 'Haan' aur 'Na' bole agle do sawaalon ke jawaab do jo group pooche."
+  },
+  {
+    "id": "sd-434",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "Kisi ek cricket commentator ki awaaz mein is game ka live haal sunao."
+  },
+  {
+    "id": "sd-435",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "Apni favourite Bollywood entry scene bina music ke slow-motion mein karke dikhao."
+  },
+  {
+    "id": "sd-436",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "10 second mein bina ruke 'Kachcha papad pakka papad' paanch baar bolo."
+  },
+  {
+    "id": "sd-437",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "Table par sabko ek-ek filmy title do jaise 'Drama Queen' ya 'Silent Killer'."
+  },
+  {
+    "id": "sd-438",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "Ek imaginary auto-wale se 20 rupaye kam karwane ki full acting karo."
+  },
+  {
+    "id": "sd-439",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "hinglish",
+    "dareType": "social",
+    "text": "Apne close friend ko text bhejo: 'Ek secret batana hai, par promise kar hassega nahi'."
+  },
+  {
+    "id": "sd-440",
+    "kind": "dare",
+    "tier": "mild",
+    "pack": "hinglish",
+    "dareType": "social",
+    "text": "Apni WhatsApp story par sirf ek chai cup ya paani ke glass ki photo daalo caption: 'Mood'."
+  },
+  {
+    "id": "sd-441",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "Agle round tak sirf shuddh Hindi words mein baat karo—ek bhi English word nahi!"
+  },
+  {
+    "id": "sd-442",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "Apne phone ke last 5 emojis dikhao aur unse ek love story bana kar sunao."
+  },
+  {
+    "id": "sd-443",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "TV serial ki saas-bahu style mein 3 baar dramatic zoom-in reaction do."
+  },
+  {
+    "id": "sd-444",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "Kisi bhi random object ko haath mein lekar uska ekdum emotional TV ad record karo."
+  },
+  {
+    "id": "sd-445",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "Apne saamne baithe player ke liye 4 line ka filmy rap ya qawwali gaao."
+  },
+  {
+    "id": "sd-446",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "Is room ke kisi ek dost ki awaaz aur walking style ki 15 second mimicry karo."
+  },
+  {
+    "id": "sd-447",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "Bina smile kiye 20 second tak sabko serious lecture do ki 'Dahi-chini' kyun zaroori hai."
+  },
+  {
+    "id": "sd-448",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "Apni pocket ya bag ki sabse ajeeb cheez table par rakh kar uski auction karo."
+  },
+  {
+    "id": "sd-449",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "Agle 2 turns tak har sentence ke end mein 'Ji huzoor' bolna zaroori hai."
+  },
+  {
+    "id": "sd-450",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": "social",
+    "text": "Apne cousin ya bestie ko voice note bhejo ki tumne ek naya dance step seekha hai."
+  },
+  {
+    "id": "sd-451",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": "social",
+    "text": "Family group mein ekdum random 'Aaj mausam kitna suhana hai na?' message drop karo."
+  },
+  {
+    "id": "sd-452",
+    "kind": "dare",
+    "tier": "spicy",
+    "pack": "hinglish",
+    "dareType": "social",
+    "text": "Apne status par likho: 'Aaj ek ullu ne mujhe game mein hara diya'—ek ghante ke liye."
+  },
+  {
+    "id": "sd-453",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "Poore room ke liye 30 second ka 'Shaadi Sangeet' hook-step freestyle dance karo."
+  },
+  {
+    "id": "sd-454",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "Ekdum emotional award-show speech do jisme tum apne phone battery ko thank you bolo."
+  },
+  {
+    "id": "sd-455",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "Table ke saamne khade hokar apni sabse funny childhood story 30 second mein act karo."
+  },
+  {
+    "id": "sd-456",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "Har player ke baare mein ek pyaari aur ek teasing line ekdum rapid-fire mein bolo."
+  },
+  {
+    "id": "sd-457",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "hinglish",
+    "dareType": "instant",
+    "text": "Bina haath hilaye aur bina hase 25 second tak ek radio RJ ki tarah non-stop bolo."
+  },
+  {
+    "id": "sd-458",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "hinglish",
+    "dareType": "social",
+    "text": "Kisi purane school friend ko call karke 10 second mein poochho 'Mera tiffin yaad hai?'"
+  },
+  {
+    "id": "sd-459",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "hinglish",
+    "dareType": "social",
+    "text": "Close friends story par ek 5-second slow-clap video daalo with caption 'Respect'."
+  },
+  {
+    "id": "sd-460",
+    "kind": "dare",
+    "tier": "legend",
+    "pack": "hinglish",
+    "dareType": "social",
+    "text": "Apne best friend ko text karo: 'Kal chai pe milte hain, bada kaam hai' bina kisi detail ke."
   }
 ]

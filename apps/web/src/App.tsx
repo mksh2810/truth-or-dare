@@ -38,6 +38,12 @@ const ResultScreen = lazy(() =>
 const PodiumScreen = lazy(() =>
   import('./screens/PodiumScreen').then((m) => ({ default: m.PodiumScreen })),
 );
+const SummaryLootScreen = lazy(() =>
+  import('./screens/SummaryLootScreen').then((m) => ({ default: m.SummaryLootScreen })),
+);
+const TableModeScreen = lazy(() =>
+  import('./screens/TableModeScreen').then((m) => ({ default: m.TableModeScreen })),
+);
 const RoomClosedScreen = lazy(() =>
   import('./screens/RoomClosedScreen').then((m) => ({ default: m.RoomClosedScreen })),
 );
@@ -65,6 +71,9 @@ export function App() {
   const route = useGameStore((s) => s.route);
   const setRoute = useGameStore((s) => s.setRoute);
   const room = useGameStore((s) => s.room);
+  const tableDisplayActive = useGameStore((s) => s.tableDisplayActive);
+  const passThePhone = useGameStore((s) => s.passThePhone);
+  const podiumSubView = useGameStore((s) => s.podiumSubView);
   const toast = useGameStore((s) => s.toast);
   const reducedMotionOverride = useGameStore((s) => s.reducedMotionOverride);
   const isInApp = useMemo(() => detectInAppBrowser().isInApp, []);
@@ -104,6 +113,9 @@ export function App() {
     }
 
     if (route === 'ROOM' && room) {
+      if (tableDisplayActive && room.phase !== 'CLOSED') {
+        return <TableModeScreen />;
+      }
       switch (room.phase) {
         case 'LOBBY':
           return <LobbyScreen />;
@@ -120,8 +132,9 @@ export function App() {
         case 'RESULT':
           return <ResultScreen />;
         case 'SUMMARY':
+          return <SummaryLootScreen />;
         case 'PODIUM':
-          return <PodiumScreen />;
+          return podiumSubView === 'SUMMARY' ? <SummaryLootScreen /> : <PodiumScreen />;
         case 'CLOSED':
           return <RoomClosedScreen />;
       }
@@ -138,6 +151,15 @@ export function App() {
           <Suspense fallback={null}>
             <InAppBrowserHelp />
           </Suspense>
+        )}
+        {passThePhone && route === 'ROOM' && room && room.phase !== 'LOBBY' && room.phase !== 'CLOSED' && (
+          <div
+            role="status"
+            data-testid="pass-the-phone-banner"
+            className="bg-[var(--color-brass)] px-3 py-1.5 text-center text-xs font-bold text-[var(--color-cream)]"
+          >
+            Pass-the-Phone Mode active — hand device to the active player
+          </div>
         )}
         <Suspense fallback={<ScreenFallback />}>{renderContent()}</Suspense>
 

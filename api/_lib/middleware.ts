@@ -54,7 +54,7 @@ function isOriginAllowed(origin: string, allowedOrigins: readonly string[], isDe
 function applyCors(req: VercelRequest, res: VercelResponse): boolean {
   const env = getEnvConfig();
   const origin = getHeader(req, 'origin');
-  const isDev = env.useMemoryStore || process.env.NODE_ENV !== 'production';
+  const isDev = process.env.NODE_ENV !== 'production';
 
   res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -87,7 +87,7 @@ function applyCors(req: VercelRequest, res: VercelResponse): boolean {
 async function authenticateRequest(req: VercelRequest, store: ArbiterStore): Promise<string> {
   const env = getEnvConfig();
 
-  if (env.useMemoryStore) {
+  if (env.useMemoryStore && process.env.NODE_ENV !== 'production') {
     const testUid = getHeader(req, 'x-test-uid');
     if (testUid && testUid.trim().length > 0) {
       return testUid.trim();

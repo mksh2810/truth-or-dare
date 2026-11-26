@@ -14,6 +14,7 @@ export function BottleSpinScreen() {
   const soundEnabled = useGameStore((s) => s.soundEnabled);
   const setSoundEnabled = useGameStore((s) => s.setSoundEnabled);
   const reducedMotionOverride = useGameStore((s) => s.reducedMotionOverride);
+  const selectedSkin = useGameStore((s) => s.selectedSkin);
   const advanceTurn = useGameStore((s) => s.advanceTurn);
 
   const [landed, setLanded] = useState(false);
@@ -76,6 +77,7 @@ export function BottleSpinScreen() {
               turnVersion={room.turnVersion}
               soundEnabled={soundEnabled}
               reducedMotionOverride={reducedMotionOverride}
+              skin={selectedSkin}
               onSpinComplete={() => setLanded(true)}
             />
           }

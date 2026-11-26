@@ -24,6 +24,7 @@ import {
   type ChitDoc,
   type DareType,
   type JudgeVerdict,
+  type PackId,
   type Phase,
   type PlayerDoc,
   type PresenceNode,
@@ -43,6 +44,8 @@ import {
   type AuthProfile,
 } from '../auth/firebase';
 import type { SyncState } from '../design/SyncIndicator';
+import { normalizeBottleSkinId, type BottleSkinId } from '../design/bottleSkins';
+import { trackEvent } from '../analytics/events';
 
 export type NavRoute = 'HOME' | 'CREATE' | 'JOIN' | 'ROOM' | 'CLOSED';
 
@@ -159,11 +162,16 @@ export interface GameState {
   lifetimeXp: number;
   level: number;
   skins: string[];
+  selectedSkin: BottleSkinId;
   savedTables: SavedTableSummary[];
 
   // Navigation & UI
   route: NavRoute;
   joinPrefillCode: string;
+  prefillPackId: PackId | null;
+  passThePhone: boolean;
+  tableDisplayActive: boolean;
+  podiumSubView: 'PODIUM' | 'SUMMARY';
   closedReason: string | null;
   syncState: SyncState;
   isOnline: boolean;
@@ -190,6 +198,11 @@ export interface GameState {
   setDisplayName: (name: string) => void;
   setSoundEnabled: (enabled: boolean) => void;
   setReducedMotionOverride: (enabled: boolean) => void;
+  setSelectedSkin: (skin: BottleSkinId) => void;
+  setPassThePhone: (enabled: boolean) => void;
+  setTableDisplayActive: (active: boolean) => void;
+  setPrefillPackId: (packId: PackId | null) => void;
+  setPodiumSubView: (view: 'PODIUM' | 'SUMMARY') => void;
   setRoute: (route: NavRoute, prefillCode?: string) => void;
   setShareSheetOpen: (open: boolean) => void;
   showToast: (text: string, tone?: ToastMessage['tone']) => void;
@@ -249,7 +262,8 @@ function loadPrefs() {
       soundEnabled: false,
       reducedMotionOverride: false,
       lifetimeXp: 0,
-      skins: ['classic-amber'],
+      skins: ['amber'],
+      selectedSkin: 'amber' as BottleSkinId,
       savedTables: [] as SavedTableSummary[],
     };
   }
@@ -263,6 +277,7 @@ function loadPrefs() {
         reducedMotionOverride: boolean;
         lifetimeXp: number;
         skins: string[];
+        selectedSkin: string;
         savedTables: SavedTableSummary[];
       }>;
       return {
@@ -271,7 +286,8 @@ function loadPrefs() {
         soundEnabled: parsed.soundEnabled ?? false,
         reducedMotionOverride: parsed.reducedMotionOverride ?? false,
         lifetimeXp: parsed.lifetimeXp ?? 0,
-        skins: parsed.skins ?? ['classic-amber'],
+        skins: parsed.skins ?? ['amber'],
+        selectedSkin: normalizeBottleSkinId(parsed.selectedSkin),
         savedTables: parsed.savedTables ?? [],
       };
     }
@@ -284,12 +300,18 @@ function loadPrefs() {
     soundEnabled: false,
     reducedMotionOverride: false,
     lifetimeXp: 0,
-    skins: ['classic-amber'],
+    skins: ['amber'],
+    selectedSkin: 'amber' as BottleSkinId,
     savedTables: [] as SavedTableSummary[],
   };
 }
 
-function persistPrefs(state: Pick<GameState, 'displayName' | 'soundEnabled' | 'reducedMotionOverride' | 'lifetimeXp' | 'skins' | 'savedTables'>) {
+function persistPrefs(
+  state: Pick<
+    GameState,
+    'displayName' | 'soundEnabled' | 'reducedMotionOverride' | 'lifetimeXp' | 'skins' | 'selectedSkin' | 'savedTables'
+  >,
+) {
   if (typeof window === 'undefined') return;
   window.localStorage.setItem(
     PREFS_KEY,
@@ -299,6 +321,7 @@ function persistPrefs(state: Pick<GameState, 'displayName' | 'soundEnabled' | 'r
       reducedMotionOverride: state.reducedMotionOverride,
       lifetimeXp: state.lifetimeXp,
       skins: state.skins,
+      selectedSkin: state.selectedSkin,
       savedTables: state.savedTables,
     }),
   );
@@ -570,10 +593,15 @@ export const useGameStore = create<GameState>((set, get) => {
     lifetimeXp: initialPrefs.lifetimeXp,
     level: calculateLevel(initialPrefs.lifetimeXp),
     skins: initialPrefs.skins,
+    selectedSkin: initialPrefs.selectedSkin,
     savedTables: initialPrefs.savedTables,
 
     route: 'HOME',
     joinPrefillCode: '',
+    prefillPackId: null,
+    passThePhone: false,
+    tableDisplayActive: false,
+    podiumSubView: 'PODIUM',
     closedReason: null,
     syncState: 'synced',
     isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
@@ -615,6 +643,22 @@ export const useGameStore = create<GameState>((set, get) => {
       set({ reducedMotionOverride });
       persistPrefs({ ...get(), reducedMotionOverride });
     },
+
+    setSelectedSkin: (selectedSkin) => {
+      set({ selectedSkin });
+      persistPrefs({ ...get(), selectedSkin });
+    },
+
+    setPassThePhone: (passThePhone) => {
+      set({ passThePhone });
+      trackEvent('table_mode_toggled', { enabled: passThePhone, mode: 'pass_the_phone' });
+    },
+
+    setTableDisplayActive: (tableDisplayActive) => set({ tableDisplayActive }),
+
+    setPrefillPackId: (prefillPackId) => set({ prefillPackId }),
+
+    setPodiumSubView: (podiumSubView) => set({ podiumSubView }),
 
     setRoute: (route, prefillCode) =>
       set({
@@ -669,7 +713,8 @@ export const useGameStore = create<GameState>((set, get) => {
         reducedMotionOverride: false,
         lifetimeXp: 0,
         level: 1,
-        skins: ['classic-amber'],
+        skins: ['amber'],
+        selectedSkin: 'amber',
         savedTables: [],
       });
       get().showToast('Your local data has been cleared.', 'info');
@@ -893,6 +938,12 @@ export const useGameStore = create<GameState>((set, get) => {
           schemaVersion: SCHEMA_VERSION,
           settings,
         });
+        trackEvent('table_created', {
+          quickPlay: Boolean(settings.quickPlay),
+          totalRounds: settings.rounds ?? 10,
+          tableMode: Boolean(settings.tableMode),
+          passThePhone: get().passThePhone,
+        });
         get().subscribeToRoom(res.code);
         set({ route: 'ROOM' });
         return res.code;
@@ -952,6 +1003,12 @@ export const useGameStore = create<GameState>((set, get) => {
           },
         };
         writeLocalBundle(code, bundle);
+        trackEvent('table_created', {
+          quickPlay: fullSettings.quickPlay,
+          totalRounds: fullSettings.rounds,
+          tableMode: fullSettings.tableMode,
+          passThePhone: get().passThePhone,
+        });
         get().subscribeToRoom(code);
         set({ route: 'ROOM' });
         return code;
@@ -969,6 +1026,10 @@ export const useGameStore = create<GameState>((set, get) => {
           name,
           avatar: '🦊',
           schemaVersion: SCHEMA_VERSION,
+          spectator,
+        });
+        trackEvent('table_joined', {
+          method: get().joinPrefillCode === normalizedCode ? 'link' : 'code',
           spectator,
         });
         get().subscribeToRoom(normalizedCode);
@@ -1012,6 +1073,10 @@ export const useGameStore = create<GameState>((set, get) => {
         bundle.presence[uid] = { online: true, away: false, lastSeen: Date.now() };
         bundle.room.turnVersion += 1;
         writeLocalBundle(normalizedCode, bundle);
+        trackEvent('table_joined', {
+          method: get().joinPrefillCode === normalizedCode ? 'link' : 'code',
+          spectator,
+        });
         get().subscribeToRoom(normalizedCode);
         set({ route: 'ROOM' });
       }
@@ -1072,6 +1137,12 @@ export const useGameStore = create<GameState>((set, get) => {
     updateSettings: async (patch) => {
       const { room, auth } = get();
       if (!room || !auth) return;
+      if (patch.settings?.tableMode !== undefined) {
+        trackEvent('table_mode_toggled', {
+          enabled: patch.settings.tableMode,
+          mode: 'table',
+        });
+      }
       try {
         await callArbiter('/api/room/settings', {
           code: room.code,
@@ -1107,21 +1178,32 @@ export const useGameStore = create<GameState>((set, get) => {
     },
 
     startGame: async () => {
-      const { room } = get();
+      const { room, players } = get();
       if (!room) return;
+      const isRematch = room.phase === 'PODIUM' || room.phase === 'SUMMARY';
+      const activeCount = players.filter((p) => !p.banned && !p.spectator).length;
       try {
         await callArbiter('/api/room/start', {
           code: room.code,
           expectedPhase: room.phase,
           expectedVersion: room.turnVersion,
         });
+        if (isRematch) {
+          trackEvent('rematch_started', { playerCount: activeCount });
+        } else {
+          trackEvent('game_started', {
+            playerCount: activeCount,
+            quickPlay: room.settings.quickPlay,
+            packCount: room.settings.packIds.length,
+          });
+        }
       } catch (err) {
         if (!(err instanceof Error && err.message === 'LOCAL_FALLBACK')) throw err;
         const bundle = readLocalBundle(room.code);
         if (!bundle) return;
         const now = Date.now();
 
-        if (bundle.room.phase === 'PODIUM') {
+        if (bundle.room.phase === 'PODIUM' || bundle.room.phase === 'SUMMARY') {
           // Rematch -> back to LOBBY
           bundle.room.phase = 'LOBBY';
           bundle.room.round = 0;
@@ -1138,6 +1220,7 @@ export const useGameStore = create<GameState>((set, get) => {
           bundle.room.turnVersion += 1;
           writeLocalBundle(room.code, bundle);
           applyBundle(bundle);
+          trackEvent('rematch_started', { playerCount: activeCount });
           return;
         }
 
@@ -1184,6 +1267,11 @@ export const useGameStore = create<GameState>((set, get) => {
         }
         writeLocalBundle(room.code, bundle);
         applyBundle(bundle);
+        trackEvent('game_started', {
+          playerCount: bundle.players.filter((p) => !p.banned && !p.spectator).length,
+          quickPlay: bundle.room.settings.quickPlay,
+          packCount: bundle.room.settings.packIds.length,
+        });
       }
     },
 
@@ -1203,11 +1291,13 @@ export const useGameStore = create<GameState>((set, get) => {
           expectedPhase: room.phase,
           expectedVersion: room.turnVersion,
         });
+        trackEvent('chit_submitted', { kind, verdict: res.verdict, tier: 'MILD' });
         return res;
       } catch (err) {
         if (!(err instanceof Error && err.message === 'LOCAL_FALLBACK')) throw err;
         const mod = checkDeterministicModeration(text);
         if (!mod.allowed) {
+          trackEvent('chit_submitted', { kind, verdict: 'NOPE', tier: 'MILD' });
           return {
             verdict: 'NOPE',
             owlReason: mod.reason || 'That prompt breaks table rules.',
@@ -1215,6 +1305,7 @@ export const useGameStore = create<GameState>((set, get) => {
           };
         }
         if (text.trim().length < 10) {
+          trackEvent('chit_submitted', { kind, verdict: 'TOO_MILD', tier: 'MILD' });
           return {
             verdict: 'TOO_MILD',
             owlReason: 'Give the table a little more detail to work with!',
@@ -1235,6 +1326,7 @@ export const useGameStore = create<GameState>((set, get) => {
           writeLocalBundle(room.code, bundle);
           applyBundle(bundle);
         }
+        trackEvent('chit_submitted', { kind, verdict: 'FINE', tier: 'MILD' });
         return {
           verdict: 'FINE',
           owlReason: 'Sealed! The Owl approves.',
@@ -1362,6 +1454,14 @@ export const useGameStore = create<GameState>((set, get) => {
             owlLine: pickRandom(OWL_LINES_BY_STAMP[tally.stamp]),
             deadlineAt: now + 6000,
           };
+          trackEvent('turn_completed', {
+            kind: bundle.turn.kind ?? 'TRUTH',
+            resultStamp: tally.stamp,
+            durationSec: bundle.turn.startedAt
+              ? Math.max(0, Math.round((now - Number(bundle.turn.startedAt)) / 1000))
+              : 0,
+            stalled: Boolean(bundle.turn.stalled),
+          });
         } else if (bundle.room.phase === 'RESULT') {
           if (bundle.room.round >= bundle.room.totalRounds) {
             bundle.room.phase = 'PODIUM';
@@ -1521,6 +1621,14 @@ export const useGameStore = create<GameState>((set, get) => {
         };
         writeLocalBundle(room.code, bundle);
         applyBundle(bundle);
+        trackEvent('turn_completed', {
+          kind: bundle.turn.kind ?? 'TRUTH',
+          resultStamp: 'SKIPPED',
+          durationSec: bundle.turn.startedAt
+            ? Math.max(0, Math.round((now - Number(bundle.turn.startedAt)) / 1000))
+            : 0,
+          stalled: false,
+        });
       }
     },
 

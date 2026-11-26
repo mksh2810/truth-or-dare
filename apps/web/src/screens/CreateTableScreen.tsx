@@ -14,6 +14,9 @@ const PACKS: Array<{ id: PackId; label: string }> = [
 
 export function CreateTableScreen() {
   const savedName = useGameStore((s) => s.displayName);
+  const prefillPackId = useGameStore((s) => s.prefillPackId);
+  const passThePhone = useGameStore((s) => s.passThePhone);
+  const setPassThePhone = useGameStore((s) => s.setPassThePhone);
   const createRoom = useGameStore((s) => s.createRoom);
   const setRoute = useGameStore((s) => s.setRoute);
 
@@ -21,7 +24,7 @@ export function CreateTableScreen() {
   const [rounds, setRounds] = useState<TotalRounds>(10);
   const [quickPlay, setQuickPlay] = useState(false);
   const [tableMode, setTableMode] = useState(false);
-  const [packId, setPackId] = useState<PackId>('friends');
+  const [packId, setPackId] = useState<PackId>(prefillPackId ?? 'friends');
   const [voteSec, setVoteSec] = useState<number>(20);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -184,6 +187,7 @@ export function CreateTableScreen() {
               type="button"
               role="switch"
               aria-checked={tableMode}
+              data-testid="create-tablemode-toggle"
               onClick={() => setTableMode(!tableMode)}
               className="flex min-h-[44px] w-full items-center justify-between rounded-[14px] border border-black/15 bg-[var(--color-linen)] px-3.5 py-2 text-left text-sm"
             >
@@ -192,6 +196,21 @@ export function CreateTableScreen() {
                 <p className="text-xs opacity-75">Shared screen display for TV or laptop</p>
               </div>
               <span className="text-xs font-bold">{tableMode ? 'ON' : 'OFF'}</span>
+            </button>
+
+            <button
+              type="button"
+              role="switch"
+              aria-checked={passThePhone}
+              data-testid="create-passthephone-toggle"
+              onClick={() => setPassThePhone(!passThePhone)}
+              className="flex min-h-[44px] w-full items-center justify-between rounded-[14px] border border-black/15 bg-[var(--color-linen)] px-3.5 py-2 text-left text-sm"
+            >
+              <div>
+                <p className="font-semibold">Pass-the-Phone</p>
+                <p className="text-xs opacity-75">Single-device fallback for groups sharing one phone</p>
+              </div>
+              <span className="text-xs font-bold">{passThePhone ? 'ON' : 'OFF'}</span>
             </button>
           </div>
         </SurfaceCard>
