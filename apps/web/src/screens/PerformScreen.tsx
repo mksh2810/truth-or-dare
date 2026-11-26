@@ -1,5 +1,12 @@
 import { Check, FastForward, Hourglass, RefreshCw } from 'lucide-react';
-import { Button, ElapsedStopwatch, OwlMascot, SurfaceCard, SyncIndicator } from '../design';
+import {
+  Button,
+  ElapsedStopwatch,
+  ParchmentCard,
+  SurfaceCard,
+  SyncIndicator,
+  WaxSealedEnvelope,
+} from '../design';
 import { useGameStore } from '../state/useGameStore';
 
 export function PerformScreen() {
@@ -29,13 +36,20 @@ export function PerformScreen() {
   return (
     <main
       data-testid="perform-screen"
-      className="lamplit-backdrop mx-auto flex min-h-dvh w-full max-w-[430px] flex-col justify-between px-4 py-4"
+      className="lamplit-backdrop relative mx-auto flex min-h-dvh w-full max-w-[430px] flex-col justify-between overflow-hidden px-4 py-4"
       style={{
         paddingTop: 'calc(var(--safe-top) + 12px)',
         paddingBottom: 'calc(var(--safe-bottom) + 24px)',
       }}
     >
-      <header className="flex items-center justify-between gap-2">
+      {/* Warm golden glow behind envelope */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-24 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full opacity-40 blur-3xl"
+        style={{ background: 'radial-gradient(circle, #F4C97A 0%, transparent 70%)' }}
+      />
+
+      <header className="relative z-10 flex items-center justify-between gap-2">
         <ElapsedStopwatch
           startedAt={turn.startedAt}
           clockOffsetMs={clockOffsetMs}
@@ -48,9 +62,15 @@ export function PerformScreen() {
       </header>
 
       {isPerformer ? (
-        <section className="my-auto flex flex-col gap-4">
-          <SurfaceCard
-            surface="linen"
+        <section className="relative z-10 my-auto flex flex-col gap-4">
+          <h1 className="font-display text-center text-2xl font-bold text-[var(--color-cream)]">
+            Unseal the Chit...
+          </h1>
+
+          <WaxSealedEnvelope />
+
+          <ParchmentCard
+            tiltDeg={-1}
             data-testid="unsealed-chit-card"
             className="space-y-3 text-center"
           >
@@ -64,22 +84,29 @@ export function PerformScreen() {
                 {turn.kind ?? 'TRUTH'}
               </span>
               {isDare && turn.dareType && (
-                <span className="rounded-full border border-black/15 bg-[var(--color-linen)] px-2.5 py-1 text-xs font-semibold">
+                <span className="rounded-full border border-[#8A6420]/30 bg-white/60 px-2.5 py-1 text-xs font-semibold">
                   {turn.dareType}
                 </span>
               )}
             </div>
 
-            <p className="font-chit py-4 text-[22px] leading-snug text-[var(--color-ink)]">
+            <p className="font-display py-3 text-2xl leading-snug font-bold italic text-[var(--color-ink)]">
               {privatePrompt?.text ?? 'Unsealing your prompt…'}
             </p>
+
+            {/* Ornamental Flourish */}
+            <div aria-hidden="true" className="flex items-center justify-center gap-2 opacity-45">
+              <span className="h-[1px] w-10 bg-[#8A6420]" />
+              <span className="text-xs text-[#8A6420]">✦</span>
+              <span className="h-[1px] w-10 bg-[#8A6420]" />
+            </div>
 
             <p className="text-xs opacity-75">
               {isDare
                 ? 'Complete the dare in front of the table, then tap Done.'
                 : 'Answer aloud to the table, then tap Done.'}
             </p>
-          </SurfaceCard>
+          </ParchmentCard>
 
           <Button
             variant={isDare ? 'primary-dare' : 'primary-truth'}
@@ -101,7 +128,7 @@ export function PerformScreen() {
               onClick={() => void performSwap()}
             >
               <RefreshCw className="h-4 w-4" aria-hidden="true" />
-              {me?.swapUsed ? 'Swap Used' : 'Free Swap'}
+              {me?.swapUsed ? 'Swap Used' : '1 Free Swap'}
             </Button>
 
             <Button
@@ -116,8 +143,8 @@ export function PerformScreen() {
           </div>
         </section>
       ) : (
-        <section className="my-auto flex flex-col items-center gap-5 text-center">
-          <OwlMascot pose="idle" size="md" surface="lamplit" />
+        <section className="relative z-10 my-auto flex flex-col items-center gap-5 text-center">
+          <WaxSealedEnvelope />
           <SurfaceCard surface="lamplit" className="w-full space-y-2">
             <h1 className="font-display text-2xl font-bold" aria-live="polite">
               {performer?.name ?? 'Player'} is unsealing a{' '}

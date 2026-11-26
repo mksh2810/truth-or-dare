@@ -1,19 +1,27 @@
 import { useState } from 'react';
 import {
+  ArrowLeft,
   Check,
   Copy,
   ExternalLink,
-  LogOut,
+  Flag,
+  Hourglass,
   Monitor,
   Play,
   QrCode,
   Share2,
   UserX,
-  Flag,
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import type { PlayerDoc, TotalRounds } from '@vowlet/shared';
-import { BottomSheet, Button, RadialTable, SurfaceCard, SyncIndicator } from '../design';
+import {
+  BotanicalCorners,
+  BottomSheet,
+  Button,
+  RadialTable,
+  SurfaceCard,
+  SyncIndicator,
+} from '../design';
 import { useGameStore } from '../state/useGameStore';
 import { ReportBlockSheet } from './ReportBlockSheet';
 
@@ -45,6 +53,7 @@ export function LobbyScreen() {
   const activePlayers = players.filter((p) => !p.banned && !p.spectator);
   const presentPlayers = activePlayers.filter((p) => presence[p.uid]?.online ?? true);
   const readyCount = activePlayers.filter((p) => p.ready).length;
+  const readyPct = activePlayers.length > 0 ? Math.round((readyCount / activePlayers.length) * 100) : 0;
   const me = activePlayers.find((p) => p.uid === myUid);
 
   const inviteUrl =
@@ -96,21 +105,23 @@ export function LobbyScreen() {
   return (
     <main
       data-testid="lobby-screen"
-      className="lamplit-backdrop mx-auto flex min-h-dvh w-full max-w-[430px] flex-col gap-4 px-4 py-4"
+      className="lamplit-backdrop relative mx-auto flex min-h-dvh w-full max-w-[430px] flex-col gap-3.5 overflow-hidden px-4 py-4"
       style={{
         paddingTop: 'calc(var(--safe-top) + 12px)',
         paddingBottom: 'calc(var(--safe-bottom) + 20px)',
       }}
     >
+      <BotanicalCorners surface="lamplit" />
+
       {/* Top Bar */}
-      <header className="flex items-center justify-between gap-2">
+      <header className="relative z-10 flex items-center justify-between gap-2">
         <button
           type="button"
           onClick={() => void leaveRoom()}
           aria-label="Leave table"
           className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/10 text-[var(--color-cream)]"
         >
-          <LogOut className="h-4 w-4" aria-hidden="true" />
+          <ArrowLeft className="h-5 w-5" aria-hidden="true" />
         </button>
 
         <div className="flex items-center gap-1.5">
@@ -119,10 +130,15 @@ export function LobbyScreen() {
             aria-label={`Copy room code ${room.code}`}
             data-testid="copy-room-code"
             onClick={() => void handleCopyCode()}
-            className="tabular-nums inline-flex min-h-[44px] min-w-[44px] items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 text-sm font-bold tracking-[0.18em] text-[var(--color-cream)]"
+            className="tabular-nums inline-flex min-h-[44px] min-w-[44px] items-center gap-1.5 rounded-full border border-[#F4C97A]/40 bg-black/35 px-3.5 text-sm font-bold tracking-[0.12em] text-[var(--color-cream)]"
           >
+            <span className="text-xs font-medium tracking-normal text-[#F4C97A]">Room:</span>
             <span data-testid="room-code-text">{room.code}</span>
-            {copied ? <Check className="h-4 w-4 text-[#A7D7A6]" aria-hidden="true" /> : <Copy className="h-4 w-4" aria-hidden="true" />}
+            {copied ? (
+              <Check className="h-4 w-4 text-[#A7D7A6]" aria-hidden="true" />
+            ) : (
+              <Copy className="h-4 w-4 text-[#F4C97A]" aria-hidden="true" />
+            )}
           </button>
 
           <button
@@ -139,45 +155,114 @@ export function LobbyScreen() {
         <SyncIndicator state={syncState} surface="lamplit" />
       </header>
 
-      {/* Ready Counter */}
-      <div className="flex items-center justify-between px-1 text-xs font-semibold text-[var(--color-lamplit-muted)]">
-        <span className="inline-flex items-center gap-1.5">
-          <Check className="h-3.5 w-3.5 text-[#A7D7A6]" aria-hidden="true" />
-          <span>
-            {readyCount} of {activePlayers.length} ready
-          </span>
-        </span>
-        <span>{activePlayers.length}/8 seats</span>
+      <p className="relative z-10 text-center text-sm font-medium text-[var(--color-lamplit-muted)]">
+        Waiting for everyone...
+      </p>
+
+      {/* Radial Wooden Table with Amber Bottle */}
+      <div className="relative z-10">
+        <RadialTable
+          players={players}
+          presence={presence}
+          myUid={myUid}
+          hostUid={room.hostUid}
+          isHost={isHost}
+          showReadyBadge
+          onSelectPlayer={(p) => setSelectedPlayer(p)}
+          centerContent={
+            <div className="flex flex-col items-center justify-center text-center">
+              <svg
+                width="36"
+                height="82"
+                viewBox="0 0 48 110"
+                fill="none"
+                aria-hidden="true"
+                className="drop-shadow-[0_6px_12px_rgba(0,0,0,0.65)]"
+              >
+                <rect x="19" y="4" width="10" height="9" rx="2" fill="#C99B48" stroke="#23201C" strokeWidth="1.4" />
+                <path
+                  d="M18.5 16 L29.5 16 L30.5 34 L38 46 L38 95 C38 100 34 104 29 104 L19 104 C14 104 10 100 10 95 L10 46 L17.5 34 Z"
+                  fill="#9E521C"
+                  stroke="#FFFDF9"
+                  strokeOpacity="0.4"
+                  strokeWidth="1.4"
+                />
+                <path d="M14.5 48 L14.5 93" stroke="#F4C97A" strokeOpacity="0.55" strokeWidth="2.5" strokeLinecap="round" />
+                <rect x="13" y="55" width="22" height="26" rx="4" fill="#F6EBDC" stroke="#8A6420" strokeWidth="1.2" />
+                <circle cx="24" cy="68" r="5" fill="#9C3325" />
+              </svg>
+              {presentPlayers.length < 3 && (
+                <span className="mt-1 rounded-full bg-black/65 px-2 py-0.5 text-[10px] font-medium text-[#F4C97A]">
+                  Need 3+ players
+                </span>
+              )}
+            </div>
+          }
+        />
       </div>
 
-      {/* Radial Table */}
-      <RadialTable
-        players={players}
-        presence={presence}
-        myUid={myUid}
-        hostUid={room.hostUid}
-        isHost={isHost}
-        showReadyBadge
-        onSelectPlayer={(p) => setSelectedPlayer(p)}
-        centerContent={
-          <div className="text-center px-3">
-            {presentPlayers.length < 3 ? (
-              <p className="text-xs font-medium text-[var(--color-lamplit-muted)]">
-                Need 3+ players
-                <br />
-                to spin
-              </p>
-            ) : (
-              <p className="font-display text-lg font-bold text-[var(--color-cream)]">
-                Table Ready
-              </p>
-            )}
-          </div>
-        }
-      />
+      {/* Cream Players Ready Progress Card */}
+      <div
+        className="parchment-card relative z-10 rounded-[16px] px-4 py-3 text-[var(--color-ink)]"
+      >
+        <div className="flex items-center justify-between text-sm font-bold">
+          <span className="inline-flex items-center gap-2">
+            <Hourglass className="h-4 w-4 text-[var(--color-brass-text)]" aria-hidden="true" />
+            <span>
+              {readyCount} / {activePlayers.length} Players Ready
+            </span>
+          </span>
+          <span className="tabular-nums text-xs font-semibold text-[var(--color-brass-text)]">
+            {activePlayers.length}/8 seats
+          </span>
+        </div>
+        <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-[#23201C]/12">
+          <div
+            className="h-full rounded-full transition-all duration-300"
+            style={{
+              width: `${readyPct}%`,
+              background: 'linear-gradient(90deg, #B8893B 0%, #5B8C5A 100%)',
+            }}
+          />
+        </div>
+      </div>
 
-      {/* Call Link */}
-      <SurfaceCard surface="lamplit" className="space-y-2.5">
+      {/* Ready & Start Game Primary Row */}
+      <div className="relative z-10 flex gap-2">
+        {me && (
+          <Button
+            variant={me.ready ? 'primary-truth' : 'secondary'}
+            surface="lamplit"
+            fullWidth
+            data-testid="ready-toggle-btn"
+            onClick={() => void updateSettings({ ready: !me.ready })}
+          >
+            <Check className="h-4 w-4" aria-hidden="true" />
+            {me.ready ? 'Ready!' : 'Mark Ready'}
+          </Button>
+        )}
+
+        {isHost && (
+          <button
+            type="button"
+            disabled={presentPlayers.length < 3 || starting}
+            data-testid="start-game-btn"
+            onClick={() => void handleStart()}
+            className="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-[14px] px-4 py-2.5 text-sm font-bold text-[var(--color-ink)] transition-transform active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+            style={{
+              background: 'linear-gradient(180deg, #FFFDF9 0%, #EFE2CB 100%)',
+              border: '1.5px solid #B8893B',
+              boxShadow: '0 4px 14px rgba(0, 0, 0, 0.35)',
+            }}
+          >
+            <Play className="h-4 w-4" aria-hidden="true" />
+            <span>{starting ? 'Starting…' : 'Start Game'}</span>
+          </button>
+        )}
+      </div>
+
+      {/* Call Link & Settings */}
+      <SurfaceCard surface="lamplit" className="relative z-10 space-y-2.5">
         <div className="flex items-center justify-between gap-2">
           <span className="text-xs font-semibold text-[var(--color-lamplit-muted)]">
             Optional Call Link (Meet / WhatsApp / Discord)
@@ -211,11 +296,8 @@ export function LobbyScreen() {
             </Button>
           </div>
         )}
-      </SurfaceCard>
 
-      {/* Settings & Controls */}
-      <SurfaceCard surface="lamplit" className="space-y-3">
-        <div className="flex items-center justify-between text-xs">
+        <div className="flex items-center justify-between text-xs pt-1">
           <span className="text-[var(--color-lamplit-muted)]">
             {room.totalRounds} rounds • {room.settings.packIds[0] ?? 'friends'}
           </span>
@@ -299,35 +381,6 @@ export function LobbyScreen() {
             Open Table Display
           </Button>
         )}
-
-        <div className="flex gap-2">
-          {me && (
-            <Button
-              variant={me.ready ? 'primary-truth' : 'secondary'}
-              surface="lamplit"
-              fullWidth
-              data-testid="ready-toggle-btn"
-              onClick={() => void updateSettings({ ready: !me.ready })}
-            >
-              <Check className="h-4 w-4" aria-hidden="true" />
-              {me.ready ? 'Ready!' : 'Mark Ready'}
-            </Button>
-          )}
-
-          {isHost && (
-            <Button
-              variant="primary-dare"
-              fullWidth
-              disabled={presentPlayers.length < 3}
-              loading={starting}
-              data-testid="start-game-btn"
-              onClick={() => void handleStart()}
-            >
-              <Play className="h-4 w-4" aria-hidden="true" />
-              Start Game
-            </Button>
-          )}
-        </div>
       </SurfaceCard>
 
       {/* QR & Share Modal */}

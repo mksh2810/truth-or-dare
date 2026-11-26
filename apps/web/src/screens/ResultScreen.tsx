@@ -1,6 +1,14 @@
 import { useEffect } from 'react';
-import { ArrowRight, Trophy } from 'lucide-react';
-import { Button, OwlMascot, SurfaceCard, SyncIndicator, TimerRing, WaxSeal, playStampSound } from '../design';
+import { ArrowRight, Flame, Trophy } from 'lucide-react';
+import {
+  BotanicalCorners,
+  LaurelWreath,
+  OwlMascot,
+  SyncIndicator,
+  TimerRing,
+  WaxSeal,
+  playStampSound,
+} from '../design';
 import { useGameStore } from '../state/useGameStore';
 
 export function ResultScreen() {
@@ -35,17 +43,20 @@ export function ResultScreen() {
   return (
     <main
       data-testid="result-screen"
-      className="mx-auto flex min-h-dvh w-full max-w-[430px] flex-col justify-between px-4 py-4"
+      className="linen-backdrop relative mx-auto flex min-h-dvh w-full max-w-[430px] flex-col justify-between overflow-hidden px-4 py-4"
       style={{
         paddingTop: 'calc(var(--safe-top) + 12px)',
         paddingBottom: 'calc(var(--safe-bottom) + 24px)',
       }}
     >
-      <header className="flex items-center justify-between gap-2">
+      <BotanicalCorners surface="linen" />
+
+      <header className="relative z-10 flex items-center justify-between gap-2">
         <TimerRing
           deadlineAt={turn.deadlineAt}
           totalSec={6}
           clockOffsetMs={clockOffsetMs}
+          size={48}
           onExpire={() => void advanceTurn()}
         />
         <span className="tabular-nums text-xs font-semibold uppercase opacity-75">
@@ -57,46 +68,71 @@ export function ResultScreen() {
       <section
         aria-live="polite"
         aria-label={`Result: ${stamp}, ${deltaLabel}`}
-        className="my-auto flex flex-col items-center gap-5 text-center"
+        className="relative z-10 my-auto flex flex-col items-center gap-4 text-center"
       >
-        <WaxSeal stamp={stamp} size="lg" />
+        <LaurelWreath>
+          <WaxSeal stamp={stamp} size="lg" />
+        </LaurelWreath>
 
-        <SurfaceCard className="w-full space-y-2">
+        <div className="space-y-1.5">
           <p className="text-sm font-semibold opacity-75">{performer?.name ?? 'Player'}</p>
           <p
             data-testid="result-score-delta"
-            className="tabular-nums font-display text-3xl font-bold"
+            className="tabular-nums font-display text-4xl font-bold"
             style={{ color: deltaColor }}
           >
             {deltaLabel}
           </p>
-        </SurfaceCard>
 
-        <OwlMascot
-          pose={owlPose}
-          size="md"
-          line={turn.owlLine || 'The Owl has recorded your fate.'}
-        />
+          {(performer?.streak ?? 0) > 0 && (
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-[#8A6420]/30 bg-[var(--color-cream)] px-3.5 py-1 text-xs font-bold text-[var(--color-terracotta-text)] shadow-sm">
+              <Flame className="h-3.5 w-3.5 text-[var(--color-dare-terracotta)]" aria-hidden="true" />
+              <span>Streak +{performer?.streak}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Vowlet Owl bottom-left + Cream Speech Bubble */}
+        <div className="mt-2 flex w-full items-end gap-3 px-1 text-left">
+          <OwlMascot pose={owlPose} size="md" className="shrink-0" />
+          <div
+            className="relative flex-1 rounded-[18px] border border-[#8A6420]/25 bg-[var(--color-cream)] px-4 py-3 text-sm font-medium text-[var(--color-ink)]"
+            style={{ boxShadow: 'var(--shadow-card)' }}
+          >
+            <p className="font-display text-base font-semibold italic leading-snug">
+              “{turn.owlLine || 'The Owl has recorded your fate.'}”
+            </p>
+          </div>
+        </div>
       </section>
 
-      <Button
-        variant="primary-dare"
-        fullWidth
+      <button
+        type="button"
         data-testid="result-next-btn"
         onClick={() => void advanceTurn()}
+        className="relative z-10 flex min-h-[52px] w-full items-center justify-center gap-2 rounded-[16px] px-5 py-3 text-base font-bold text-[var(--color-cream)] transition-transform active:scale-[0.98]"
+        style={{
+          background: 'linear-gradient(180deg, #336775 0%, #244C57 100%)',
+          border: '1px solid rgba(35, 32, 28, 0.35)',
+          boxShadow: '0 4px 14px rgba(35, 32, 28, 0.24)',
+        }}
       >
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-[3px] rounded-[13px] border border-[#FFFDF9]/25"
+        />
         {isFinalRound ? (
           <>
             <Trophy className="h-5 w-5" aria-hidden="true" />
-            View Summary &amp; Podium
+            <span>View Summary &amp; Podium</span>
           </>
         ) : (
           <>
             <ArrowRight className="h-5 w-5" aria-hidden="true" />
-            Next Turn
+            <span>Next Turn</span>
           </>
         )}
-      </Button>
+      </button>
     </main>
   );
 }

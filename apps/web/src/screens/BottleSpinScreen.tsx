@@ -1,6 +1,13 @@
 import { useState } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
-import { BottleSpinner, RadialTable, SyncIndicator, TimerRing } from '../design';
+import {
+  BotanicalCorners,
+  BottleSpinner,
+  RadialTable,
+  SyncIndicator,
+  TimerRing,
+  TornScrollBanner,
+} from '../design';
 import { useGameStore } from '../state/useGameStore';
 
 export function BottleSpinScreen() {
@@ -36,13 +43,15 @@ export function BottleSpinScreen() {
   return (
     <main
       data-testid="bottle-spin-screen"
-      className="lamplit-backdrop mx-auto flex min-h-dvh w-full max-w-[430px] flex-col justify-between px-4 py-4"
+      className="lamplit-backdrop relative mx-auto flex min-h-dvh w-full max-w-[430px] flex-col justify-between overflow-hidden px-4 py-4"
       style={{
         paddingTop: 'calc(var(--safe-top) + 12px)',
-        paddingBottom: 'calc(var(--safe-bottom) + 24px)',
+        paddingBottom: 'calc(var(--safe-bottom) + 20px)',
       }}
     >
-      <header className="flex items-center justify-between gap-2">
+      <BotanicalCorners surface="lamplit" />
+
+      <header className="relative z-10 flex items-center justify-between gap-2">
         <button
           type="button"
           aria-label={soundEnabled ? 'Mute sound effects' : 'Enable sound effects'}
@@ -50,23 +59,33 @@ export function BottleSpinScreen() {
           onClick={() => setSoundEnabled(!soundEnabled)}
           className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/10 text-[var(--color-cream)]"
         >
-          {soundEnabled ? <Volume2 className="h-5 w-5" aria-hidden="true" /> : <VolumeX className="h-5 w-5" aria-hidden="true" />}
+          {soundEnabled ? (
+            <Volume2 className="h-5 w-5" aria-hidden="true" />
+          ) : (
+            <VolumeX className="h-5 w-5" aria-hidden="true" />
+          )}
         </button>
 
-        <span className="tabular-nums text-xs font-semibold tracking-wide text-[var(--color-lamplit-muted)] uppercase">
-          Round {room.round} of {room.totalRounds}
-        </span>
+        <div className="text-center">
+          <h1 className="font-display text-2xl font-bold text-[var(--color-cream)]">
+            The Bottle Spins...
+          </h1>
+          <p className="text-xs text-[var(--color-lamplit-muted)]">
+            Let fate decide! • Round {room.round}/{room.totalRounds}
+          </p>
+        </div>
 
         <SyncIndicator state={syncState} surface="lamplit" />
       </header>
 
-      <div className="my-auto flex flex-col items-center gap-6">
+      <div className="relative z-10 my-auto flex flex-col items-center gap-5">
         <RadialTable
           players={players}
           presence={presence}
           myUid={auth?.uid ?? null}
           hostUid={room.hostUid}
           activePerformerUid={landed ? turn.performerUid : null}
+          showSpinGlow
           centerContent={
             <BottleSpinner
               targetSeatIndex={targetSeatIndex}
@@ -83,27 +102,29 @@ export function BottleSpinScreen() {
           }
         />
 
-        <div aria-live="polite" className="min-h-[56px] text-center">
-          {landed && performer ? (
-            <p className="font-display text-2xl font-bold text-[var(--color-cream)]">
-              The bottle has chosen {performer.name}
-            </p>
-          ) : (
-            <p className="text-sm font-medium text-[var(--color-lamplit-muted)]">
-              Spinning the bottle…
-            </p>
-          )}
+        <div aria-live="polite" className="w-full px-2">
+          <TornScrollBanner tiltDeg={-1}>
+            {landed && performer ? (
+              <p className="font-display text-2xl font-bold italic text-[var(--color-ink)]">
+                The bottle has chosen {performer.name}.
+              </p>
+            ) : (
+              <p className="font-display text-xl font-semibold italic text-[var(--color-ink)]/80">
+                Spinning the bottle…
+              </p>
+            )}
+          </TornScrollBanner>
         </div>
       </div>
 
-      {/* Hidden/compact TimerRing triggers advanceTurn when 4.5s deadline expires */}
-      <div className="flex justify-center">
+      {/* Compact TimerRing triggers advanceTurn when 4.5s deadline expires */}
+      <div className="relative z-10 flex justify-center">
         <TimerRing
           deadlineAt={turn.deadlineAt}
           totalSec={5}
           clockOffsetMs={clockOffsetMs}
           surface="lamplit"
-          size={48}
+          size={44}
           onExpire={() => void advanceTurn()}
         />
       </div>

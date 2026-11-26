@@ -9,3 +9,4 @@ export * from './RadialTable';
 export * from './BottleSpinner';
 export * from './bottleSkins';
 export * from './sound';
+export * from './EveningDecor';

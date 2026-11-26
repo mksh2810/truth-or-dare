@@ -69,10 +69,18 @@ body {
   padding: 0;
   min-height: 100%;
   background-color: var(--color-linen);
+  background-image: radial-gradient(circle at 50% 28%, #faf6ee 0%, #f4ece0 55%, #efe6d5 100%);
   color: var(--color-ink);
   font-family: var(--font-ui);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+}
+
+.linen-backdrop {
+  background-color: #f6f1e9;
+  background-image:
+    radial-gradient(circle at 50% 24%, rgba(250, 246, 238, 0.96) 0%, rgba(239, 230, 213, 0.94) 100%);
+  color: var(--color-ink);
 }
 
 .font-display {
@@ -97,9 +105,18 @@ body {
 }
 
 .lamplit-backdrop {
-  background-color: var(--color-lamplit-bg);
+  background-color: #140e0a;
   background-image:
-    var(--scrim-lamplit),
-    radial-gradient(circle at 50% 25%, rgba(196, 85, 45, 0.22) 0%, rgba(26, 20, 16, 0.95) 70%);
+    linear-gradient(180deg, rgba(20, 14, 10, 0.62) 0%, rgba(20, 14, 10, 0.78) 100%),
+    radial-gradient(circle at 50% 22%, rgba(212, 132, 58, 0.34) 0%, rgba(44, 27, 14, 0.92) 48%, #140e0a 88%);
   color: var(--color-lamplit-text);
+}
+
+.parchment-card {
+  background: linear-gradient(155deg, #fdf9f0 0%, #f3e8d4 100%);
+  border: 1px solid rgba(138, 100, 32, 0.28);
+  box-shadow:
+    0 2px 6px rgba(35, 32, 28, 0.12),
+    0 12px 28px rgba(35, 32, 28, 0.12),
+    inset 0 0 18px rgba(184, 137, 59, 0.08);
 }

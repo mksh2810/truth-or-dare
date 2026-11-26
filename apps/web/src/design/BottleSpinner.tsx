@@ -112,36 +112,53 @@ export function BottleSpinner({
       >
         {/* Bottle pointing UP (0 deg = 12 o'clock, so 180 deg = 6 o'clock) */}
         <svg
-          width="44"
-          height="104"
-          viewBox="0 0 44 104"
+          width="48"
+          height="110"
+          viewBox="0 0 48 110"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           role="img"
           aria-label={`Spinning ${skinMeta.name} bottle`}
-          style={{ filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.45))' }}
+          style={{ filter: 'drop-shadow(0 6px 14px rgba(0,0,0,0.65))' }}
         >
-          {/* Cork / Cap */}
-          <rect x="17" y="4" width="10" height="8" rx="2" fill={skinMeta.capFill} stroke="#23201C" strokeWidth="1.5" />
-          {/* Neck */}
+          <defs>
+            <linearGradient id="bottleGlassGrad" x1="10" y1="36" x2="38" y2="104" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stopColor={skinMeta.highlightStroke} stopOpacity="0.85" />
+              <stop offset="40%" stopColor={skinMeta.bodyFill} />
+              <stop offset="100%" stopColor="#1E120A" />
+            </linearGradient>
+          </defs>
+          {/* Cork & Lip */}
+          <rect x="19" y="4" width="10" height="9" rx="2" fill={skinMeta.capFill} stroke="#23201C" strokeWidth="1.4" />
+          <rect x="17" y="12" width="14" height="4" rx="1.5" fill={skinMeta.bodyFill} stroke="#FFFDF9" strokeOpacity="0.4" strokeWidth="1" />
+          {/* Bottle Body */}
           <path
-            d="M17 12 L27 12 L28 32 L35 44 L35 92 C35 96.5 31.5 100 27 100 L17 100 C12.5 100 9 96.5 9 92 L9 44 L16 32 Z"
-            fill={skinMeta.bodyFill}
+            d="M18.5 16 L29.5 16 L30.5 34 L38 46 L38 95 C38 100 34 104 29 104 L19 104 C14 104 10 100 10 95 L10 46 L17.5 34 Z"
+            fill="url(#bottleGlassGrad)"
             stroke="#FFFDF9"
             strokeOpacity="0.45"
             strokeWidth="1.5"
           />
-          {/* Highlight */}
+          {/* Left Glass Reflection */}
           <path
-            d="M15 46 L15 90"
+            d="M14.5 48 L14.5 93"
             stroke={skinMeta.highlightStroke}
-            strokeOpacity="0.45"
-            strokeWidth="3"
+            strokeOpacity="0.65"
+            strokeWidth="2.8"
             strokeLinecap="round"
           />
-          {/* Cream Vowlet label */}
-          <rect x="12" y="54" width="20" height="26" rx="4" fill="#F6F1E9" stroke="#23201C" strokeWidth="1.2" />
-          <circle cx="22" cy="67" r="5" fill={skinMeta.sealFill} />
+          <path
+            d="M20 20 L20 33"
+            stroke="#FFFDF9"
+            strokeOpacity="0.45"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+          {/* Cream Vowlet Label */}
+          <rect x="13" y="55" width="22" height="28" rx="4" fill="#F6EBDC" stroke="#8A6420" strokeWidth="1.2" />
+          <rect x="15" y="57" width="18" height="24" rx="2.5" fill="none" stroke="#8A6420" strokeOpacity="0.35" strokeWidth="0.8" />
+          <circle cx="24" cy="69" r="5.5" fill={skinMeta.sealFill} />
+          <circle cx="24" cy="69" r="3" fill="none" stroke="#F4C97A" strokeOpacity="0.6" strokeWidth="0.8" />
         </svg>
       </motion.div>
     </div>
