@@ -1,5 +1,6 @@
-import { Feather, Flame, Sparkles } from 'lucide-react';
-import { OwlMascot, SurfaceCard, SyncIndicator, TimerRing } from '../design';
+import { Feather, Flame } from 'lucide-react';
+import { SyncIndicator, TimerRing } from '../design';
+import { OwlMark, TopBar } from '../design/VowletUiPrimitives';
 import { useGameStore } from '../state/useGameStore';
 
 export function ChosenScreen() {
@@ -17,117 +18,67 @@ export function ChosenScreen() {
   const performer = players.find((p) => p.uid === turn.performerUid);
 
   return (
-    <main
-      data-testid="chosen-screen"
-      className="lamplit-backdrop relative mx-auto flex min-h-dvh w-full max-w-[430px] flex-col justify-between overflow-hidden px-4 py-4"
-      style={{
-        paddingTop: 'calc(var(--safe-top) + 12px)',
-        paddingBottom: 'calc(var(--safe-bottom) + 24px)',
-      }}
-    >
-      {/* Subtle Golden Sparkles */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden opacity-45">
-        <Sparkles className="absolute top-24 left-8 h-4 w-4 text-[#F4C97A]" />
-        <Sparkles className="absolute top-32 right-10 h-5 w-5 text-[#F4C97A]" />
-        <Sparkles className="absolute bottom-28 left-12 h-3.5 w-3.5 text-[#F4C97A]" />
-      </div>
-
-      <header className="relative z-10 flex items-center justify-between">
-        <TimerRing
-          deadlineAt={turn.deadlineAt}
-          totalSec={room.settings.chooseDeadlineSec}
-          clockOffsetMs={clockOffsetMs}
-          surface="lamplit"
-          onExpire={() => void advanceTurn()}
+    <main className="vowlet-shell" data-testid="chosen-screen">
+      <div className="choose-screen dark-scene">
+        <TopBar
+          dark
+          rightSlot={
+            <div className="flex items-center gap-2">
+              <TimerRing
+                deadlineAt={turn.deadlineAt}
+                totalSec={room.settings.chooseDeadlineSec}
+                clockOffsetMs={clockOffsetMs}
+                surface="lamplit"
+                size={40}
+                onExpire={() => void advanceTurn()}
+              />
+              <SyncIndicator state={syncState} surface="lamplit" />
+            </div>
+          }
         />
-        <span className="tabular-nums text-xs font-semibold text-[var(--color-lamplit-muted)] uppercase">
-          Round {room.round} / {room.totalRounds}
-        </span>
-        <SyncIndicator state={syncState} surface="lamplit" />
-      </header>
 
-      <section className="relative z-10 my-auto flex flex-col items-center gap-5">
         {isPerformer ? (
-          <div className="w-full space-y-5 text-center">
-            <div>
-              <h1 className="font-display text-3xl font-bold text-[var(--color-cream)]">
-                You&apos;ve been chosen!
-              </h1>
-              <p className="mt-1 text-xs text-[var(--color-lamplit-muted)]">
-                Auto-selects Truth if timer runs out.
-              </p>
+          <>
+            <div className="chosen-heading">
+              <span aria-hidden="true">✦</span>
+              <h1>You&apos;ve been chosen!</h1>
+              <p className="dark-sub">Auto-selects Truth if timer runs out.</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3.5 pt-1">
-              {/* Ornate Double-Gold-Bordered TRUTH Card */}
+            <div className="choice-cards">
               <button
                 type="button"
+                className="choice-card truth-card"
                 disabled={pendingAction}
                 data-testid="choose-truth-btn"
                 onClick={() => void choosePromptKind('TRUTH')}
-                className="relative flex min-h-[220px] flex-col items-center justify-center gap-3 rounded-[18px] p-4 text-[var(--color-cream)] transition-transform active:scale-95 disabled:opacity-50"
-                style={{
-                  background: 'linear-gradient(165deg, #2E5E6B 0%, #193A44 100%)',
-                  border: '2px solid #C99B48',
-                  boxShadow: '0 12px 28px rgba(0, 0, 0, 0.55), inset 0 0 20px rgba(244, 201, 122, 0.12)',
-                }}
               >
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-2 rounded-[12px] border border-[#F4C97A]/45"
-                />
-                <Feather className="h-10 w-10 text-[#F4C97A]" aria-hidden="true" />
-                <span className="font-display text-2xl font-bold tracking-wider uppercase">
-                  TRUTH
-                </span>
-                <span className="max-w-[120px] text-xs leading-snug text-[#FFFDF9]/85">
-                  Reveal what lies beneath.
-                </span>
+                <Feather size={35} aria-hidden="true" />
+                <b>TRUTH</b>
+                <small>Reveal what lies beneath.</small>
               </button>
 
-              {/* Ornate Double-Gold-Bordered DARE Card */}
               <button
                 type="button"
+                className="choice-card dare-card"
                 disabled={pendingAction}
                 data-testid="choose-dare-btn"
                 onClick={() => void choosePromptKind('DARE')}
-                className="relative flex min-h-[220px] flex-col items-center justify-center gap-3 rounded-[18px] p-4 text-[var(--color-cream)] transition-transform active:scale-95 disabled:opacity-50"
-                style={{
-                  background: 'linear-gradient(165deg, #C4552D 0%, #8C3315 100%)',
-                  border: '2px solid #C99B48',
-                  boxShadow: '0 12px 28px rgba(0, 0, 0, 0.55), inset 0 0 20px rgba(244, 201, 122, 0.12)',
-                }}
               >
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-2 rounded-[12px] border border-[#F4C97A]/45"
-                />
-                <Flame className="h-10 w-10 text-[#F4C97A]" aria-hidden="true" />
-                <span className="font-display text-2xl font-bold tracking-wider uppercase">
-                  DARE
-                </span>
-                <span className="max-w-[120px] text-xs leading-snug text-[#FFFDF9]/85">
-                  Make the evening memorable.
-                </span>
+                <Flame size={35} aria-hidden="true" />
+                <b>DARE</b>
+                <small>Make the evening memorable.</small>
               </button>
             </div>
-          </div>
+          </>
         ) : (
-          <div className="flex w-full flex-col items-center gap-5">
-            <OwlMascot pose="judging" size="md" surface="lamplit" />
-            <SurfaceCard surface="lamplit" className="w-full text-center">
-              <p className="font-display text-2xl font-bold" aria-live="polite">
-                {performer?.name ?? 'Player'} is choosing…
-              </p>
-              <p className="mt-1 text-xs text-[var(--color-lamplit-muted)]">
-                Truth or Dare? Stay tuned.
-              </p>
-            </SurfaceCard>
+          <div className="chosen-heading flex flex-col items-center gap-4 px-5" aria-live="polite">
+            <OwlMark />
+            <h1>{performer?.name ?? 'Player'} is choosing...</h1>
+            <p className="dark-sub">Truth or Dare? Stay tuned.</p>
           </div>
         )}
-      </section>
-
-      <div className="h-6" />
+      </div>
     </main>
   );
 }

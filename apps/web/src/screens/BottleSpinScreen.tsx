@@ -1,13 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
-import {
-  BotanicalCorners,
-  BottleSpinner,
-  RadialTable,
-  SyncIndicator,
-  TimerRing,
-  TornScrollBanner,
-} from '../design';
+import { SyncIndicator, TimerRing, playSpinLandingChime } from '../design';
+import { toMillis } from '../design/TimerRing';
+import { Bottle, Tabletop, TopBar } from '../design/VowletUiPrimitives';
 import { useGameStore } from '../state/useGameStore';
 
 export function BottleSpinScreen() {
@@ -21,15 +16,19 @@ export function BottleSpinScreen() {
   const soundEnabled = useGameStore((s) => s.soundEnabled);
   const setSoundEnabled = useGameStore((s) => s.setSoundEnabled);
   const reducedMotionOverride = useGameStore((s) => s.reducedMotionOverride);
-  const selectedSkin = useGameStore((s) => s.selectedSkin);
   const advanceTurn = useGameStore((s) => s.advanceTurn);
 
   const [landed, setLanded] = useState(false);
+  const landedTurnRef = useRef<number>(-1);
 
-  const activePlayers = players
-    .filter((p) => !p.banned && !p.spectator)
-    .slice()
-    .sort((a, b) => a.seat - b.seat);
+  const activePlayers = useMemo(
+    () =>
+      players
+        .filter((p) => !p.banned && !p.spectator)
+        .slice()
+        .sort((a, b) => a.seat - b.seat),
+    [players],
+  );
   const mySeatIndex = Math.max(
     0,
     activePlayers.findIndex((p) => p.uid === auth?.uid),
@@ -40,93 +39,91 @@ export function BottleSpinScreen() {
   );
   const performer = activePlayers[targetSeatIndex];
 
+  const totalSeats = Math.max(1, activePlayers.length);
+  const targetAngle = 180 + ((targetSeatIndex - mySeatIndex) / totalSeats) * 360;
+  const normalizedTarget = ((targetAngle % 360) + 360) % 360;
+  const cumulativeRotate = room.turnVersion * 360 * 6 + 360 * 6 + normalizedTarget;
+
+  const deadlineMs = toMillis(turn.deadlineAt) ?? Date.now();
+  const remainingMs = Math.max(0, deadlineMs - (Date.now() + clockOffsetMs));
+  const durationSec = Math.min(4.5, Math.max(0.4, remainingMs / 1000));
+
+  useEffect(() => {
+    setLanded(false);
+  }, [room.turnVersion]);
+
+  const handleSpinComplete = () => {
+    if (landedTurnRef.current === room.turnVersion) return;
+    landedTurnRef.current = room.turnVersion;
+    setLanded(true);
+    playSpinLandingChime(soundEnabled);
+    if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+      navigator.vibrate(40);
+    }
+  };
+
   return (
-    <main
-      data-testid="bottle-spin-screen"
-      className="lamplit-backdrop relative mx-auto flex min-h-dvh w-full max-w-[430px] flex-col justify-between overflow-hidden px-4 py-4"
-      style={{
-        paddingTop: 'calc(var(--safe-top) + 12px)',
-        paddingBottom: 'calc(var(--safe-bottom) + 20px)',
-      }}
-    >
-      <BotanicalCorners surface="lamplit" />
+    <main className="vowlet-shell" data-testid="bottle-spin-screen">
+      <div className="spin-screen dark-scene">
+        <TopBar
+          dark
+          rightSlot={
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                className="icon-btn"
+                aria-label={soundEnabled ? 'Mute sound effects' : 'Enable sound effects'}
+                data-testid="spin-sound-toggle"
+                onClick={() => setSoundEnabled(!soundEnabled)}
+              >
+                {soundEnabled ? (
+                  <Volume2 size={18} aria-hidden="true" />
+                ) : (
+                  <VolumeX size={18} aria-hidden="true" />
+                )}
+              </button>
+              <SyncIndicator state={syncState} surface="lamplit" />
+            </div>
+          }
+        />
 
-      <header className="relative z-10 flex items-center justify-between gap-2">
-        <button
-          type="button"
-          aria-label={soundEnabled ? 'Mute sound effects' : 'Enable sound effects'}
-          data-testid="spin-sound-toggle"
-          onClick={() => setSoundEnabled(!soundEnabled)}
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/10 text-[var(--color-cream)]"
-        >
-          {soundEnabled ? (
-            <Volume2 className="h-5 w-5" aria-hidden="true" />
-          ) : (
-            <VolumeX className="h-5 w-5" aria-hidden="true" />
-          )}
-        </button>
+        <h1>The Bottle Spins...</h1>
+        <p className="dark-sub">
+          Let fate decide! • Round {room.round}/{room.totalRounds}
+        </p>
 
-        <div className="text-center">
-          <h1 className="font-display text-2xl font-bold text-[var(--color-cream)]">
-            The Bottle Spins...
-          </h1>
-          <p className="text-xs text-[var(--color-lamplit-muted)]">
-            Let fate decide! • Round {room.round}/{room.totalRounds}
-          </p>
-        </div>
-
-        <SyncIndicator state={syncState} surface="lamplit" />
-      </header>
-
-      <div className="relative z-10 my-auto flex flex-col items-center gap-5">
-        <RadialTable
+        <Tabletop
           players={players}
           presence={presence}
           myUid={auth?.uid ?? null}
           hostUid={room.hostUid}
           activePerformerUid={landed ? turn.performerUid : null}
-          showSpinGlow
           centerContent={
-            <BottleSpinner
-              targetSeatIndex={targetSeatIndex}
-              mySeatIndex={mySeatIndex}
-              totalSeats={activePlayers.length}
-              deadlineAt={turn.deadlineAt}
-              clockOffsetMs={clockOffsetMs}
-              turnVersion={room.turnVersion}
-              soundEnabled={soundEnabled}
-              reducedMotionOverride={reducedMotionOverride}
-              skin={selectedSkin}
-              onSpinComplete={() => setLanded(true)}
+            <Bottle
+              rotate={cumulativeRotate}
+              reducedMotion={reducedMotionOverride}
+              durationSec={durationSec}
+              onSpinComplete={handleSpinComplete}
             />
           }
         />
 
-        <div aria-live="polite" className="w-full px-2">
-          <TornScrollBanner tiltDeg={-1}>
-            {landed && performer ? (
-              <p className="font-display text-2xl font-bold italic text-[var(--color-ink)]">
-                The bottle has chosen {performer.name}.
-              </p>
-            ) : (
-              <p className="font-display text-xl font-semibold italic text-[var(--color-ink)]/80">
-                Spinning the bottle…
-              </p>
-            )}
-          </TornScrollBanner>
+        <div className="chosen-note" aria-live="polite">
+          {landed && performer
+            ? `The bottle has chosen ${performer.name}.`
+            : 'The bottle is choosing...'}
         </div>
-      </div>
 
-      {/* Compact TimerRing triggers advanceTurn when 4.5s deadline expires */}
-      <div className="relative z-10 flex justify-center">
-        <TimerRing
-          deadlineAt={turn.deadlineAt}
-          totalSec={5}
-          clockOffsetMs={clockOffsetMs}
-          surface="lamplit"
-          size={44}
-          onExpire={() => void advanceTurn()}
-        />
+        <div className="flex justify-center pb-2">
+          <TimerRing
+            deadlineAt={turn.deadlineAt}
+            totalSec={5}
+            clockOffsetMs={clockOffsetMs}
+            surface="lamplit"
+            size={44}
+            onExpire={() => void advanceTurn()}
+          />
+        </div>
       </div>
     </main>
   );

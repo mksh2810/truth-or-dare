@@ -1,12 +1,5 @@
 import { useState } from 'react';
-import {
-  AlertCircle,
-  CheckCircle2,
-  Feather,
-  Flame,
-  Sparkles,
-  XCircle,
-} from 'lucide-react';
+import { AlertCircle, CheckCircle2, Sparkles, XCircle } from 'lucide-react';
 import {
   MAX_CHIT_LENGTH,
   checkDeterministicModeration,
@@ -14,14 +7,8 @@ import {
   type JudgeVerdict,
   type PromptKind,
 } from '@vowlet/shared';
-import {
-  BotanicalCorners,
-  OwlMascot,
-  ParchmentCard,
-  SmallRedWaxSeal,
-  SyncIndicator,
-  TimerRing,
-} from '../design';
+import { SyncIndicator, TimerRing } from '../design';
+import { MainButton, Paper, Seal, TopBar } from '../design/VowletUiPrimitives';
 import { useGameStore } from '../state/useGameStore';
 
 export function WriteChitsScreen() {
@@ -87,133 +74,107 @@ export function WriteChitsScreen() {
     }
   };
 
-  const owlPose =
-    judgeState?.verdict === 'FINE'
-      ? 'approve'
-      : judgeState?.verdict === 'NOPE'
-        ? 'disapprove'
-        : judgeState?.verdict === 'TOO_MILD'
-          ? 'judging'
-          : 'idle';
-
   return (
-    <main
-      data-testid="write-chits-screen"
-      className="linen-backdrop relative mx-auto flex min-h-dvh w-full max-w-[430px] flex-col gap-3 overflow-hidden px-4 py-4"
-      style={{
-        paddingTop: 'calc(var(--safe-top) + 12px)',
-        paddingBottom: 'calc(var(--safe-bottom) + 20px)',
-      }}
-    >
-      <BotanicalCorners surface="linen" />
-
-      <header className="relative z-10 flex items-center justify-between gap-2">
-        <TimerRing
-          deadlineAt={writingDeadlineMs}
-          totalSec={room.settings.writingDeadlineSec}
-          clockOffsetMs={clockOffsetMs}
-          size={52}
-          onExpire={() => void advanceTurn()}
+    <main className="vowlet-shell" data-testid="write-chits-screen">
+      <form className="chits-screen parchment" onSubmit={(e) => void handleSeal(e)}>
+        <TopBar
+          rightSlot={
+            <div className="flex items-center gap-2">
+              <TimerRing
+                deadlineAt={writingDeadlineMs}
+                totalSec={room.settings.writingDeadlineSec}
+                clockOffsetMs={clockOffsetMs}
+                size={38}
+                onExpire={() => void advanceTurn()}
+              />
+              <SyncIndicator state={syncState} />
+            </div>
+          }
         />
-        <div className="text-center">
-          <h1 className="font-display text-2xl font-bold leading-tight">Write Your Chits</h1>
-          <p className="text-[11px] opacity-80">
-            {chits.length} sealed • consent-safe only
-          </p>
-        </div>
-        <SyncIndicator state={syncState} />
-      </header>
 
-      <form
-        onSubmit={(e) => void handleSeal(e)}
-        className="relative z-10 flex flex-1 flex-col justify-between gap-3"
-      >
-        <div className="space-y-3.5 py-1">
-          {/* Tilted Truth Parchment Card */}
-          <ParchmentCard tiltDeg={-1.5} className="transition-all">
-            <div className="flex items-center justify-between gap-2">
+        <h1>Write Your Chits</h1>
+        <p className="intro">
+          Create one Truth and one Dare,
+          <br />
+          or pick from starter prompts. ({chits.length} sealed)
+        </p>
+
+        <Paper
+          title={
+            <>
               <button
                 type="button"
                 data-testid="chit-kind-truth"
                 onClick={() => setKind('TRUTH')}
-                className="inline-flex min-h-[44px] items-center gap-2 text-left"
+                className="inline-flex min-h-[44px] items-center gap-2 border-0 bg-transparent p-0 text-inherit"
               >
-                <Feather className="h-5 w-5 text-[var(--color-truth-teal)]" aria-hidden="true" />
-                <span className="font-display text-2xl font-bold italic text-[var(--color-truth-teal)]">
-                  Truth
-                </span>
+                <span>♧ Truth</span>
               </button>
               {kind === 'TRUTH' && (
-                <span className="rounded-full bg-[var(--color-truth-teal)] px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-[var(--color-cream)] uppercase">
+                <span className="rounded-full bg-[#2e5e6b] px-2.5 py-0.5 font-sans text-[10px] font-bold tracking-wider text-[#fffdf9] uppercase not-italic">
                   Active
                 </span>
               )}
-            </div>
-
-            {kind === 'TRUTH' ? (
-              <div className="mt-2">
-                <textarea
-                  data-testid="chit-textarea"
-                  rows={3}
-                  maxLength={MAX_CHIT_LENGTH}
-                  value={truthText}
-                  onChange={(e) => setText(e.target.value)}
-                  placeholder="What is the weirdest food combo you actually enjoy?"
-                  className="font-chit w-full resize-none rounded-[10px] border border-[#8A6420]/25 bg-white/55 p-2.5 text-lg leading-snug text-[var(--color-ink)] placeholder:text-[#23201C]/45"
-                />
-                <div className="mt-1 flex items-center justify-between text-[11px]">
-                  <span
-                    className="font-medium"
-                    style={{
-                      color:
-                        localCheck && !localCheck.allowed
-                          ? 'var(--color-brick)'
-                          : 'var(--color-sage-text)',
-                    }}
-                  >
-                    {localCheck && !localCheck.allowed ? localCheck.reason : 'Ready for Judge Owl'}
-                  </span>
-                  <span className="tabular-nums font-semibold opacity-75">
-                    {truthText.length}/{MAX_CHIT_LENGTH} ({remainingChars} left)
-                  </span>
-                </div>
+            </>
+          }
+        >
+          {kind === 'TRUTH' ? (
+            <div className="mt-2">
+              <textarea
+                data-testid="chit-textarea"
+                rows={3}
+                maxLength={MAX_CHIT_LENGTH}
+                value={truthText}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="What is the weirdest food combo you actually enjoy?"
+                className="w-full resize-none rounded-lg border border-[#caa77d] bg-white/60 p-2.5 text-lg leading-snug text-[#34271d]"
+                style={{ fontFamily: 'Caveat, cursive' }}
+              />
+              <div className="mt-1 flex items-center justify-between text-[11px]">
+                <span
+                  style={{
+                    color: localCheck && !localCheck.allowed ? '#a33a2c' : '#3f6b3e',
+                  }}
+                >
+                  {localCheck && !localCheck.allowed ? localCheck.reason : 'Ready for Judge Owl'}
+                </span>
+                <span className="tabular-nums font-semibold">
+                  {truthText.length}/{MAX_CHIT_LENGTH} ({remainingChars} left)
+                </span>
               </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setKind('TRUTH')}
-                className="font-chit mt-1 block w-full py-2 text-left text-base italic text-[#23201C]/70"
-              >
-                {truthText.trim() || 'Tap to write a Truth chit…'}
-              </button>
-            )}
-          </ParchmentCard>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setKind('TRUTH')}
+              className="w-full border-0 bg-transparent p-0 text-inherit"
+            >
+              <p>{truthText.trim() || 'Tap to write a Truth chit…'}</p>
+            </button>
+          )}
+        </Paper>
 
-          {/* Tilted Dare Parchment Card */}
-          <ParchmentCard tiltDeg={1.5} className="transition-all">
-            <div className="flex items-center justify-between gap-2">
+        <Paper
+          tone="dare"
+          title={
+            <>
               <button
                 type="button"
                 data-testid="chit-kind-dare"
                 onClick={() => setKind('DARE')}
-                className="inline-flex min-h-[44px] items-center gap-2 text-left"
+                className="inline-flex min-h-[44px] items-center gap-2 border-0 bg-transparent p-0 text-inherit"
               >
-                <Flame className="h-5 w-5 text-[var(--color-dare-terracotta)]" aria-hidden="true" />
-                <span className="font-display text-2xl font-bold italic text-[var(--color-terracotta-text)]">
-                  Dare
-                </span>
+                <span>♨ Dare</span>
               </button>
-
               {kind === 'DARE' && (
-                <div className="flex gap-1" data-testid="dare-type-selector">
+                <div className="flex gap-1 font-sans not-italic" data-testid="dare-type-selector">
                   <button
                     type="button"
                     onClick={() => setDareType('INSTANT')}
                     className="min-h-[34px] rounded-full px-2.5 text-[11px] font-bold"
                     style={{
-                      backgroundColor:
-                        dareType === 'INSTANT' ? 'var(--color-ink)' : 'rgba(35,32,28,0.08)',
-                      color: dareType === 'INSTANT' ? 'var(--color-cream)' : 'var(--color-ink)',
+                      backgroundColor: dareType === 'INSTANT' ? '#23201c' : 'rgba(35,32,28,0.1)',
+                      color: dareType === 'INSTANT' ? '#fffdf9' : '#23201c',
                     }}
                   >
                     Instant
@@ -223,129 +184,99 @@ export function WriteChitsScreen() {
                     onClick={() => setDareType('SOCIAL')}
                     className="min-h-[34px] rounded-full px-2.5 text-[11px] font-bold"
                     style={{
-                      backgroundColor:
-                        dareType === 'SOCIAL' ? 'var(--color-ink)' : 'rgba(35,32,28,0.08)',
-                      color: dareType === 'SOCIAL' ? 'var(--color-cream)' : 'var(--color-ink)',
+                      backgroundColor: dareType === 'SOCIAL' ? '#23201c' : 'rgba(35,32,28,0.1)',
+                      color: dareType === 'SOCIAL' ? '#fffdf9' : '#23201c',
                     }}
                   >
                     Social
                   </button>
                 </div>
               )}
-            </div>
-
-            {kind === 'DARE' ? (
-              <div className="mt-2">
-                <textarea
-                  data-testid="chit-textarea"
-                  rows={3}
-                  maxLength={MAX_CHIT_LENGTH}
-                  value={dareText}
-                  onChange={(e) => setText(e.target.value)}
-                  placeholder="Speak in a dramatic movie-trailer voice for the next 2 turns."
-                  className="font-chit w-full resize-none rounded-[10px] border border-[#8A6420]/25 bg-white/55 p-2.5 text-lg leading-snug text-[var(--color-ink)] placeholder:text-[#23201C]/45"
-                />
-                <div className="mt-1 flex items-center justify-between text-[11px]">
-                  <span
-                    className="font-medium"
-                    style={{
-                      color:
-                        localCheck && !localCheck.allowed
-                          ? 'var(--color-brick)'
-                          : 'var(--color-sage-text)',
-                    }}
-                  >
-                    {localCheck && !localCheck.allowed ? localCheck.reason : 'Ready for Judge Owl'}
-                  </span>
-                  <span className="tabular-nums font-semibold opacity-75">
-                    {dareText.length}/{MAX_CHIT_LENGTH} ({remainingChars} left)
-                  </span>
-                </div>
+            </>
+          }
+        >
+          {kind === 'DARE' ? (
+            <div className="mt-2">
+              <textarea
+                data-testid="chit-textarea"
+                rows={3}
+                maxLength={MAX_CHIT_LENGTH}
+                value={dareText}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="Speak in a dramatic movie-trailer voice for the next 2 turns."
+                className="w-full resize-none rounded-lg border border-[#caa77d] bg-white/60 p-2.5 text-lg leading-snug text-[#34271d]"
+                style={{ fontFamily: 'Caveat, cursive' }}
+              />
+              <div className="mt-1 flex items-center justify-between text-[11px]">
+                <span
+                  style={{
+                    color: localCheck && !localCheck.allowed ? '#a33a2c' : '#3f6b3e',
+                  }}
+                >
+                  {localCheck && !localCheck.allowed ? localCheck.reason : 'Ready for Judge Owl'}
+                </span>
+                <span className="tabular-nums font-semibold">
+                  {dareText.length}/{MAX_CHIT_LENGTH} ({remainingChars} left)
+                </span>
               </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setKind('DARE')}
-                className="font-chit mt-1 block w-full py-2 text-left text-base italic text-[#23201C]/70"
-              >
-                {dareText.trim() || 'Tap to write a Dare chit…'}
-              </button>
-            )}
-          </ParchmentCard>
-
-          {/* Judge Verdict Banner */}
-          {judgeState ? (
-            <div
-              role="status"
-              data-testid="judge-verdict-banner"
-              className="flex items-center gap-2 rounded-[14px] border border-black/10 px-3 py-2 text-xs font-semibold"
-              style={{
-                backgroundColor:
-                  judgeState.verdict === 'FINE'
-                    ? 'rgba(91, 140, 90, 0.16)'
-                    : judgeState.verdict === 'TOO_MILD'
-                      ? 'rgba(184, 137, 59, 0.18)'
-                      : 'rgba(163, 58, 44, 0.16)',
-                color:
-                  judgeState.verdict === 'FINE'
-                    ? 'var(--color-sage-text)'
-                    : judgeState.verdict === 'TOO_MILD'
-                      ? 'var(--color-brass-text)'
-                      : 'var(--color-brick)',
-              }}
-            >
-              {judgeState.verdict === 'FINE' && <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden="true" />}
-              {judgeState.verdict === 'TOO_MILD' && <AlertCircle className="h-4 w-4 shrink-0" aria-hidden="true" />}
-              {judgeState.verdict === 'NOPE' && <XCircle className="h-4 w-4 shrink-0" aria-hidden="true" />}
-              <span>
-                {judgeState.verdict}: {judgeState.reason}
-              </span>
             </div>
           ) : (
-            <div className="flex items-center justify-center gap-2 text-xs opacity-75">
-              <OwlMascot pose={owlPose} size="sm" />
-              <span className="max-w-[230px] text-left">
-                Judge Owl checks every chit. Zero alcohol, zero PII, consent-safe!
-              </span>
-            </div>
-          )}
-        </div>
-
-        {/* Bottom Actions */}
-        <div className="space-y-2.5">
-          <div className="flex justify-center">
             <button
               type="button"
-              data-testid="skip-writing-btn"
-              onClick={() => void advanceTurn()}
-              className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-[#8A6420]/30 bg-[var(--color-cream)] px-5 py-2 text-xs font-semibold text-[var(--color-ink)] shadow-sm transition-transform active:scale-95"
+              onClick={() => setKind('DARE')}
+              className="w-full border-0 bg-transparent p-0 text-inherit"
             >
-              <Sparkles className="h-3.5 w-3.5 text-[var(--color-brass-text)]" aria-hidden="true" />
-              <span>Use Starter Prompts</span>
+              <p>{dareText.trim() || 'Tap to write a Dare chit…'}</p>
             </button>
-          </div>
+          )}
+        </Paper>
 
-          <div className="relative flex items-center pr-3">
-            <button
-              type="submit"
-              disabled={!text.trim() || submitting}
-              data-testid="seal-chit-btn"
-              className="relative flex min-h-[50px] w-full items-center justify-center rounded-[16px] px-5 py-2.5 pr-12 text-base font-bold text-[var(--color-cream)] transition-transform active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
-              style={{
-                background: 'linear-gradient(180deg, #336775 0%, #244C57 100%)',
-                border: '1px solid rgba(35, 32, 28, 0.35)',
-                boxShadow: '0 4px 14px rgba(35, 32, 28, 0.24)',
-              }}
-            >
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-[3px] rounded-[13px] border border-[#FFFDF9]/25"
-              />
-              <span>{submitting ? 'Sealing…' : 'Seal Chits'}</span>
-            </button>
-            <SmallRedWaxSeal size={48} className="pointer-events-none absolute right-0" />
+        {judgeState && (
+          <div
+            role="status"
+            data-testid="judge-verdict-banner"
+            className="mx-5 mt-2 flex items-center gap-2 rounded-xl border border-black/10 px-3 py-2 text-xs font-semibold"
+            style={{
+              backgroundColor:
+                judgeState.verdict === 'FINE'
+                  ? 'rgba(91, 140, 90, 0.16)'
+                  : judgeState.verdict === 'TOO_MILD'
+                    ? 'rgba(184, 137, 59, 0.18)'
+                    : 'rgba(163, 58, 44, 0.16)',
+              color:
+                judgeState.verdict === 'FINE'
+                  ? '#3f6b3e'
+                  : judgeState.verdict === 'TOO_MILD'
+                    ? '#8a6420'
+                    : '#a33a2c',
+            }}
+          >
+            {judgeState.verdict === 'FINE' && <CheckCircle2 size={15} aria-hidden="true" />}
+            {judgeState.verdict === 'TOO_MILD' && <AlertCircle size={15} aria-hidden="true" />}
+            {judgeState.verdict === 'NOPE' && <XCircle size={15} aria-hidden="true" />}
+            <span>
+              {judgeState.verdict}: {judgeState.reason}
+            </span>
           </div>
-        </div>
+        )}
+
+        <button
+          type="button"
+          className="community-btn"
+          data-testid="skip-writing-btn"
+          onClick={() => void advanceTurn()}
+        >
+          <Sparkles size={15} aria-hidden="true" />
+          Use Starter Prompts
+        </button>
+
+        <MainButton
+          type="submit"
+          disabled={!text.trim() || submitting}
+          data-testid="seal-chit-btn"
+        >
+          {submitting ? 'Sealing…' : 'Seal Chits'} <Seal>✦</Seal>
+        </MainButton>
       </form>
     </main>
   );
