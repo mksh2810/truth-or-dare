@@ -1,6 +1,7 @@
-import { Check, FastForward, Hourglass, LockKeyhole, RefreshCw } from 'lucide-react';
+import { useState } from 'react';
+import { Check, FastForward, Hourglass, RefreshCw } from 'lucide-react';
 import { ElapsedStopwatch, SyncIndicator } from '../design';
-import { MainButton, Seal, TopBar } from '../design/VowletUiPrimitives';
+import { BotanicalLayer, TopBar, WaxSealArtwork } from '../design/VowletUiPrimitives';
 import { useGameStore } from '../state/useGameStore';
 
 export function PerformScreen() {
@@ -16,6 +17,8 @@ export function PerformScreen() {
   const performSwap = useGameStore((s) => s.performSwap);
   const performStall = useGameStore((s) => s.performStall);
 
+  const [unsealed, setUnsealed] = useState(true);
+
   const myUid = auth?.uid ?? '';
   const isPerformer = myUid === turn.performerUid;
   const performer = players.find((p) => p.uid === turn.performerUid);
@@ -28,7 +31,19 @@ export function PerformScreen() {
 
   return (
     <main className="vowlet-shell" data-testid="perform-screen">
-      <div className="reveal-screen dark-scene">
+      <div className="bg-wood-candle flex min-h-dvh flex-col pb-5">
+        <BotanicalLayer darkMode />
+
+        {/* Overhead Spotlight */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-0 left-1/2 z-0 h-[340px] w-[360px] -translate-x-1/2"
+          style={{
+            background:
+              'radial-gradient(ellipse at 50% 0%, rgba(245, 206, 132, 0.28) 0%, rgba(245, 206, 132, 0.06) 55%, transparent 80%)',
+          }}
+        />
+
         <TopBar
           dark
           rightSlot={
@@ -44,85 +59,152 @@ export function PerformScreen() {
         />
 
         {isPerformer ? (
-          <>
-            <h1>Unseal the Chit...</h1>
+          <div className="relative z-10 flex flex-1 flex-col items-center px-5 pt-2">
+            <h1 className="font-cormorant text-center text-[31px] leading-tight font-bold text-[#faeed7] italic">
+              Unseal the Chit...
+            </h1>
 
-            <div className="envelope" aria-hidden="true">
-              <Seal>✧</Seal>
-              <LockKeyhole size={30} />
-            </div>
-
-            <div className="revealed-paper" data-testid="unsealed-chit-card">
-              <small>
-                {turn.kind ?? 'TRUTH'} CHIT{isDare && turn.dareType ? ` • ${turn.dareType}` : ''}
-              </small>
-              <p>{privatePrompt?.text ?? 'Unsealing your prompt…'}</p>
-            </div>
-
-            <MainButton
-              disabled={pendingAction}
-              data-testid="perform-done-btn"
-              onClick={() => void performDone()}
+            {/* Kraft Sealed Envelope with animated flap & clickable WaxSeal */}
+            <div
+              className={`relative mt-5 mb-4 h-[132px] w-[224px] ${
+                unsealed ? 'envelope-open' : ''
+              }`}
+              style={{ perspective: '700px' }}
             >
-              <Check size={17} aria-hidden="true" />
-              I&apos;ve completed it
-            </MainButton>
+              {/* Envelope Body */}
+              <div className="absolute inset-0 overflow-hidden rounded-xl border border-[#8e673b] bg-gradient-to-br from-[#d9b88c] via-[#c29967] to-[#9b7243] shadow-[0_14px_26px_rgba(0,0,0,0.6)]">
+                <svg viewBox="0 0 224 132" className="h-full w-full" aria-hidden="true">
+                  <path d="M0 0 L112 72 L224 0" fill="none" stroke="#855d32" strokeWidth="1.5" />
+                  <path d="M0 132 L84 68 M224 132 L140 68" stroke="#855d32" strokeWidth="1.2" opacity="0.65" />
+                </svg>
+              </div>
 
-            <div className="flex w-[calc(100%-44px)] gap-2 pb-2">
+              {/* Animated Envelope Flap */}
+              <div className="envelope-flap pointer-events-none absolute top-0 right-0 left-0 h-[76px]">
+                <svg viewBox="0 0 224 76" className="h-full w-full" aria-hidden="true">
+                  <polygon
+                    points="0,0 224,0 112,74"
+                    fill="url(#envelopeFlapGrad)"
+                    stroke="#7f572e"
+                    strokeWidth="1.5"
+                  />
+                </svg>
+              </div>
+
+              {/* Clickable Wax Seal */}
               <button
                 type="button"
-                disabled={pendingAction || Boolean(me?.swapUsed)}
-                data-testid="perform-swap-btn"
-                onClick={() => void performSwap()}
-                className="main-btn secondary !m-0 !w-1/2"
+                aria-label={unsealed ? 'Chit unsealed' : 'Break wax seal to reveal chit'}
+                onClick={() => setUnsealed((prev) => !prev)}
+                className={`wax-btn absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 ${
+                  unsealed ? 'seal-cracking' : ''
+                }`}
               >
-                <RefreshCw size={15} aria-hidden="true" />
-                {me?.swapUsed ? 'Swap Used' : '1 Free Swap'}
-              </button>
-
-              <button
-                type="button"
-                disabled={pendingAction}
-                data-testid="perform-skip-btn"
-                onClick={() => void performSkip()}
-                className="main-btn secondary !m-0 !w-1/2"
-              >
-                <FastForward size={15} aria-hidden="true" />
-                Skip (-30)
+                <WaxSealArtwork color={isDare ? 'red' : 'brass'} icon="emblem" size={56} />
               </button>
             </div>
-          </>
+
+            {/* Torn Note Prompt Card */}
+            <div
+              className="torn-note w-full -rotate-[0.8deg] px-5 py-5 text-center"
+              data-testid="unsealed-chit-card"
+            >
+              <div className="font-cinzel text-[10px] font-bold tracking-[0.22em] text-[#75522f] uppercase">
+                {turn.kind ?? 'TRUTH'} CHIT
+                {isDare && turn.dareType ? ` • ${turn.dareType}` : ''}
+              </div>
+              <p className="font-script mt-2.5 text-[28px] leading-snug font-bold text-[#2b1d12]">
+                {privatePrompt?.text ?? 'Unsealing your prompt…'}
+              </p>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="mt-auto flex w-full flex-col gap-2.5 pt-4">
+              <button
+                type="button"
+                className="btn-teal w-full"
+                disabled={pendingAction}
+                data-testid="perform-done-btn"
+                onClick={() => void performDone()}
+              >
+                <Check size={18} aria-hidden="true" />
+                <span>I&apos;ve completed it</span>
+              </button>
+
+              <div className="grid grid-cols-2 gap-2.5">
+                <button
+                  type="button"
+                  disabled={pendingAction || Boolean(me?.swapUsed)}
+                  data-testid="perform-swap-btn"
+                  onClick={() => void performSwap()}
+                  className="btn-parchment w-full text-[14px]"
+                >
+                  <RefreshCw size={15} aria-hidden="true" />
+                  <span>{me?.swapUsed ? 'Swap Used' : '1 Free Swap'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  disabled={pendingAction}
+                  data-testid="perform-skip-btn"
+                  onClick={() => void performSkip()}
+                  className="btn-parchment w-full text-[14px]"
+                >
+                  <FastForward size={15} aria-hidden="true" />
+                  <span>Skip (-30)</span>
+                </button>
+              </div>
+            </div>
+          </div>
         ) : (
-          <>
-            <h1 aria-live="polite">
+          <div className="relative z-10 flex flex-1 flex-col items-center px-5 pt-2">
+            <h1
+              aria-live="polite"
+              className="font-cormorant text-center text-[30px] leading-tight font-bold text-[#faeed7] italic"
+            >
               {performer?.name ?? 'Player'} is unsealing a{' '}
               {turn.kind === 'DARE' ? 'Dare' : 'Truth'}...
             </h1>
 
-            <div className="envelope" aria-hidden="true">
-              <Seal>✧</Seal>
-              <LockKeyhole size={30} />
+            <div className="relative mt-6 mb-5 h-[132px] w-[224px]" aria-hidden="true">
+              <div className="absolute inset-0 overflow-hidden rounded-xl border border-[#8e673b] bg-gradient-to-br from-[#d9b88c] via-[#c29967] to-[#9b7243] shadow-[0_14px_26px_rgba(0,0,0,0.6)]">
+                <svg viewBox="0 0 224 132" className="h-full w-full">
+                  <polygon points="0,0 224,0 112,74" fill="url(#envelopeFlapGrad)" stroke="#7f572e" strokeWidth="1.5" />
+                </svg>
+              </div>
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <WaxSealArtwork color="red" icon="emblem" size={56} />
+              </div>
             </div>
 
-            <div className="revealed-paper">
-              <small>WITNESS VIEW</small>
-              <p>Watch closely — you&apos;ll vote once they finish.</p>
+            <div className="torn-note w-full -rotate-[0.6deg] px-5 py-5 text-center">
+              <div className="font-cinzel text-[10px] font-bold tracking-[0.22em] text-[#75522f] uppercase">
+                WITNESS VIEW
+              </div>
+              <p className="font-script mt-2 text-[26px] leading-snug font-bold text-[#2b1d12]">
+                Watch closely — you&apos;ll vote once they finish.
+              </p>
             </div>
 
             {!me?.spectator && (
-              <MainButton
-                secondary
-                disabled={hasPressedStall || pendingAction}
-                data-testid="taking-too-long-btn"
-                onClick={() => void performStall()}
-              >
-                <Hourglass size={16} aria-hidden="true" />
-                {hasPressedStall
-                  ? `Stall Requested (${turn.stallVotes.length}/${witnesses.length})`
-                  : `Taking Too Long (${turn.stallVotes.length}/${witnesses.length})`}
-              </MainButton>
+              <div className="mt-auto w-full pt-4">
+                <button
+                  type="button"
+                  className="btn-parchment w-full"
+                  disabled={hasPressedStall || pendingAction}
+                  data-testid="taking-too-long-btn"
+                  onClick={() => void performStall()}
+                >
+                  <Hourglass size={16} aria-hidden="true" />
+                  <span>
+                    {hasPressedStall
+                      ? `Stall Requested (${turn.stallVotes.length}/${witnesses.length})`
+                      : `Taking Too Long (${turn.stallVotes.length}/${witnesses.length})`}
+                  </span>
+                </button>
+              </div>
             )}
-          </>
+          </div>
         )}
       </div>
     </main>

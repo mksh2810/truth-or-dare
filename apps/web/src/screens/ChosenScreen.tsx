@@ -1,6 +1,5 @@
-import { Feather, Flame } from 'lucide-react';
 import { SyncIndicator, TimerRing } from '../design';
-import { OwlMark, TopBar } from '../design/VowletUiPrimitives';
+import { BotanicalLayer, OwlArtwork, TopBar } from '../design/VowletUiPrimitives';
 import { useGameStore } from '../state/useGameStore';
 
 export function ChosenScreen() {
@@ -19,7 +18,32 @@ export function ChosenScreen() {
 
   return (
     <main className="vowlet-shell" data-testid="chosen-screen">
-      <div className="choose-screen dark-scene">
+      <div className="bg-wood-candle flex min-h-dvh flex-col pb-7">
+        <BotanicalLayer darkMode />
+
+        {/* Floating Sparkles */}
+        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+          <span className="sparkle-float absolute top-20 left-8 text-lg text-[#f4d284]">✦</span>
+          <span
+            className="sparkle-float absolute top-28 right-10 text-sm text-[#f4d284]"
+            style={{ animationDelay: '0.7s' }}
+          >
+            ✦
+          </span>
+          <span
+            className="sparkle-float absolute bottom-24 left-12 text-xs text-[#f4d284]"
+            style={{ animationDelay: '1.3s' }}
+          >
+            ✦
+          </span>
+          <span
+            className="sparkle-float absolute right-8 bottom-32 text-base text-[#f4d284]"
+            style={{ animationDelay: '1.8s' }}
+          >
+            ✦
+          </span>
+        </div>
+
         <TopBar
           dark
           rightSlot={
@@ -38,44 +62,85 @@ export function ChosenScreen() {
         />
 
         {isPerformer ? (
-          <>
-            <div className="chosen-heading">
-              <span aria-hidden="true">✦</span>
-              <h1>You&apos;ve been chosen!</h1>
-              <p className="dark-sub">Auto-selects Truth if timer runs out.</p>
+          <div className="relative z-10 flex flex-1 flex-col justify-between px-4 pt-6">
+            <div className="text-center">
+              <span className="sparkle-float inline-block text-xl text-[#f4d284]" aria-hidden="true">
+                ✦
+              </span>
+              <h1 className="font-cormorant mt-1 text-[34px] leading-tight font-bold text-[#faeed7] italic">
+                You&apos;ve been chosen!
+              </h1>
+              <p className="font-cormorant mt-1 text-[17px] text-[#e5cfa9]">
+                Auto-selects Truth if timer runs out.
+              </p>
             </div>
 
-            <div className="choice-cards">
+            <div className="my-auto grid grid-cols-2 gap-3.5 py-6">
               <button
                 type="button"
-                className="choice-card truth-card"
+                className="tarot-card tarot-truth h-[272px] w-full"
                 disabled={pendingAction}
                 data-testid="choose-truth-btn"
                 onClick={() => void choosePromptKind('TRUTH')}
               >
-                <Feather size={35} aria-hidden="true" />
-                <b>TRUTH</b>
-                <small>Reveal what lies beneath.</small>
+                <div className="tarot-inner">
+                  <span className="text-[11px] tracking-[0.2em] text-[#e6be6c]/75" aria-hidden="true">
+                    ✦
+                  </span>
+                  <svg width="46" height="46" viewBox="0 0 24 24" className="my-3" aria-hidden="true">
+                    <path
+                      d="M20.2 3.8C15.4 3.4 9.5 7.4 6.8 12.8L4 20l7.2-2.8c5.4-2.7 9.4-8.6 9-13.4zM9.2 15.8l-2.6 1 1-2.6"
+                      fill="url(#goldQuillGrad)"
+                    />
+                  </svg>
+                  <span className="font-cinzel text-[20px] font-extrabold tracking-[0.14em] text-[#faeed7]">
+                    TRUTH
+                  </span>
+                  <span className="font-cormorant mt-2 text-[16px] leading-tight text-[#e8d5b3] italic">
+                    Reveal what lies beneath.
+                  </span>
+                </div>
               </button>
 
               <button
                 type="button"
-                className="choice-card dare-card"
+                className="tarot-card tarot-dare h-[272px] w-full"
                 disabled={pendingAction}
                 data-testid="choose-dare-btn"
                 onClick={() => void choosePromptKind('DARE')}
               >
-                <Flame size={35} aria-hidden="true" />
-                <b>DARE</b>
-                <small>Make the evening memorable.</small>
+                <div className="tarot-inner">
+                  <span className="text-[11px] tracking-[0.2em] text-[#e6be6c]/75" aria-hidden="true">
+                    ✦
+                  </span>
+                  <svg width="46" height="46" viewBox="0 0 24 24" className="my-3" aria-hidden="true">
+                    <path
+                      d="M12.5 2c.6 3.5-2 5.4-2 8.2 0 1.4 1 2.5 2.4 2.5 1.8 0 2.9-1.7 2.4-4 2.5 2.1 3.7 4.7 3.7 7.3 0 3.7-3 6.5-7 6.5s-7-2.8-7-6.5c0-3.4 2.2-6.5 4.9-8.8 1-.9 2-2.8 2.6-5.2z"
+                      fill="url(#goldFlameGrad)"
+                    />
+                  </svg>
+                  <span className="font-cinzel text-[20px] font-extrabold tracking-[0.14em] text-[#faeed7]">
+                    DARE
+                  </span>
+                  <span className="font-cormorant mt-2 text-[16px] leading-tight text-[#f3d4b8] italic">
+                    Make the evening memorable.
+                  </span>
+                </div>
               </button>
             </div>
-          </>
+          </div>
         ) : (
-          <div className="chosen-heading flex flex-col items-center gap-4 px-5" aria-live="polite">
-            <OwlMark />
-            <h1>{performer?.name ?? 'Player'} is choosing...</h1>
-            <p className="dark-sub">Truth or Dare? Stay tuned.</p>
+          <div
+            className="relative z-10 flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center"
+            aria-live="polite"
+          >
+            <OwlArtwork className="h-[170px] w-[170px] drop-shadow-[0_14px_20px_rgba(0,0,0,0.55)]" />
+            <h1 className="font-cormorant text-[32px] leading-tight font-bold text-[#faeed7] italic">
+              {performer?.name ?? 'Player'} is choosing...
+            </h1>
+            <p className="font-cormorant text-[18px] text-[#e5cfa9]">
+              Truth or Dare? Stay tuned.
+            </p>
           </div>
         )}
       </div>

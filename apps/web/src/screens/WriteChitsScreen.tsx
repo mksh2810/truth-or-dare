@@ -8,7 +8,7 @@ import {
   type PromptKind,
 } from '@vowlet/shared';
 import { SyncIndicator, TimerRing } from '../design';
-import { MainButton, Paper, Seal, TopBar } from '../design/VowletUiPrimitives';
+import { BotanicalLayer, TopBar, WaxSealArtwork } from '../design/VowletUiPrimitives';
 import { useGameStore } from '../state/useGameStore';
 
 export function WriteChitsScreen() {
@@ -76,7 +76,12 @@ export function WriteChitsScreen() {
 
   return (
     <main className="vowlet-shell" data-testid="write-chits-screen">
-      <form className="chits-screen parchment" onSubmit={(e) => void handleSeal(e)}>
+      <form
+        className="bg-parchment flex min-h-dvh flex-col pb-5"
+        onSubmit={(e) => void handleSeal(e)}
+      >
+        <BotanicalLayer />
+
         <TopBar
           rightSlot={
             <div className="flex items-center gap-2">
@@ -92,89 +97,110 @@ export function WriteChitsScreen() {
           }
         />
 
-        <h1>Write Your Chits</h1>
-        <p className="intro">
-          Create one Truth and one Dare,
-          <br />
-          or pick from starter prompts. ({chits.length} sealed)
-        </p>
+        <div className="relative z-10 px-5 text-center">
+          <h1 className="font-cormorant text-[31px] leading-tight font-bold text-[#2b1d12]">
+            Write Your Chits
+          </h1>
+          <p className="font-cormorant mt-0.5 text-[16px] font-medium text-[#5e4430]">
+            Create one Truth and one Dare, or pick starter prompts. ({chits.length} sealed)
+          </p>
+        </div>
 
-        <Paper
-          title={
-            <>
+        {/* Truth Chit Card (-2.2deg) */}
+        <div className="relative z-10 mt-3 px-5">
+          <div className="chit-card -rotate-[2.2deg] p-4 transition-transform">
+            <div className="flex items-center justify-between border-b border-[#c5a072]/60 pb-2">
               <button
                 type="button"
                 data-testid="chit-kind-truth"
                 onClick={() => setKind('TRUTH')}
-                className="inline-flex min-h-[44px] items-center gap-2 border-0 bg-transparent p-0 text-inherit"
+                className="flex min-h-[44px] items-center gap-2 border-0 bg-transparent p-0 text-left"
               >
-                <span>♧ Truth</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M20.2 3.8C15.4 3.4 9.5 7.4 6.8 12.8L4 20l7.2-2.8c5.4-2.7 9.4-8.6 9-13.4zM9.2 15.8l-2.6 1 1-2.6"
+                    fill="url(#tealQuillGrad)"
+                  />
+                </svg>
+                <span className="font-playfair text-[23px] font-bold text-[#24484e] italic">
+                  Truth
+                </span>
               </button>
+
               {kind === 'TRUTH' && (
-                <span className="rounded-full bg-[#2e5e6b] px-2.5 py-0.5 font-sans text-[10px] font-bold tracking-wider text-[#fffdf9] uppercase not-italic">
+                <span className="rounded-full bg-[#24484e] px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-[#fff8eb] uppercase">
                   Active
                 </span>
               )}
-            </>
-          }
-        >
-          {kind === 'TRUTH' ? (
-            <div className="mt-2">
-              <textarea
-                data-testid="chit-textarea"
-                rows={3}
-                maxLength={MAX_CHIT_LENGTH}
-                value={truthText}
-                onChange={(e) => setText(e.target.value)}
-                placeholder="What is the weirdest food combo you actually enjoy?"
-                className="w-full resize-none rounded-lg border border-[#caa77d] bg-white/60 p-2.5 text-lg leading-snug text-[#34271d]"
-                style={{ fontFamily: 'Caveat, cursive' }}
-              />
-              <div className="mt-1 flex items-center justify-between text-[11px]">
-                <span
-                  style={{
-                    color: localCheck && !localCheck.allowed ? '#a33a2c' : '#3f6b3e',
-                  }}
-                >
-                  {localCheck && !localCheck.allowed ? localCheck.reason : 'Ready for Judge Owl'}
-                </span>
-                <span className="tabular-nums font-semibold">
-                  {truthText.length}/{MAX_CHIT_LENGTH} ({remainingChars} left)
-                </span>
-              </div>
             </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setKind('TRUTH')}
-              className="w-full border-0 bg-transparent p-0 text-inherit"
-            >
-              <p>{truthText.trim() || 'Tap to write a Truth chit…'}</p>
-            </button>
-          )}
-        </Paper>
 
-        <Paper
-          tone="dare"
-          title={
-            <>
+            {kind === 'TRUTH' ? (
+              <div className="mt-2.5">
+                <textarea
+                  data-testid="chit-textarea"
+                  rows={2}
+                  maxLength={MAX_CHIT_LENGTH}
+                  value={truthText}
+                  onChange={(e) => setText(e.target.value)}
+                  placeholder="What is the weirdest food combo you actually enjoy?"
+                  className="font-script w-full resize-none rounded-lg border border-[#c5a072]/70 bg-[#fffdf8]/75 p-2.5 text-[21px] leading-snug text-[#2b1d12] placeholder:text-[#8c7053]/70"
+                />
+                <div className="mt-1 flex items-center justify-between text-[11px]">
+                  <span
+                    className="font-medium"
+                    style={{
+                      color: localCheck && !localCheck.allowed ? '#a33a2c' : '#3f6b3e',
+                    }}
+                  >
+                    {localCheck && !localCheck.allowed ? localCheck.reason : 'Ready for Judge Owl'}
+                  </span>
+                  <span className="font-semibold text-[#5e4430] tabular-nums">
+                    {truthText.length}/{MAX_CHIT_LENGTH} ({remainingChars} left)
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setKind('TRUTH')}
+                className="font-script mt-2 min-h-[44px] w-full border-0 bg-transparent p-1 text-center text-[22px] text-[#3a2819]"
+              >
+                {truthText.trim() || 'Tap to write a Truth chit…'}
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Dare Chit Card (+1.8deg) */}
+        <div className="relative z-10 mt-3 px-5">
+          <div className="chit-card rotate-[1.8deg] p-4 transition-transform">
+            <div className="flex items-center justify-between gap-2 border-b border-[#c5a072]/60 pb-2">
               <button
                 type="button"
                 data-testid="chit-kind-dare"
                 onClick={() => setKind('DARE')}
-                className="inline-flex min-h-[44px] items-center gap-2 border-0 bg-transparent p-0 text-inherit"
+                className="flex min-h-[44px] items-center gap-2 border-0 bg-transparent p-0 text-left"
               >
-                <span>♨ Dare</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M12.5 2c.6 3.5-2 5.4-2 8.2 0 1.4 1 2.5 2.4 2.5 1.8 0 2.9-1.7 2.4-4 2.5 2.1 3.7 4.7 3.7 7.3 0 3.7-3 6.5-7 6.5s-7-2.8-7-6.5c0-3.4 2.2-6.5 4.9-8.8 1-.9 2-2.8 2.6-5.2z"
+                    fill="url(#flameGrad)"
+                  />
+                </svg>
+                <span className="font-playfair text-[23px] font-bold text-[#a9441f] italic">
+                  Dare
+                </span>
               </button>
+
               {kind === 'DARE' && (
-                <div className="flex gap-1 font-sans not-italic" data-testid="dare-type-selector">
+                <div className="flex gap-1" data-testid="dare-type-selector">
                   <button
                     type="button"
                     onClick={() => setDareType('INSTANT')}
-                    className="min-h-[34px] rounded-full px-2.5 text-[11px] font-bold"
+                    className="min-h-[36px] rounded-full px-2.5 text-[11px] font-bold"
                     style={{
-                      backgroundColor: dareType === 'INSTANT' ? '#23201c' : 'rgba(35,32,28,0.1)',
-                      color: dareType === 'INSTANT' ? '#fffdf9' : '#23201c',
+                      backgroundColor: dareType === 'INSTANT' ? '#2b1d12' : 'rgba(43,29,18,0.1)',
+                      color: dareType === 'INSTANT' ? '#fff8eb' : '#2b1d12',
                     }}
                   >
                     Instant
@@ -182,60 +208,69 @@ export function WriteChitsScreen() {
                   <button
                     type="button"
                     onClick={() => setDareType('SOCIAL')}
-                    className="min-h-[34px] rounded-full px-2.5 text-[11px] font-bold"
+                    className="min-h-[36px] rounded-full px-2.5 text-[11px] font-bold"
                     style={{
-                      backgroundColor: dareType === 'SOCIAL' ? '#23201c' : 'rgba(35,32,28,0.1)',
-                      color: dareType === 'SOCIAL' ? '#fffdf9' : '#23201c',
+                      backgroundColor: dareType === 'SOCIAL' ? '#2b1d12' : 'rgba(43,29,18,0.1)',
+                      color: dareType === 'SOCIAL' ? '#fff8eb' : '#2b1d12',
                     }}
                   >
                     Social
                   </button>
                 </div>
               )}
-            </>
-          }
-        >
-          {kind === 'DARE' ? (
-            <div className="mt-2">
-              <textarea
-                data-testid="chit-textarea"
-                rows={3}
-                maxLength={MAX_CHIT_LENGTH}
-                value={dareText}
-                onChange={(e) => setText(e.target.value)}
-                placeholder="Speak in a dramatic movie-trailer voice for the next 2 turns."
-                className="w-full resize-none rounded-lg border border-[#caa77d] bg-white/60 p-2.5 text-lg leading-snug text-[#34271d]"
-                style={{ fontFamily: 'Caveat, cursive' }}
-              />
-              <div className="mt-1 flex items-center justify-between text-[11px]">
-                <span
-                  style={{
-                    color: localCheck && !localCheck.allowed ? '#a33a2c' : '#3f6b3e',
-                  }}
-                >
-                  {localCheck && !localCheck.allowed ? localCheck.reason : 'Ready for Judge Owl'}
-                </span>
-                <span className="tabular-nums font-semibold">
-                  {dareText.length}/{MAX_CHIT_LENGTH} ({remainingChars} left)
-                </span>
-              </div>
             </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setKind('DARE')}
-              className="w-full border-0 bg-transparent p-0 text-inherit"
-            >
-              <p>{dareText.trim() || 'Tap to write a Dare chit…'}</p>
-            </button>
-          )}
-        </Paper>
+
+            {kind === 'DARE' ? (
+              <div className="mt-2.5">
+                <textarea
+                  data-testid="chit-textarea"
+                  rows={2}
+                  maxLength={MAX_CHIT_LENGTH}
+                  value={dareText}
+                  onChange={(e) => setText(e.target.value)}
+                  placeholder="Speak in a dramatic movie-trailer voice for the next 2 turns."
+                  className="font-script w-full resize-none rounded-lg border border-[#c5a072]/70 bg-[#fffdf8]/75 p-2.5 text-[21px] leading-snug text-[#2b1d12] placeholder:text-[#8c7053]/70"
+                />
+                <div className="mt-1 flex items-center justify-between text-[11px]">
+                  <span
+                    className="font-medium"
+                    style={{
+                      color: localCheck && !localCheck.allowed ? '#a33a2c' : '#3f6b3e',
+                    }}
+                  >
+                    {localCheck && !localCheck.allowed ? localCheck.reason : 'Ready for Judge Owl'}
+                  </span>
+                  <span className="font-semibold text-[#5e4430] tabular-nums">
+                    {dareText.length}/{MAX_CHIT_LENGTH} ({remainingChars} left)
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setKind('DARE')}
+                className="font-script mt-2 min-h-[44px] w-full border-0 bg-transparent p-1 text-center text-[22px] text-[#3a2819]"
+              >
+                {dareText.trim() || 'Tap to write a Dare chit…'}
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Fountain Pen Accent */}
+        <div className="relative z-10 mt-2 flex justify-end px-8" aria-hidden="true">
+          <svg width="86" height="22" viewBox="0 0 110 28" className="opacity-75">
+            <path d="M6 16 L84 8 L96 14 L84 20 Z" fill="#2b1d12" />
+            <path d="M84 8 L104 14 L84 20 L89 14 Z" fill="url(#goldGrad)" />
+            <circle cx="93" cy="14" r="1.4" fill="#2b1d12" />
+          </svg>
+        </div>
 
         {judgeState && (
           <div
             role="status"
             data-testid="judge-verdict-banner"
-            className="mx-5 mt-2 flex items-center gap-2 rounded-xl border border-black/10 px-3 py-2 text-xs font-semibold"
+            className="relative z-10 mx-5 mt-1 flex items-center gap-2 rounded-xl border border-black/10 px-3 py-2 text-xs font-semibold"
             style={{
               backgroundColor:
                 judgeState.verdict === 'FINE'
@@ -260,23 +295,31 @@ export function WriteChitsScreen() {
           </div>
         )}
 
-        <button
-          type="button"
-          className="community-btn"
-          data-testid="skip-writing-btn"
-          onClick={() => void advanceTurn()}
-        >
-          <Sparkles size={15} aria-hidden="true" />
-          Use Starter Prompts
-        </button>
+        <div className="relative z-10 mt-auto flex flex-col gap-3 px-5 pt-3">
+          <button
+            type="button"
+            className="btn-parchment w-full"
+            data-testid="skip-writing-btn"
+            onClick={() => void advanceTurn()}
+          >
+            <Sparkles size={16} aria-hidden="true" />
+            <span>Use Starter Prompts</span>
+          </button>
 
-        <MainButton
-          type="submit"
-          disabled={!text.trim() || submitting}
-          data-testid="seal-chit-btn"
-        >
-          {submitting ? 'Sealing…' : 'Seal Chits'} <Seal>✦</Seal>
-        </MainButton>
+          <div className="relative">
+            <button
+              type="submit"
+              disabled={!text.trim() || submitting}
+              data-testid="seal-chit-btn"
+              className="btn-teal w-full pr-12"
+            >
+              <span>{submitting ? 'Sealing…' : 'Seal Chits'}</span>
+            </button>
+            <div className="pointer-events-none absolute -top-1.5 right-3">
+              <WaxSealArtwork color="red" icon="emblem" size={50} />
+            </div>
+          </div>
+        </div>
       </form>
     </main>
   );

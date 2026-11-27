@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { Check, X } from 'lucide-react';
 import { SyncIndicator } from '../design';
 import { toMillis } from '../design/TimerRing';
-import { Avatars, TopBar } from '../design/VowletUiPrimitives';
+import {
+  BotanicalLayer,
+  PlayerAvatarArtwork,
+  TopBar,
+  WaxSealArtwork,
+} from '../design/VowletUiPrimitives';
 import { useGameStore } from '../state/useGameStore';
 
 export function VoteScreen() {
@@ -28,8 +32,13 @@ export function VoteScreen() {
     return () => window.clearInterval(id);
   }, []);
 
+  const totalSec = room.settings.voteDeadlineSec || 20;
   const deadlineMs = toMillis(turn.deadlineAt) ?? nowMs;
   const remainingSec = Math.max(0, Math.ceil((deadlineMs - (nowMs + clockOffsetMs)) / 1000));
+  const progress = Math.max(0, Math.min(1, remainingSec / totalSec));
+  const radius = 64;
+  const circumference = 2 * Math.PI * radius;
+  const dashOffset = circumference * (1 - progress);
 
   useEffect(() => {
     if (remainingSec === 0 && !expiredRef.current) {
@@ -52,71 +61,131 @@ export function VoteScreen() {
 
   return (
     <main className="vowlet-shell" data-testid="vote-screen">
-      <div className="vote-screen parchment">
-        <TopBar rightSlot={<SyncIndicator state={syncState} />} />
+      <div className="bg-parchment flex min-h-dvh flex-col items-center pb-6">
+        <BotanicalLayer />
 
-        <h1>Time to Vote!</h1>
-        <p className="intro">
-          {isPerformer
-            ? 'Hold tight — the table is casting their verdict.'
-            : `Approve or Reject ${performer?.name ?? 'the performer'}.`}
-        </p>
+        <div className="w-full">
+          <TopBar rightSlot={<SyncIndicator state={syncState} />} />
+        </div>
 
+        <div className="relative z-10 px-5 text-center">
+          <h1 className="font-cormorant text-[33px] leading-tight font-bold text-[#2b1d12]">
+            Time to Vote!
+          </h1>
+          <p className="font-cormorant mt-1 text-[17px] font-medium text-[#5e4430]">
+            {isPerformer
+              ? 'Hold tight — the table is casting their verdict.'
+              : `Approve or Reject ${performer?.name ?? 'the performer'}.`}
+          </p>
+        </div>
+
+        {/* SVG Circular Countdown Ring */}
         <div
-          className="timer"
+          className="relative z-10 my-6 flex h-[156px] w-[156px] items-center justify-center"
           data-testid="timer-ring"
           role="timer"
           aria-label={`${remainingSec} seconds remaining`}
         >
-          00:{String(remainingSec).padStart(2, '0')}
+          <svg viewBox="0 0 156 156" className="h-full w-full -rotate-90" aria-hidden="true">
+            <circle
+              cx="78"
+              cy="78"
+              r={radius}
+              fill="#fff7e8"
+              fillOpacity="0.65"
+              stroke="#d9bfa0"
+              strokeWidth="9"
+            />
+            <circle
+              cx="78"
+              cy="78"
+              r={radius}
+              fill="none"
+              stroke="url(#timerRingGrad)"
+              strokeWidth="9"
+              strokeLinecap="round"
+              strokeDasharray={circumference}
+              strokeDashoffset={dashOffset}
+              style={{ transition: 'stroke-dashoffset 0.25s linear' }}
+            />
+          </svg>
+          <span className="font-cormorant absolute text-[34px] font-bold text-[#2b1d12] tabular-nums">
+            00:{String(remainingSec).padStart(2, '0')}
+          </span>
         </div>
 
-        {isPerformer || me?.spectator ? (
-          <div className="paper mx-5 mb-4 p-4 text-center">
-            <p className="font-semibold">Table is voting…</p>
-            <small className="opacity-75">
-              {isPerformer
-                ? 'Waiting for witnesses to seal the verdict.'
-                : 'Spectators observe while players vote.'}
-            </small>
-          </div>
-        ) : (
-          <div className="vote-actions">
-            <button
-              type="button"
-              className="vote-seal pass"
-              data-testid="vote-approve-btn"
-              aria-pressed={myVote?.verdict === 'APPROVE'}
-              style={{
-                opacity: myVote && myVote.verdict !== 'APPROVE' ? 0.55 : 1,
-                transform: myVote?.verdict === 'APPROVE' ? 'scale(1.06)' : undefined,
-              }}
-              onClick={() => void castVote('APPROVE')}
-            >
-              <Check size={31} aria-hidden="true" />
-              <b>Approve</b>
-            </button>
+        {/* Two Tactile Wax Seal Vote Buttons */}
+        <div className="relative z-10 w-full px-5">
+          {isPerformer || me?.spectator ? (
+            <div className="chit-card mx-auto mb-5 max-w-[320px] p-4 text-center">
+              <p className="font-cormorant text-[20px] font-bold text-[#2b1d12]">
+                Table is voting…
+              </p>
+              <small className="text-xs text-[#5e4430]">
+                {isPerformer
+                  ? 'Waiting for witnesses to seal the verdict.'
+                  : 'Spectators observe while players vote.'}
+              </small>
+            </div>
+          ) : (
+            <div className="mb-5 flex items-center justify-center gap-8">
+              <button
+                type="button"
+                className="wax-btn gap-1.5"
+                data-testid="vote-approve-btn"
+                aria-pressed={myVote?.verdict === 'APPROVE'}
+                style={{
+                  opacity: myVote && myVote.verdict !== 'APPROVE' ? 0.55 : 1,
+                  transform: myVote?.verdict === 'APPROVE' ? 'scale(1.07)' : undefined,
+                }}
+                onClick={() => void castVote('APPROVE')}
+              >
+                <WaxSealArtwork color="green" icon="check" size={96} />
+                <span className="font-cinzel text-sm font-bold tracking-wider text-[#2f522c]">
+                  Approve
+                </span>
+              </button>
 
-            <button
-              type="button"
-              className="vote-seal fail"
-              data-testid="vote-reject-btn"
-              aria-pressed={myVote?.verdict === 'REJECT'}
-              style={{
-                opacity: myVote && myVote.verdict !== 'REJECT' ? 0.55 : 1,
-                transform: myVote?.verdict === 'REJECT' ? 'scale(1.06)' : undefined,
-              }}
-              onClick={() => void castVote('REJECT')}
-            >
-              <X size={31} aria-hidden="true" />
-              <b>Reject</b>
-            </button>
-          </div>
-        )}
+              <button
+                type="button"
+                className="wax-btn gap-1.5"
+                data-testid="vote-reject-btn"
+                aria-pressed={myVote?.verdict === 'REJECT'}
+                style={{
+                  opacity: myVote && myVote.verdict !== 'REJECT' ? 0.55 : 1,
+                  transform: myVote?.verdict === 'REJECT' ? 'scale(1.07)' : undefined,
+                }}
+                onClick={() => void castVote('REJECT')}
+              >
+                <WaxSealArtwork color="red" icon="x" size={96} />
+                <span className="font-cinzel text-sm font-bold tracking-wider text-[#8c2a1e]">
+                  Reject
+                </span>
+              </button>
+            </div>
+          )}
+        </div>
 
-        <Avatars players={witnesses} compact />
-        <div className="vote-count" data-testid="vote-count-bar" aria-live="polite">
-          Votes: {currentVotes.length} / {witnesses.length}
+        {/* Witness Avatars Row + Vote Count Pill */}
+        <div className="relative z-10 mt-auto flex flex-col items-center gap-3 px-5">
+          <div className="flex flex-wrap justify-center gap-2">
+            {witnesses.map((w) => (
+              <PlayerAvatarArtwork
+                key={w.uid}
+                name={w.name}
+                size={34}
+                className="rounded-full shadow-sm"
+              />
+            ))}
+          </div>
+
+          <div
+            className="rounded-full border border-[#c59d6b] bg-[#fbf0dc] px-6 py-2 font-serif text-sm font-semibold text-[#2b1d12] shadow-sm"
+            data-testid="vote-count-bar"
+            aria-live="polite"
+          >
+            Votes: {currentVotes.length} / {witnesses.length}
+          </div>
         </div>
       </div>
     </main>

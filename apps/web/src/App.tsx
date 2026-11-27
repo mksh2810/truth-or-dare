@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect, useMemo } from 'react';
 import { MotionConfig } from 'framer-motion';
 import { subscribeAuth } from './auth/firebase';
+import { SharedSvgDefs } from './design/VowletUiPrimitives';
 import { detectInAppBrowser } from './pwa/inAppBrowser';
 import { useGameStore } from './state/useGameStore';
 import { ConsentScreen } from './screens/ConsentScreen';
@@ -145,6 +146,7 @@ export function App() {
 
   return (
     <MotionConfig reducedMotion={reducedMotionOverride ? 'always' : 'user'}>
+      <SharedSvgDefs />
       <div className="min-h-dvh w-full overflow-x-hidden">
         <ReconnectingBanner />
         {isInApp && (

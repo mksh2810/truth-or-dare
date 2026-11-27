@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Check,
   Copy,
+  Crown,
   ExternalLink,
   Flag,
   Hourglass,
@@ -14,7 +15,13 @@ import {
 import { QRCodeSVG } from 'qrcode.react';
 import type { PlayerDoc, TotalRounds } from '@vowlet/shared';
 import { BottomSheet, Button, SyncIndicator } from '../design';
-import { MainButton, Tabletop, TopBar } from '../design/VowletUiPrimitives';
+import {
+  AmberBottleSvg,
+  BotanicalLayer,
+  PlayerAvatarArtwork,
+  TopBar,
+  WoodenTableSvg,
+} from '../design/VowletUiPrimitives';
 import { useGameStore } from '../state/useGameStore';
 import { ReportBlockSheet } from './ReportBlockSheet';
 
@@ -43,10 +50,20 @@ export function LobbyScreen() {
 
   const myUid = auth?.uid ?? null;
   const isHost = myUid === room.hostUid;
-  const activePlayers = players.filter((p) => !p.banned && !p.spectator);
+  const activePlayers = useMemo(
+    () =>
+      players
+        .filter((p) => !p.banned && !p.spectator)
+        .slice()
+        .sort((a, b) => a.seat - b.seat),
+    [players],
+  );
   const presentPlayers = activePlayers.filter((p) => presence[p.uid]?.online ?? true);
   const readyCount = activePlayers.filter((p) => p.ready).length;
   const me = activePlayers.find((p) => p.uid === myUid);
+
+  const myIndex = Math.max(0, activePlayers.findIndex((p) => p.uid === myUid));
+  const seatCount = Math.max(1, activePlayers.length);
 
   const inviteUrl =
     typeof window !== 'undefined'
@@ -94,9 +111,13 @@ export function LobbyScreen() {
     }
   };
 
+  const readyPct = activePlayers.length > 0 ? Math.round((readyCount / activePlayers.length) * 100) : 0;
+
   return (
     <main className="vowlet-shell" data-testid="lobby-screen">
-      <div className="lobby-screen dark-scene">
+      <div className="bg-wood-candle flex min-h-dvh flex-col pb-5">
+        <BotanicalLayer darkMode />
+
         <TopBar
           dark
           back={() => void leaveRoom()}
@@ -105,195 +126,286 @@ export function LobbyScreen() {
             <div className="flex items-center gap-1">
               <button
                 type="button"
-                className="icon-btn"
+                className="grid min-h-[44px] min-w-[44px] place-items-center rounded-full border-0 bg-transparent text-[#f8e8ce]"
                 aria-label="Show QR and share link"
                 data-testid="qr-modal-btn"
                 onClick={() => setQrOpen(true)}
               >
-                <QrCode size={18} aria-hidden="true" />
+                <QrCode size={19} aria-hidden="true" />
               </button>
               <SyncIndicator state={syncState} surface="lamplit" />
             </div>
           }
         />
 
-        <button
-          type="button"
-          className="room-code"
-          aria-label={`Copy room code ${room.code}`}
-          data-testid="copy-room-code"
-          onClick={() => void handleCopyCode()}
-        >
-          <span>
-            Room: <span data-testid="room-code-text">{room.code}</span>
-          </span>
-          {copied ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
-        </button>
-
-        <p className="dark-sub">Waiting for everyone...</p>
-
-        <Tabletop
-          players={players}
-          presence={presence}
-          myUid={myUid}
-          hostUid={room.hostUid}
-          onSelectPlayer={(p) => setSelectedPlayer(p)}
-        />
-
-        <div className="ready-pill">
-          <Hourglass size={16} aria-hidden="true" />
-          <span>
-            {readyCount} / {activePlayers.length} Players Ready
-          </span>
-        </div>
-
-        {me && (
-          <MainButton
-            secondary={!me.ready}
-            data-testid="ready-toggle-btn"
-            onClick={() => void updateSettings({ ready: !me.ready })}
-          >
-            <Check size={16} aria-hidden="true" />
-            {me.ready ? 'Ready!' : 'Mark Ready'}
-          </MainButton>
-        )}
-
-        {isHost && (
-          <MainButton
-            disabled={presentPlayers.length < 3 || starting}
-            data-testid="start-game-btn"
-            onClick={() => void handleStart()}
-          >
-            <Play size={16} aria-hidden="true" />
-            {starting ? 'Starting…' : presentPlayers.length < 3 ? 'Need 3+ Players' : 'Start Game'}
-          </MainButton>
-        )}
-
-        <section
-          aria-label="Table settings"
-          className="mx-5 mt-2 space-y-2 rounded-2xl border border-[#b68a56]/40 bg-[#21170f]/80 p-3 text-xs text-[#f7e5c9]"
-        >
-          <div className="flex items-center justify-between gap-2">
-            <span className="opacity-80">Call Link (optional)</span>
-            {room.callLink && (
-              <a
-                href={room.callLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-[44px] items-center gap-1 font-semibold text-[#f4c97a] underline"
-              >
-                Join Call <ExternalLink size={13} aria-hidden="true" />
-              </a>
-            )}
-          </div>
-
-          {isHost && (
-            <div className="flex gap-2">
-              <input
-                type="url"
-                value={callInput}
-                onChange={(e) => setCallInput(e.target.value)}
-                placeholder="https://meet.google.com/..."
-                aria-label="Optional call link"
-                className="min-h-[44px] flex-1 rounded-xl border border-[#b68a56]/40 bg-black/30 px-3 text-xs text-[#fff3df] placeholder:text-white/40"
-              />
-              <button
-                type="button"
-                onClick={() => void updateSettings({ callLink: callInput.trim() || null })}
-                className="min-h-[44px] rounded-xl border border-[#b68a56] bg-[#392719] px-3 font-semibold text-[#f7e5c9]"
-              >
-                Save
-              </button>
-            </div>
-          )}
-
-          <div className="flex items-center justify-between">
-            <span className="opacity-80">
-              {room.totalRounds} rounds • {room.settings.packIds[0] ?? 'friends'}
-            </span>
-            {isHost && (
-              <div className="flex gap-1">
-                {([5, 10, 15] as TotalRounds[]).map((r) => (
-                  <button
-                    key={r}
-                    type="button"
-                    onClick={() => void updateSettings({ settings: { rounds: r } })}
-                    className="min-h-[44px] min-w-[44px] rounded-xl px-2 font-bold tabular-nums"
-                    style={{
-                      backgroundColor: room.totalRounds === r ? '#b8893b' : 'rgba(255,255,255,0.08)',
-                      color: '#fff3df',
-                    }}
-                  >
-                    {r}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {isHost && (
-            <button
-              type="button"
-              role="switch"
-              aria-checked={room.settings.quickPlay}
-              data-testid="lobby-quickplay-toggle"
-              onClick={() =>
-                void updateSettings({
-                  settings: { quickPlay: !room.settings.quickPlay },
-                })
-              }
-              className="flex min-h-[44px] w-full items-center justify-between rounded-xl border border-white/15 bg-white/5 px-3 py-2 font-semibold"
-            >
-              <span>Quick Play (skip writing chits)</span>
-              <span>{room.settings.quickPlay ? 'ON' : 'OFF'}</span>
-            </button>
-          )}
-
-          {isHost && (
-            <button
-              type="button"
-              role="switch"
-              aria-checked={room.settings.tableMode}
-              data-testid="lobby-tablemode-toggle"
-              onClick={() =>
-                void updateSettings({
-                  settings: { tableMode: !room.settings.tableMode },
-                })
-              }
-              className="flex min-h-[44px] w-full items-center justify-between rounded-xl border border-white/15 bg-white/5 px-3 py-2 font-semibold"
-            >
-              <span>Table Mode (shared screen)</span>
-              <span>{room.settings.tableMode ? 'ON' : 'OFF'}</span>
-            </button>
-          )}
-
+        {/* Room Code Pill */}
+        <div className="relative z-10 flex flex-col items-center px-4">
           <button
             type="button"
-            role="switch"
-            aria-checked={passThePhone}
-            data-testid="lobby-passthephone-toggle"
-            onClick={() => setPassThePhone(!passThePhone)}
-            className="flex min-h-[44px] w-full items-center justify-between rounded-xl border border-white/15 bg-white/5 px-3 py-2 font-semibold"
+            aria-label={`Copy room code ${room.code}`}
+            data-testid="copy-room-code"
+            onClick={() => void handleCopyCode()}
+            className="flex min-h-[44px] items-center gap-2.5 rounded-full border border-[#d9b061]/60 bg-[#21150d]/85 px-5 py-2 text-[#f9e7c6] shadow-[0_6px_16px_rgba(0,0,0,0.45)]"
           >
-            <span>Pass-the-Phone (single-device)</span>
-            <span>{passThePhone ? 'ON' : 'OFF'}</span>
+            <span className="font-cinzel text-sm font-bold tracking-wider">
+              Room: <span data-testid="room-code-text">{room.code}</span>
+            </span>
+            {copied ? <Check size={15} aria-hidden="true" /> : <Copy size={15} aria-hidden="true" />}
           </button>
 
-          {room.settings.tableMode && (
+          <h1 className="font-cormorant mt-2 text-center text-[25px] font-semibold text-[#faeed7] italic">
+            Waiting for everyone...
+          </h1>
+        </div>
+
+        {/* Radial Wooden Table + Amber Bottle + 3-8 Seats */}
+        <div className="relative z-10 mx-auto my-2 flex h-[300px] w-full max-w-[340px] items-center justify-center">
+          <WoodenTableSvg className="h-[232px] w-[232px] drop-shadow-[0_18px_28px_rgba(0,0,0,0.65)]" />
+
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <AmberBottleSvg className="h-[88px] w-[42px] drop-shadow-[0_6px_10px_rgba(0,0,0,0.6)]" />
+          </div>
+
+          {activePlayers.map((player, index) => {
+            const relIdx = (index - myIndex + seatCount) % seatCount;
+            // Place local player (relIdx === 0) at bottom (90 deg)
+            const angleDeg = 90 + (relIdx / seatCount) * 360;
+            const angleRad = (angleDeg * Math.PI) / 180;
+            const rx = 128;
+            const ry = 122;
+            const left = 50 + (Math.cos(angleRad) * rx * 100) / 340;
+            const top = 50 + (Math.sin(angleRad) * ry * 100) / 300;
+            const isOnline = presence[player.uid]?.online ?? true;
+            const isTableHost = player.uid === room.hostUid;
+
+            return (
+              <button
+                key={player.uid}
+                type="button"
+                onClick={() => setSelectedPlayer(player)}
+                aria-label={`${player.name}${isTableHost ? ' (Host)' : ''}${player.ready ? ', Ready' : ''}`}
+                className="absolute flex min-h-[44px] min-w-[44px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-0.5 border-0 bg-transparent p-0"
+                style={{ left: `${left}%`, top: `${top}%`, opacity: isOnline ? 1 : 0.45 }}
+              >
+                <div className="relative">
+                  {isTableHost && (
+                    <span
+                      aria-hidden="true"
+                      className="absolute -top-3 left-1/2 -translate-x-1/2 text-[#f6cf78] drop-shadow"
+                    >
+                      <Crown size={14} fill="#f6cf78" />
+                    </span>
+                  )}
+                  <PlayerAvatarArtwork
+                    name={player.name}
+                    size={44}
+                    className={`rounded-full shadow-[0_4px_10px_rgba(0,0,0,0.6)] ${
+                      player.ready ? 'ring-2 ring-[#79a86b]' : ''
+                    }`}
+                  />
+                </div>
+                <span className="max-w-[78px] truncate rounded-full border border-[#d9b061]/35 bg-[#1b110a]/90 px-2 py-0.5 text-[11px] font-semibold text-[#faeed7]">
+                  {player.name}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Ready Progress Card + Actions */}
+        <div className="relative z-10 mt-auto flex flex-col gap-2.5 px-5">
+          <div className="btn-parchment pointer-events-none flex-col gap-1.5 py-2.5">
+            <div className="flex w-full items-center justify-between text-sm">
+              <span className="flex items-center gap-1.5 font-semibold">
+                <Hourglass size={15} aria-hidden="true" />
+                {readyCount} / {activePlayers.length} Players Ready
+              </span>
+              <span className="font-cinzel text-xs font-bold text-[#8a6420]">{readyPct}%</span>
+            </div>
+            <div className="h-2 w-full overflow-hidden rounded-full bg-[#c9a373]/40">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-[#3f6b3e] to-[#68985f] transition-all"
+                style={{ width: `${readyPct}%` }}
+              />
+            </div>
+          </div>
+
+          {me && (
             <button
               type="button"
-              data-testid="open-table-display-btn"
-              onClick={() => setTableDisplayActive(true)}
-              className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl border border-[#b68a56] bg-[#392719] px-3 py-2 font-semibold text-[#f7e5c9]"
+              className={me.ready ? 'btn-teal w-full' : 'btn-parchment w-full'}
+              data-testid="ready-toggle-btn"
+              onClick={() => void updateSettings({ ready: !me.ready })}
             >
-              <Monitor size={15} aria-hidden="true" />
-              Open Table Display
+              <Check size={17} aria-hidden="true" />
+              <span>{me.ready ? 'Ready!' : 'Mark Ready'}</span>
             </button>
           )}
-        </section>
+
+          {isHost && (
+            <button
+              type="button"
+              className="btn-parchment w-full"
+              disabled={presentPlayers.length < 3 || starting}
+              data-testid="start-game-btn"
+              onClick={() => void handleStart()}
+            >
+              <Play size={17} aria-hidden="true" />
+              <span>
+                {starting
+                  ? 'Starting…'
+                  : presentPlayers.length < 3
+                    ? 'Need 3+ Players'
+                    : 'Start Game'}
+              </span>
+            </button>
+          )}
+
+          {/* Compact Lobby Controls: Share / Table Mode / Quick Play / Call Link */}
+          <section
+            aria-label="Table settings"
+            className="mt-1 space-y-2 rounded-2xl border border-[#d9b061]/35 bg-[#1b110a]/85 p-3 text-xs text-[#f7e5c9]"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <span className="opacity-85">
+                {room.totalRounds} rounds • {room.settings.packIds[0] ?? 'friends'}
+              </span>
+              <button
+                type="button"
+                onClick={() => void handleShareLink()}
+                className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl border border-[#d9b061]/45 bg-[#2d1d12] px-3 font-semibold text-[#f9e5be]"
+              >
+                <Share2 size={14} aria-hidden="true" />
+                Share Link
+              </button>
+            </div>
+
+            {isHost && (
+              <div className="flex items-center justify-between gap-2">
+                <span className="opacity-80">Rounds</span>
+                <div className="flex gap-1.5">
+                  {([5, 10, 15] as TotalRounds[]).map((r) => (
+                    <button
+                      key={r}
+                      type="button"
+                      onClick={() => void updateSettings({ settings: { rounds: r } })}
+                      className="min-h-[44px] min-w-[44px] rounded-xl px-2 font-bold tabular-nums"
+                      style={{
+                        backgroundColor:
+                          room.totalRounds === r ? '#b8893b' : 'rgba(255,255,255,0.08)',
+                        color: '#fff3df',
+                      }}
+                    >
+                      {r}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="flex items-center justify-between gap-2">
+              <span className="opacity-80">Call Link (optional)</span>
+              {room.callLink && (
+                <a
+                  href={room.callLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-[44px] items-center gap-1 font-semibold text-[#f4c97a] underline"
+                >
+                  Join Call <ExternalLink size={13} aria-hidden="true" />
+                </a>
+              )}
+            </div>
+
+            {isHost && (
+              <div className="flex gap-2">
+                <input
+                  type="url"
+                  value={callInput}
+                  onChange={(e) => setCallInput(e.target.value)}
+                  placeholder="https://meet.google.com/..."
+                  aria-label="Optional call link"
+                  className="min-h-[44px] flex-1 rounded-xl border border-[#b68a56]/40 bg-black/35 px-3 text-xs text-[#fff3df] placeholder:text-white/40"
+                />
+                <button
+                  type="button"
+                  onClick={() => void updateSettings({ callLink: callInput.trim() || null })}
+                  className="min-h-[44px] rounded-xl border border-[#b68a56] bg-[#392719] px-3 font-semibold text-[#f7e5c9]"
+                >
+                  Save
+                </button>
+              </div>
+            )}
+
+            {isHost && (
+              <button
+                type="button"
+                role="switch"
+                aria-checked={room.settings.quickPlay}
+                data-testid="lobby-quickplay-toggle"
+                onClick={() =>
+                  void updateSettings({
+                    settings: { quickPlay: !room.settings.quickPlay },
+                  })
+                }
+                className="flex min-h-[44px] w-full items-center justify-between rounded-xl border border-white/15 bg-white/5 px-3 py-2 font-semibold"
+              >
+                <span>Quick Play (skip writing chits)</span>
+                <span>{room.settings.quickPlay ? 'ON' : 'OFF'}</span>
+              </button>
+            )}
+
+            {isHost && (
+              <button
+                type="button"
+                role="switch"
+                aria-checked={room.settings.tableMode}
+                data-testid="lobby-tablemode-toggle"
+                onClick={() =>
+                  void updateSettings({
+                    settings: { tableMode: !room.settings.tableMode },
+                  })
+                }
+                className="flex min-h-[44px] w-full items-center justify-between rounded-xl border border-white/15 bg-white/5 px-3 py-2 font-semibold"
+              >
+                <span>Table Mode (shared screen)</span>
+                <span>{room.settings.tableMode ? 'ON' : 'OFF'}</span>
+              </button>
+            )}
+
+            <button
+              type="button"
+              role="switch"
+              aria-checked={passThePhone}
+              data-testid="lobby-passthephone-toggle"
+              onClick={() => setPassThePhone(!passThePhone)}
+              className="flex min-h-[44px] w-full items-center justify-between rounded-xl border border-white/15 bg-white/5 px-3 py-2 font-semibold"
+            >
+              <span>Pass-the-Phone (single-device)</span>
+              <span>{passThePhone ? 'ON' : 'OFF'}</span>
+            </button>
+
+            {room.settings.tableMode && (
+              <button
+                type="button"
+                data-testid="open-table-display-btn"
+                onClick={() => setTableDisplayActive(true)}
+                className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl border border-[#b68a56] bg-[#392719] px-3 py-2 font-semibold text-[#f7e5c9]"
+              >
+                <Monitor size={15} aria-hidden="true" />
+                Open Table Display
+              </button>
+            )}
+          </section>
+        </div>
       </div>
 
-      <BottomSheet open={qrOpen} onClose={() => setQrOpen(false)} title="Invite Players" data-testid="qr-modal">
+      <BottomSheet
+        open={qrOpen}
+        onClose={() => setQrOpen(false)}
+        title="Invite Players"
+        data-testid="qr-modal"
+      >
         <div className="flex flex-col items-center gap-4 text-center">
           <div className="rounded-2xl border border-black/10 bg-white p-4">
             <QRCodeSVG value={inviteUrl} size={180} />
