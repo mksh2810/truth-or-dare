@@ -51,6 +51,12 @@ const RoomClosedScreen = lazy(() =>
 const InAppBrowserHelp = lazy(() =>
   import('./screens/InAppBrowserHelp').then((m) => ({ default: m.InAppBrowserHelp })),
 );
+const TestingModeDock = lazy(() =>
+  import('./dev/TestingModeDock').then((m) => ({ default: m.TestingModeDock })),
+);
+
+const showTestingDock =
+  import.meta.env.DEV || import.meta.env.VITE_LOCAL_API === 'true';
 
 export const VOWLET_TAGLINE = 'A little truth, a little trouble';
 
@@ -186,6 +192,11 @@ export function App() {
         )}
 
         <UpdateAvailableToast />
+        {showTestingDock && (
+          <Suspense fallback={null}>
+            <TestingModeDock />
+          </Suspense>
+        )}
       </div>
     </MotionConfig>
   );
