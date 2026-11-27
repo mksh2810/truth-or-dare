@@ -227,6 +227,7 @@ export const TurnPerformActionSchema = z.object({
   expectedPhase: z.literal('PERFORM'),
   expectedVersion: z.number().int().nonnegative(),
   idempotencyKey: IdempotencyKeySchema,
+  answerText: z.string().trim().max(280).optional(),
 });
 
 export const VoteSchema = z.object({

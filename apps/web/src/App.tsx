@@ -169,6 +169,19 @@ export function App() {
             Pass-the-Phone Mode active — hand device to the active player
           </div>
         )}
+        {room?.callLink && route === 'ROOM' && room.phase !== 'LOBBY' && room.phase !== 'CLOSED' && (
+          <div className="fixed top-2 right-2 z-40">
+            <a
+              href={room.callLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="active-game-call-link"
+              className="inline-flex min-h-[36px] items-center gap-1 rounded-full border border-[#d9b061] bg-[#234950]/95 px-3 py-1 text-xs font-semibold text-[#f6e6c6] shadow-md backdrop-blur-sm"
+            >
+              Join Call ↗
+            </a>
+          </div>
+        )}
         <Suspense fallback={<ScreenFallback />}>{renderContent()}</Suspense>
 
         {toast && (

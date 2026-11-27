@@ -42,6 +42,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
         turnVersion: nextVersion,
         phase: 'VOTE',
         deadlineAt,
+        answerText: body.answerText ? body.answerText : null,
       });
 
       tx.setRoom(

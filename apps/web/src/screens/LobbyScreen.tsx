@@ -303,18 +303,35 @@ export function LobbyScreen() {
               </div>
             )}
 
-            <div className="flex items-center justify-between gap-2">
-              <span className="opacity-80">Call Link (optional)</span>
-              {room.callLink && (
-                <a
-                  href={room.callLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex min-h-[44px] items-center gap-1 font-semibold text-[#f4c97a] underline"
-                >
-                  Join Call <ExternalLink size={13} aria-hidden="true" />
-                </a>
-              )}
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <span className="opacity-85 font-semibold">Voice / Video Call</span>
+              <div className="flex items-center gap-2">
+                {isHost && !room.callLink && (
+                  <button
+                    type="button"
+                    data-testid="create-jitsi-call-btn"
+                    onClick={() => {
+                      const jitsiUrl = `https://meet.jit.si/vowlet-${room.code.toLowerCase()}-${Math.random().toString(36).slice(2, 6)}`;
+                      setCallInput(jitsiUrl);
+                      void updateSettings({ callLink: jitsiUrl });
+                    }}
+                    className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl border border-[#d9b061]/55 bg-[#234950] px-3 font-semibold text-[#f6e6c6]"
+                  >
+                    Start Free Video Call
+                  </button>
+                )}
+                {room.callLink && (
+                  <a
+                    href={room.callLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-testid="join-call-link"
+                    className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl border border-[#d9b061] bg-[#234950] px-3 font-semibold text-[#f6e6c6]"
+                  >
+                    Join Call <ExternalLink size={13} aria-hidden="true" />
+                  </a>
+                )}
+              </div>
             </div>
 
             {isHost && (

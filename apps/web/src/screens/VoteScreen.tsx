@@ -28,7 +28,7 @@ export function VoteScreen() {
   }, [turn.deadlineAt]);
 
   useEffect(() => {
-    const id = window.setInterval(() => setNowMs(Date.now()), 250);
+    const id = window.setInterval(() => setNowMs(Date.now()), 100);
     return () => window.clearInterval(id);
   }, []);
 
@@ -106,13 +106,26 @@ export function VoteScreen() {
               strokeLinecap="round"
               strokeDasharray={circumference}
               strokeDashoffset={dashOffset}
-              style={{ transition: 'stroke-dashoffset 0.25s linear' }}
             />
           </svg>
           <span className="font-cormorant absolute text-[34px] font-bold text-[#2b1d12] tabular-nums">
             00:{String(remainingSec).padStart(2, '0')}
           </span>
         </div>
+
+        {turn.answerText && (
+          <div
+            data-testid="vote-truth-answer"
+            className="chit-card relative z-10 mx-5 mb-4 w-[calc(100%-40px)] px-4 py-3 text-center"
+          >
+            <div className="font-cinzel text-[10px] font-bold tracking-[0.18em] text-[#75522f] uppercase">
+              {performer?.name ?? 'Performer'}&apos;s Answer
+            </div>
+            <p className="font-script mt-1 text-[21px] leading-snug text-[#2b1d12]">
+              &ldquo;{turn.answerText}&rdquo;
+            </p>
+          </div>
+        )}
 
         {/* Two Tactile Wax Seal Vote Buttons */}
         <div className="relative z-10 w-full px-5">

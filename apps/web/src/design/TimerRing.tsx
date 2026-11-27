@@ -40,7 +40,7 @@ export function TimerRing({
     if (deadlineMs == null) return;
     const id = window.setInterval(() => {
       setTick((t) => t + 1);
-    }, 250);
+    }, 100);
     return () => window.clearInterval(id);
   }, [deadlineMs]);
 

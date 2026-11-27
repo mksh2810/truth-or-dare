@@ -107,6 +107,7 @@ export interface TurnDoc {
   sessionScoreDelta: number | null;
   owlLine: string | null;
   stalled?: boolean;
+  answerText?: string | null;
 }
 
 export interface VoteDoc {

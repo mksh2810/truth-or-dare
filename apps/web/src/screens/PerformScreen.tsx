@@ -18,6 +18,7 @@ export function PerformScreen() {
   const performStall = useGameStore((s) => s.performStall);
 
   const [unsealed, setUnsealed] = useState(true);
+  const [answerText, setAnswerText] = useState('');
 
   const myUid = auth?.uid ?? '';
   const isPerformer = myUid === turn.performerUid;
@@ -118,6 +119,31 @@ export function PerformScreen() {
               </p>
             </div>
 
+            {/* Truth Answer Input (optional: answer aloud or type) */}
+            {!isDare && (
+              <div className="chit-card mt-3 w-full p-3.5 text-left">
+                <label
+                  htmlFor="truth-answer-input"
+                  className="font-cinzel block text-[10px] font-bold tracking-[0.18em] text-[#75522f] uppercase"
+                >
+                  Your Truth Answer (or answer aloud)
+                </label>
+                <textarea
+                  id="truth-answer-input"
+                  data-testid="truth-answer-input"
+                  rows={2}
+                  maxLength={280}
+                  value={answerText}
+                  onChange={(e) => setAnswerText(e.target.value)}
+                  placeholder="Type your answer here for the table to read…"
+                  className="font-script mt-1 w-full resize-none bg-transparent text-[20px] leading-snug text-[#2b1d12] placeholder-[#8b6b4a]/70 outline-none"
+                />
+                <div className="text-right text-[11px] font-medium text-[#75522f] tabular-nums">
+                  {answerText.length}/280
+                </div>
+              </div>
+            )}
+
             {/* Action Buttons */}
             <div className="mt-auto flex w-full flex-col gap-2.5 pt-4">
               <button
@@ -125,7 +151,7 @@ export function PerformScreen() {
                 className="btn-teal w-full"
                 disabled={pendingAction}
                 data-testid="perform-done-btn"
-                onClick={() => void performDone()}
+                onClick={() => void performDone(answerText.trim() || undefined)}
               >
                 <Check size={18} aria-hidden="true" />
                 <span>I&apos;ve completed it</span>

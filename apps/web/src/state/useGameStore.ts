@@ -238,7 +238,7 @@ export interface GameState {
   }>;
   advanceTurn: () => Promise<void>;
   choosePromptKind: (choice: PromptKind) => Promise<void>;
-  performDone: () => Promise<void>;
+  performDone: (answerText?: string) => Promise<void>;
   performSkip: () => Promise<void>;
   performSwap: () => Promise<void>;
   performStall: () => Promise<void>;
@@ -382,7 +382,11 @@ export const useGameStore = create<GameState>((set, get) => {
       if (dateHdr) {
         const serverMs = Date.parse(dateHdr);
         if (!Number.isNaN(serverMs)) {
-          set({ clockOffsetMs: serverMs - Date.now() });
+          const nextOffset = serverMs - Date.now();
+          const prevOffset = get().clockOffsetMs;
+          if (prevOffset === 0 || Math.abs(nextOffset - prevOffset) > 1500) {
+            set({ clockOffsetMs: nextOffset });
+          }
         }
       }
 
@@ -487,7 +491,11 @@ export const useGameStore = create<GameState>((set, get) => {
       if (dateHdr) {
         const serverMs = Date.parse(dateHdr);
         if (!Number.isNaN(serverMs)) {
-          set({ clockOffsetMs: serverMs - Date.now() });
+          const nextOffset = serverMs - Date.now();
+          const prevOffset = get().clockOffsetMs;
+          if (prevOffset === 0 || Math.abs(nextOffset - prevOffset) > 1500) {
+            set({ clockOffsetMs: nextOffset });
+          }
         }
       }
 
@@ -1556,7 +1564,7 @@ export const useGameStore = create<GameState>((set, get) => {
       }
     },
 
-    performDone: async () => {
+    performDone: async (answerText?: string) => {
       const { room } = get();
       if (!room) return;
       try {
@@ -1564,6 +1572,7 @@ export const useGameStore = create<GameState>((set, get) => {
           code: room.code,
           expectedPhase: 'PERFORM',
           expectedVersion: room.turnVersion,
+          ...(answerText ? { answerText } : {}),
         });
       } catch (err) {
         if (!(err instanceof Error && err.message === 'LOCAL_FALLBACK')) throw err;
