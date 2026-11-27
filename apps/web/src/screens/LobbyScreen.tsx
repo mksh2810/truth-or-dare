@@ -3,14 +3,17 @@ import {
   Check,
   Copy,
   Crown,
-  ExternalLink,
   Flag,
   Hourglass,
+  Mic,
+  MicOff,
   Monitor,
+  PhoneOff,
   Play,
   QrCode,
   Share2,
   UserX,
+  Video,
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import type { PlayerDoc, TotalRounds } from '@vowlet/shared';
@@ -18,10 +21,11 @@ import { BottomSheet, Button, SyncIndicator } from '../design';
 import {
   AmberBottleSvg,
   BotanicalLayer,
-  PlayerAvatarArtwork,
+  PlayerSeatAvatar,
   TopBar,
   WoodenTableSvg,
 } from '../design/VowletUiPrimitives';
+import { useMediaCall } from '../media/useMediaCall';
 import { useGameStore } from '../state/useGameStore';
 import { ReportBlockSheet } from './ReportBlockSheet';
 
@@ -43,10 +47,21 @@ export function LobbyScreen() {
 
   const [copied, setCopied] = useState(false);
   const [qrOpen, setQrOpen] = useState(false);
-  const [callInput, setCallInput] = useState(room.callLink ?? '');
   const [selectedPlayer, setSelectedPlayer] = useState<PlayerDoc | null>(null);
   const [reportTarget, setReportTarget] = useState<PlayerDoc | null>(null);
   const [starting, setStarting] = useState(false);
+
+  const voiceJoined = useMediaCall((s) => s.voiceJoined);
+  const micMuted = useMediaCall((s) => s.micMuted);
+  const autoCamForDares = useMediaCall((s) => s.autoCamForDares);
+  const localStream = useMediaCall((s) => s.localStream);
+  const remoteStreams = useMediaCall((s) => s.remoteStreams);
+  const remoteMediaState = useMediaCall((s) => s.remoteMediaState);
+  const mediaError = useMediaCall((s) => s.mediaError);
+  const joinVoice = useMediaCall((s) => s.joinVoice);
+  const leaveVoice = useMediaCall((s) => s.leaveVoice);
+  const toggleMic = useMediaCall((s) => s.toggleMic);
+  const setAutoCamForDares = useMediaCall((s) => s.setAutoCamForDares);
 
   const myUid = auth?.uid ?? null;
   const isHost = myUid === room.hostUid;
@@ -177,13 +192,18 @@ export function LobbyScreen() {
             const top = 50 + (Math.sin(angleRad) * ry * 100) / 300;
             const isOnline = presence[player.uid]?.online ?? true;
             const isTableHost = player.uid === room.hostUid;
+            const isMe = player.uid === myUid;
+            const seatStream = isMe ? localStream : (remoteStreams[player.uid] ?? null);
+            const isVoiceActive = isMe
+              ? voiceJoined && !micMuted
+              : Boolean(remoteMediaState[player.uid]?.voice);
 
             return (
               <button
                 key={player.uid}
                 type="button"
                 onClick={() => setSelectedPlayer(player)}
-                aria-label={`${player.name}${isTableHost ? ' (Host)' : ''}${player.ready ? ', Ready' : ''}`}
+                aria-label={`${player.name}${isTableHost ? ' (Host)' : ''}${player.ready ? ', Ready' : ''}${isVoiceActive ? ', Voice active' : ''}`}
                 className="absolute flex min-h-[44px] min-w-[44px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-0.5 border-0 bg-transparent p-0"
                 style={{ left: `${left}%`, top: `${top}%`, opacity: isOnline ? 1 : 0.45 }}
               >
@@ -196,10 +216,13 @@ export function LobbyScreen() {
                       <Crown size={14} fill="#f6cf78" />
                     </span>
                   )}
-                  <PlayerAvatarArtwork
+                  <PlayerSeatAvatar
                     name={player.name}
+                    stream={seatStream}
+                    muted
+                    isVoiceActive={isVoiceActive}
                     size={44}
-                    className={`rounded-full shadow-[0_4px_10px_rgba(0,0,0,0.6)] ${
+                    className={`shadow-[0_4px_10px_rgba(0,0,0,0.6)] ${
                       player.ready ? 'ring-2 ring-[#79a86b]' : ''
                     }`}
                   />
@@ -303,56 +326,77 @@ export function LobbyScreen() {
               </div>
             )}
 
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="opacity-85 font-semibold">Voice / Video Call</span>
-              <div className="flex items-center gap-2">
-                {isHost && !room.callLink && (
-                  <button
-                    type="button"
-                    data-testid="create-jitsi-call-btn"
-                    onClick={() => {
-                      const jitsiUrl = `https://meet.jit.si/vowlet-${room.code.toLowerCase()}-${Math.random().toString(36).slice(2, 6)}`;
-                      setCallInput(jitsiUrl);
-                      void updateSettings({ callLink: jitsiUrl });
-                    }}
-                    className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl border border-[#d9b061]/55 bg-[#234950] px-3 font-semibold text-[#f6e6c6]"
-                  >
-                    Start Free Video Call
-                  </button>
-                )}
-                {room.callLink && (
-                  <a
-                    href={room.callLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-testid="join-call-link"
-                    className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl border border-[#d9b061] bg-[#234950] px-3 font-semibold text-[#f6e6c6]"
-                  >
-                    Join Call <ExternalLink size={13} aria-hidden="true" />
-                  </a>
-                )}
+            <div className="space-y-2 rounded-xl border border-[#d9b061]/30 bg-black/25 p-2.5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="font-semibold text-[#f9e5be]">Voice &amp; Video Call</span>
+                <div className="flex items-center gap-2">
+                  {voiceJoined ? (
+                    <>
+                      <button
+                        type="button"
+                        data-testid="lobby-mic-toggle-btn"
+                        onClick={() => toggleMic()}
+                        className={`inline-flex min-h-[44px] items-center gap-1.5 rounded-xl border px-3 font-semibold ${
+                          micMuted
+                            ? 'border-[#c4552d]/70 bg-[#5c2116] text-[#f9e5be]'
+                            : 'border-[#79a86b] bg-[#244429] text-[#f6f1e9]'
+                        }`}
+                      >
+                        {micMuted ? <MicOff size={15} aria-hidden="true" /> : <Mic size={15} aria-hidden="true" />}
+                        <span>{micMuted ? 'Unmute' : 'Mic On'}</span>
+                      </button>
+                      <button
+                        type="button"
+                        data-testid="lobby-leave-voice-btn"
+                        onClick={() => leaveVoice()}
+                        className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl border border-[#d9b061]/45 bg-[#392719] px-3 font-semibold text-[#f7e5c9]"
+                      >
+                        <PhoneOff size={14} aria-hidden="true" />
+                        <span>Leave Voice</span>
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      type="button"
+                      data-testid="lobby-join-voice-btn"
+                      onClick={() => void joinVoice()}
+                      className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl border border-[#d9b061]/55 bg-[#234950] px-3 font-semibold text-[#f6e6c6]"
+                    >
+                      <Mic size={15} aria-hidden="true" />
+                      <span>Join Voice Call</span>
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
 
-            {isHost && (
-              <div className="flex gap-2">
-                <input
-                  type="url"
-                  value={callInput}
-                  onChange={(e) => setCallInput(e.target.value)}
-                  placeholder="https://meet.google.com/..."
-                  aria-label="Optional call link"
-                  className="min-h-[44px] flex-1 rounded-xl border border-[#b68a56]/40 bg-black/35 px-3 text-xs text-[#fff3df] placeholder:text-white/40"
-                />
-                <button
-                  type="button"
-                  onClick={() => void updateSettings({ callLink: callInput.trim() || null })}
-                  className="min-h-[44px] rounded-xl border border-[#b68a56] bg-[#392719] px-3 font-semibold text-[#f7e5c9]"
-                >
-                  Save
-                </button>
-              </div>
-            )}
+              <button
+                type="button"
+                role="switch"
+                aria-checked={autoCamForDares}
+                data-testid="lobby-autocam-toggle"
+                onClick={() => setAutoCamForDares(!autoCamForDares)}
+                className="flex min-h-[44px] w-full items-center justify-between gap-3 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-left"
+              >
+                <div className="flex items-start gap-2">
+                  <Video size={15} className="mt-0.5 shrink-0 text-[#d9b061]" aria-hidden="true" />
+                  <div>
+                    <div className="font-semibold">Auto-Cam for Dares</div>
+                    <div className="text-[11px] opacity-75">
+                      Camera turns on automatically only during Dare turns
+                    </div>
+                  </div>
+                </div>
+                <span className="shrink-0 font-bold text-[#f6cf78]">
+                  {autoCamForDares ? 'ON' : 'OFF'}
+                </span>
+              </button>
+
+              {mediaError && (
+                <p role="alert" className="text-[11px] font-medium text-[#f59f8b]">
+                  {mediaError}
+                </p>
+              )}
+            </div>
 
             {isHost && (
               <button

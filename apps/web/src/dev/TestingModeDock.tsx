@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { FlaskConical, Users, Play, RefreshCw, Eye, X, Vote, AlertTriangle } from 'lucide-react';
+import { FlaskConical, Users, Play, RefreshCw, Eye, X, Vote, AlertTriangle, FastForward } from 'lucide-react';
 import { useGameStore } from '../state/useGameStore';
 import type { VoteVerdict } from '@vowlet/shared';
 
@@ -56,7 +56,7 @@ export function TestingModeDock() {
     }
   }, [auth?.uid]);
 
-  // Auto-play bots across WRITING, CHOOSE, PERFORM, VOTE
+  // Fast auto-play bots across WRITING, SPIN, CHOOSE, PERFORM, VOTE, RESULT
   useEffect(() => {
     if (!autoPlayBots || !room) return;
     const key = `${room.code}:${room.phase}:${room.turnVersion}:${turn?.performerUid ?? ''}`;
@@ -66,6 +66,8 @@ export function TestingModeDock() {
     if (botPlayers.length === 0) return;
 
     let cancelled = false;
+    const delayMs = room.phase === 'RESULT' ? 1400 : room.phase === 'SPIN' ? 2200 : 350;
+
     const timer = window.setTimeout(async () => {
       if (cancelled) return;
       lastHandledRef.current = key;
@@ -73,12 +75,12 @@ export function TestingModeDock() {
       if (room.phase === 'WRITING') {
         for (const bot of botPlayers) {
           await apiPostAs(bot.uid, '/api/chit/submit', {
-            code: room.code,
+            roomCode: room.code,
             kind: 'TRUTH',
-            text: `${bot.name}'s secret truth: What's your funniest midnight snack?`,
+            text: `${bot.name}'s truth: What is your funniest midnight snack?`,
           });
           await apiPostAs(bot.uid, '/api/chit/submit', {
-            code: room.code,
+            roomCode: room.code,
             kind: 'DARE',
             dareType: 'INSTANT',
             text: `${bot.name}'s dare: Speak in a dramatic movie trailer voice for 15s.`,
@@ -87,10 +89,20 @@ export function TestingModeDock() {
         return;
       }
 
+      if (room.phase === 'SPIN') {
+        await apiPostAs(botPlayers[0]!.uid, '/api/turn/advance', {
+          roomCode: room.code,
+          expectedPhase: 'SPIN',
+          expectedVersion: room.turnVersion,
+          force: true,
+        });
+        return;
+      }
+
       if (room.phase === 'CHOOSE' && turn?.performerUid?.startsWith('bot-')) {
         const choice = room.round % 2 === 0 ? 'DARE' : 'TRUTH';
         await apiPostAs(turn.performerUid, '/api/turn/choose', {
-          code: room.code,
+          roomCode: room.code,
           expectedPhase: 'CHOOSE',
           expectedVersion: room.turnVersion,
           choice,
@@ -100,9 +112,12 @@ export function TestingModeDock() {
 
       if (room.phase === 'PERFORM' && turn?.performerUid?.startsWith('bot-')) {
         await apiPostAs(turn.performerUid, '/api/turn/perform/done', {
-          code: room.code,
+          roomCode: room.code,
           expectedPhase: 'PERFORM',
           expectedVersion: room.turnVersion,
+          ...(turn.kind === 'TRUTH'
+            ? { answerText: `${players.find((p) => p.uid === turn.performerUid)?.name ?? 'Bot'}: Cold pizza at 2 AM!` }
+            : {}),
         });
         return;
       }
@@ -111,20 +126,39 @@ export function TestingModeDock() {
         const witnessBots = botPlayers.filter((b) => b.uid !== turn?.performerUid);
         for (const bot of witnessBots) {
           await apiPostAs(bot.uid, '/api/turn/vote', {
-            code: room.code,
+            roomCode: room.code,
             expectedPhase: 'VOTE',
             expectedVersion: room.turnVersion,
             verdict: 'APPROVE',
           });
         }
+        // If human isn't a witness (i.e. human is performer), bots were all the witnesses -> advance!
+        if (turn?.performerUid === auth?.uid) {
+          await apiPostAs(botPlayers[0]!.uid, '/api/turn/advance', {
+            roomCode: room.code,
+            expectedPhase: 'VOTE',
+            expectedVersion: room.turnVersion,
+            force: true,
+          });
+        }
+        return;
       }
-    }, 900);
+
+      if (room.phase === 'RESULT') {
+        await apiPostAs(botPlayers[0]!.uid, '/api/turn/advance', {
+          roomCode: room.code,
+          expectedPhase: 'RESULT',
+          expectedVersion: room.turnVersion,
+          force: true,
+        });
+      }
+    }, delayMs);
 
     return () => {
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [autoPlayBots, room, turn, players]);
+  }, [autoPlayBots, room, turn, players, auth?.uid]);
 
   const handleQuickStartRoom = async () => {
     setBusy(true);
@@ -133,17 +167,17 @@ export function TestingModeDock() {
       const code = await createRoom({
         name: 'You',
         settings: {
-          quickPlay: false,
+          quickPlay: true,
         },
       });
       for (const bot of BOT_PROFILES.slice(0, 3)) {
         await apiPostAs(bot.uid, '/api/room/join', {
-          code,
+          roomCode: code,
           name: bot.name,
           avatar: bot.avatar,
         });
         await apiPostAs(bot.uid, '/api/room/settings', {
-          code,
+          roomCode: code,
           expectedPhase: 'LOBBY',
           ready: true,
         });
@@ -164,12 +198,12 @@ export function TestingModeDock() {
       const available = BOT_PROFILES.filter((b) => !existingUids.has(b.uid)).slice(0, count);
       for (const bot of available) {
         await apiPostAs(bot.uid, '/api/room/join', {
-          code: room.code,
+          roomCode: room.code,
           name: bot.name,
           avatar: bot.avatar,
         });
         await apiPostAs(bot.uid, '/api/room/settings', {
-          code: room.code,
+          roomCode: room.code,
           expectedPhase: 'LOBBY',
           ready: true,
         });
@@ -190,7 +224,7 @@ export function TestingModeDock() {
       const verdict: VoteVerdict =
         mode === 'TIE' ? (i % 2 === 0 ? 'APPROVE' : 'REJECT') : mode;
       await apiPostAs(bot.uid, '/api/turn/vote', {
-        code: room.code,
+        roomCode: room.code,
         expectedPhase: 'VOTE',
         expectedVersion: room.turnVersion,
         verdict,
@@ -206,7 +240,7 @@ export function TestingModeDock() {
     );
     for (const bot of witnessBots) {
       await apiPostAs(bot.uid, '/api/turn/perform/stall', {
-        code: room.code,
+        roomCode: room.code,
         expectedPhase: 'PERFORM',
         expectedVersion: room.turnVersion,
       });
@@ -216,11 +250,32 @@ export function TestingModeDock() {
 
   const handleForceAdvance = async () => {
     if (!room || !auth) return;
-    await apiPostAs(auth.uid, '/api/turn/advance', {
-      code: room.code,
+    if (room.phase === 'LOBBY') {
+      const res = await apiPostAs(room.hostUid, '/api/room/start', {
+        roomCode: room.code,
+        expectedPhase: 'LOBBY',
+        expectedVersion: room.turnVersion,
+      });
+      if (!res.ok) showToast(res.error?.message ?? 'Need 3+ players', 'error');
+      return;
+    }
+    if (room.phase === 'PERFORM' && turn?.performerUid) {
+      await apiPostAs(turn.performerUid, '/api/turn/perform/done', {
+        roomCode: room.code,
+        expectedPhase: 'PERFORM',
+        expectedVersion: room.turnVersion,
+      });
+      return;
+    }
+    const res = await apiPostAs(auth.uid, '/api/turn/advance', {
+      roomCode: room.code,
       expectedPhase: room.phase,
       expectedVersion: room.turnVersion,
+      force: true,
     });
+    if (!res.ok) {
+      showToast(res.error?.message ?? 'Could not force advance', 'error');
+    }
   };
 
   const switchSeat = (uid: string, name: string) => {
@@ -310,16 +365,17 @@ export function TestingModeDock() {
               </button>
               <button
                 type="button"
+                data-testid="force-advance-btn"
                 onClick={handleForceAdvance}
-                className="flex items-center justify-center gap-1 rounded-lg bg-white/10 px-2 py-1.5 font-medium hover:bg-white/15"
+                className="flex items-center justify-center gap-1 rounded-lg bg-[#C99A4E] text-[#1B110B] px-2 py-1.5 font-bold hover:brightness-105"
               >
-                <RefreshCw className="h-3.5 w-3.5" />
+                <FastForward className="h-3.5 w-3.5" />
                 <span>Force Advance</span>
               </button>
             </div>
 
             <label className="flex items-center justify-between rounded-lg bg-white/5 px-2.5 py-1.5 cursor-pointer">
-              <span>Auto-Play Bots</span>
+              <span>Auto-Play Bots (Fast)</span>
               <input
                 type="checkbox"
                 checked={autoPlayBots}

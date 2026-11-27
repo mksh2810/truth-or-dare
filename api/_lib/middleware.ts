@@ -51,7 +51,7 @@ function isOriginAllowed(origin: string, allowedOrigins: readonly string[], isDe
   return false;
 }
 
-function applyCors(req: VercelRequest, res: VercelResponse): boolean {
+export function applyCors(req: VercelRequest, res: VercelResponse): boolean {
   const env = getEnvConfig();
   const origin = getHeader(req, 'origin');
   const isDev = process.env.NODE_ENV !== 'production';

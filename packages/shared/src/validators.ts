@@ -212,6 +212,7 @@ export const TurnAdvanceSchema = z.object({
   expectedPhase: PhaseSchema,
   expectedVersion: z.number().int().nonnegative(),
   idempotencyKey: IdempotencyKeySchema,
+  force: z.boolean().optional(),
 });
 
 export const TurnChooseSchema = z.object({

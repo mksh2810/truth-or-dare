@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
-import { ArrowLeft, Settings } from 'lucide-react';
+import { useEffect, useRef, type ReactNode } from 'react';
+import { ArrowLeft, Mic, Settings } from 'lucide-react';
 
 export function getPlayerInitials(name: string): string {
   const trimmed = name.trim();
@@ -287,6 +287,82 @@ export function PlayerAvatarArtwork({
       ) : null}
       <path d="M28.5 34.5 Q32 37.5 35.5 34.5" stroke="#5E3522" strokeWidth="1.5" strokeLinecap="round" fill="none" />
     </svg>
+  );
+}
+
+export interface PlayerSeatAvatarProps {
+  name: string;
+  stream?: MediaStream | null;
+  muted?: boolean;
+  isVoiceActive?: boolean;
+  size?: number;
+  className?: string;
+}
+
+/**
+ * Circular seat avatar that renders live WebRTC video when active video tracks
+ * are present, otherwise falls back to the illustrated PlayerAvatarArtwork.
+ */
+export function PlayerSeatAvatar({
+  name,
+  stream = null,
+  muted = true,
+  isVoiceActive = false,
+  size = 44,
+  className = '',
+}: PlayerSeatAvatarProps) {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const hasVideo = Boolean(
+    stream && stream.getVideoTracks().some((t) => t.readyState === 'live' && t.enabled),
+  );
+
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    if (hasVideo && stream) {
+      if (el.srcObject !== stream) {
+        el.srcObject = stream;
+      }
+    } else if (el.srcObject !== null) {
+      el.srcObject = null;
+    }
+  }, [hasVideo, stream]);
+
+  return (
+    <div
+      className={`relative inline-flex shrink-0 items-center justify-center rounded-full ${
+        isVoiceActive ? 'ring-2 ring-[#79a86b] ring-offset-1 ring-offset-[#1b110a]' : ''
+      } ${className}`}
+      style={{ width: size, height: size }}
+    >
+      {isVoiceActive && (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -inset-1 animate-pulse rounded-full border border-[#d9b061]/70"
+        />
+      )}
+
+      {hasVideo ? (
+        <video
+          ref={videoRef}
+          autoPlay
+          playsInline
+          muted={muted}
+          className="h-full w-full rounded-full object-cover"
+        />
+      ) : (
+        <PlayerAvatarArtwork name={name} size={size} className="rounded-full" />
+      )}
+
+      {isVoiceActive && (
+        <span
+          aria-label="Voice active"
+          className="absolute -right-0.5 -bottom-0.5 grid h-4 w-4 place-items-center rounded-full border border-[#1b110a] bg-[#5B8C5A] text-[#FFFDF9] shadow"
+        >
+          <Mic size={9} aria-hidden="true" />
+        </span>
+      )}
+    </div>
   );
 }
 

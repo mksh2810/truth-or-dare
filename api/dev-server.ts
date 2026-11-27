@@ -59,6 +59,13 @@ async function loadRoutes(): Promise<Map<string, VercelHandler>> {
     ['/api/turn/perform/skip', () => import('./turn/perform/skip.js')],
     ['/api/turn/perform/stall', () => import('./turn/perform/stall.js')],
     ['/api/game/finish', () => import('./game/finish.js')],
+    ['/api/room/migrate', () => import('./room/migrate.js')],
+    ['/api/report', () => import('./report.js')],
+    ['/api/user/delete', () => import('./user/delete.js')],
+    ['/api/prompts/community', () => import('./prompts/community.js')],
+    ['/api/prompts/rate', () => import('./prompts/rate.js')],
+    ['/api/prompts/delete', () => import('./prompts/delete.js')],
+    ['/api/rtc/signal', () => import('./rtc/signal.js')],
   ];
 
   const map = new Map<string, VercelHandler>();

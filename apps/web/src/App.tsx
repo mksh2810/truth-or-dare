@@ -1,7 +1,9 @@
-import { Suspense, lazy, useEffect, useMemo } from 'react';
+import { Suspense, lazy, useEffect, useMemo, useRef } from 'react';
 import { MotionConfig } from 'framer-motion';
+import { Mic, MicOff, PhoneOff } from 'lucide-react';
 import { subscribeAuth } from './auth/firebase';
 import { SharedSvgDefs } from './design/VowletUiPrimitives';
+import { useMediaCall } from './media/useMediaCall';
 import { detectInAppBrowser } from './pwa/inAppBrowser';
 import { useGameStore } from './state/useGameStore';
 import { ConsentScreen } from './screens/ConsentScreen';
@@ -72,18 +74,65 @@ function ScreenFallback() {
   );
 }
 
+function RemoteAudioTrack({ stream }: { stream: MediaStream }) {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    const el = audioRef.current;
+    if (!el) return;
+    if (el.srcObject !== stream) {
+      el.srcObject = stream;
+    }
+  }, [stream]);
+
+  return <audio ref={audioRef} autoPlay playsInline className="hidden" />;
+}
+
+function RemoteAudioMixer({ myUid }: { myUid: string | null }) {
+  const remoteStreams = useMediaCall((s) => s.remoteStreams);
+  const entries = Object.entries(remoteStreams).filter(([uid]) => uid !== myUid);
+  if (entries.length === 0) return null;
+  return (
+    <div aria-hidden="true" className="hidden">
+      {entries.map(([uid, stream]) => (
+        <RemoteAudioTrack key={uid} stream={stream} />
+      ))}
+    </div>
+  );
+}
+
 export function App() {
   const setAuth = useGameStore((s) => s.setAuth);
+  const auth = useGameStore((s) => s.auth);
   const consentAccepted = useGameStore((s) => s.consentAccepted);
   const route = useGameStore((s) => s.route);
   const setRoute = useGameStore((s) => s.setRoute);
   const room = useGameStore((s) => s.room);
+  const players = useGameStore((s) => s.players);
+  const turn = useGameStore((s) => s.turn);
   const tableDisplayActive = useGameStore((s) => s.tableDisplayActive);
   const passThePhone = useGameStore((s) => s.passThePhone);
   const podiumSubView = useGameStore((s) => s.podiumSubView);
   const toast = useGameStore((s) => s.toast);
   const reducedMotionOverride = useGameStore((s) => s.reducedMotionOverride);
   const isInApp = useMemo(() => detectInAppBrowser().isInApp, []);
+
+  const voiceJoined = useMediaCall((s) => s.voiceJoined);
+  const micMuted = useMediaCall((s) => s.micMuted);
+  const toggleMic = useMediaCall((s) => s.toggleMic);
+  const leaveVoice = useMediaCall((s) => s.leaveVoice);
+  const syncRoomContext = useMediaCall((s) => s.syncRoomContext);
+
+  useEffect(() => {
+    const inActiveRoom = route === 'ROOM' && room && room.phase !== 'CLOSED';
+    syncRoomContext({
+      roomCode: inActiveRoom ? room.code : null,
+      myUid: auth?.uid ?? null,
+      peerUids: players.filter((p) => !p.banned).map((p) => p.uid),
+      phase: inActiveRoom ? room.phase : null,
+      turnKind: inActiveRoom ? (turn?.kind ?? null) : null,
+    });
+  }, [route, room, auth?.uid, players, turn?.kind, syncRoomContext]);
 
   useEffect(() => {
     const unsub = subscribeAuth((profile) => {
@@ -169,19 +218,37 @@ export function App() {
             Pass-the-Phone Mode active — hand device to the active player
           </div>
         )}
-        {room?.callLink && route === 'ROOM' && room.phase !== 'LOBBY' && room.phase !== 'CLOSED' && (
-          <div className="fixed top-2 right-2 z-40">
-            <a
-              href={room.callLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-testid="active-game-call-link"
-              className="inline-flex min-h-[36px] items-center gap-1 rounded-full border border-[#d9b061] bg-[#234950]/95 px-3 py-1 text-xs font-semibold text-[#f6e6c6] shadow-md backdrop-blur-sm"
+        {voiceJoined && route === 'ROOM' && room && room.phase !== 'CLOSED' && (
+          <div
+            data-testid="active-voice-call-pill"
+            className="fixed top-2 right-2 z-40 flex items-center gap-1 rounded-full border border-[#d9b061]/70 bg-[#1b110a]/95 p-1 shadow-md backdrop-blur-sm"
+          >
+            <button
+              type="button"
+              onClick={() => toggleMic()}
+              aria-label={micMuted ? 'Unmute microphone' : 'Mute microphone'}
+              data-testid="voice-pill-mic-btn"
+              className={`inline-flex min-h-[36px] items-center gap-1 rounded-full px-2.5 text-xs font-semibold ${
+                micMuted
+                  ? 'bg-[#5c2116] text-[#f9e5be]'
+                  : 'bg-[#244429] text-[#f6f1e9]'
+              }`}
             >
-              Join Call ↗
-            </a>
+              {micMuted ? <MicOff size={13} aria-hidden="true" /> : <Mic size={13} aria-hidden="true" />}
+              <span>{micMuted ? 'Muted' : 'Mic'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => leaveVoice()}
+              aria-label="Leave voice call"
+              data-testid="voice-pill-leave-btn"
+              className="grid min-h-[36px] min-w-[36px] place-items-center rounded-full bg-[#392719] text-[#f7e5c9]"
+            >
+              <PhoneOff size={13} aria-hidden="true" />
+            </button>
           </div>
         )}
+        <RemoteAudioMixer myUid={auth?.uid ?? null} />
         <Suspense fallback={<ScreenFallback />}>{renderContent()}</Suspense>
 
         {toast && (

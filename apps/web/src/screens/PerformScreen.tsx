@@ -1,7 +1,23 @@
-import { useState } from 'react';
-import { Check, FastForward, Hourglass, RefreshCw } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import {
+  Check,
+  FastForward,
+  Hourglass,
+  Mic,
+  MicOff,
+  MonitorUp,
+  RefreshCw,
+  Video,
+  VideoOff,
+} from 'lucide-react';
 import { ElapsedStopwatch, SyncIndicator } from '../design';
-import { BotanicalLayer, TopBar, WaxSealArtwork } from '../design/VowletUiPrimitives';
+import {
+  BotanicalLayer,
+  PlayerSeatAvatar,
+  TopBar,
+  WaxSealArtwork,
+} from '../design/VowletUiPrimitives';
+import { useMediaCall } from '../media/useMediaCall';
 import { useGameStore } from '../state/useGameStore';
 
 export function PerformScreen() {
@@ -19,6 +35,21 @@ export function PerformScreen() {
 
   const [unsealed, setUnsealed] = useState(true);
   const [answerText, setAnswerText] = useState('');
+  const stageVideoRef = useRef<HTMLVideoElement | null>(null);
+
+  const voiceJoined = useMediaCall((s) => s.voiceJoined);
+  const micMuted = useMediaCall((s) => s.micMuted);
+  const cameraOn = useMediaCall((s) => s.cameraOn);
+  const screenSharing = useMediaCall((s) => s.screenSharing);
+  const localStream = useMediaCall((s) => s.localStream);
+  const screenStream = useMediaCall((s) => s.screenStream);
+  const remoteStreams = useMediaCall((s) => s.remoteStreams);
+  const remoteMediaState = useMediaCall((s) => s.remoteMediaState);
+  const mediaError = useMediaCall((s) => s.mediaError);
+  const joinVoice = useMediaCall((s) => s.joinVoice);
+  const toggleMic = useMediaCall((s) => s.toggleMic);
+  const toggleCamera = useMediaCall((s) => s.toggleCamera);
+  const toggleScreenShare = useMediaCall((s) => s.toggleScreenShare);
 
   const myUid = auth?.uid ?? '';
   const isPerformer = myUid === turn.performerUid;
@@ -29,6 +60,166 @@ export function PerformScreen() {
   );
   const hasPressedStall = turn.stallVotes.includes(myUid);
   const isDare = turn.kind === 'DARE';
+
+  const performerStageStream = isPerformer
+    ? screenSharing && screenStream
+      ? screenStream
+      : cameraOn && localStream
+        ? localStream
+        : null
+    : (remoteStreams[turn.performerUid] ?? null);
+
+  const stageHasVideo = Boolean(
+    performerStageStream &&
+      performerStageStream.getVideoTracks().some((t) => t.readyState === 'live' && t.enabled),
+  );
+  const isPerformerScreenActive = isPerformer
+    ? screenSharing
+    : Boolean(remoteMediaState[turn.performerUid]?.screen);
+  const isPerformerVoiceActive = isPerformer
+    ? voiceJoined && !micMuted
+    : Boolean(remoteMediaState[turn.performerUid]?.voice);
+
+  useEffect(() => {
+    const el = stageVideoRef.current;
+    if (!el) return;
+    if (stageHasVideo && performerStageStream) {
+      if (el.srcObject !== performerStageStream) {
+        el.srcObject = performerStageStream;
+      }
+    } else if (el.srcObject !== null) {
+      el.srcObject = null;
+    }
+  }, [stageHasVideo, performerStageStream]);
+
+  const dareStageBlock = isDare ? (
+    <section
+      aria-label="In-Table Dare Video and Screen Stage"
+      data-testid="dare-video-stage"
+      className="mt-3 w-full rounded-2xl border border-[#d9b061]/40 bg-[#1b110a]/85 p-3 text-[#faeed7] shadow-[0_10px_24px_rgba(0,0,0,0.45)]"
+    >
+      <div className="mb-2 flex items-center justify-between text-[11px] font-semibold tracking-wider text-[#e5cfa9] uppercase">
+        <span>In-Table Dare Stage</span>
+        {stageHasVideo && (
+          <span className="rounded-full bg-[#C4552D] px-2 py-0.5 text-[10px] font-bold text-[#FFFDF9]">
+            {isPerformerScreenActive ? 'SCREEN SHARE' : 'LIVE CAM'}
+          </span>
+        )}
+      </div>
+
+      {/* Performer Live Video / Screen or Seat Avatar */}
+      <div className="relative flex h-[168px] w-full items-center justify-center overflow-hidden rounded-xl border border-[#d9b061]/25 bg-[#120b06]">
+        {stageHasVideo ? (
+          <video
+            ref={stageVideoRef}
+            autoPlay
+            playsInline
+            muted
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <div className="flex flex-col items-center gap-2 text-center">
+            <PlayerSeatAvatar
+              name={performer?.name ?? 'Performer'}
+              stream={null}
+              muted
+              isVoiceActive={isPerformerVoiceActive}
+              size={64}
+            />
+            <span className="text-xs text-[#e5cfa9]/80">
+              {isPerformer
+                ? 'Turn on camera or share screen for the table'
+                : `${performer?.name ?? 'Performer'}’s camera is off`}
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Witness Video / Voice Strip */}
+      {witnesses.length > 0 && (
+        <div className="mt-2.5 flex items-center gap-2.5 overflow-x-auto pb-1">
+          {witnesses.map((w) => {
+            const isMe = w.uid === myUid;
+            const wStream = isMe ? localStream : (remoteStreams[w.uid] ?? null);
+            const wVoice = isMe
+              ? voiceJoined && !micMuted
+              : Boolean(remoteMediaState[w.uid]?.voice);
+            return (
+              <div key={w.uid} className="flex shrink-0 flex-col items-center gap-0.5">
+                <PlayerSeatAvatar
+                  name={w.name}
+                  stream={wStream}
+                  muted
+                  isVoiceActive={wVoice}
+                  size={36}
+                />
+                <span className="max-w-[56px] truncate text-[10px] text-[#e5cfa9]">{w.name}</span>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Action Pills: Camera On/Off, Mic Mute/Unmute, Share Screen (performer only) */}
+      <div className="mt-2.5 flex flex-wrap items-center justify-center gap-2">
+        <button
+          type="button"
+          data-testid="dare-camera-toggle-btn"
+          onClick={() => void toggleCamera()}
+          className={`inline-flex min-h-[44px] items-center gap-1.5 rounded-full border px-3.5 text-xs font-semibold ${
+            cameraOn
+              ? 'border-[#79a86b] bg-[#244429] text-[#f6f1e9]'
+              : 'border-[#d9b061]/45 bg-[#2d1d12] text-[#f9e5be]'
+          }`}
+        >
+          {cameraOn ? <Video size={14} aria-hidden="true" /> : <VideoOff size={14} aria-hidden="true" />}
+          <span>{cameraOn ? 'Camera On' : 'Camera Off'}</span>
+        </button>
+
+        <button
+          type="button"
+          data-testid="dare-mic-toggle-btn"
+          onClick={() => (voiceJoined ? toggleMic() : void joinVoice())}
+          className={`inline-flex min-h-[44px] items-center gap-1.5 rounded-full border px-3.5 text-xs font-semibold ${
+            voiceJoined && !micMuted
+              ? 'border-[#79a86b] bg-[#244429] text-[#f6f1e9]'
+              : voiceJoined && micMuted
+                ? 'border-[#c4552d]/70 bg-[#5c2116] text-[#f9e5be]'
+                : 'border-[#d9b061]/45 bg-[#2d1d12] text-[#f9e5be]'
+          }`}
+        >
+          {voiceJoined && !micMuted ? (
+            <Mic size={14} aria-hidden="true" />
+          ) : (
+            <MicOff size={14} aria-hidden="true" />
+          )}
+          <span>{!voiceJoined ? 'Join Mic' : micMuted ? 'Mic Muted' : 'Mic On'}</span>
+        </button>
+
+        {isPerformer && (
+          <button
+            type="button"
+            data-testid="dare-screen-share-btn"
+            onClick={() => void toggleScreenShare()}
+            className={`inline-flex min-h-[44px] items-center gap-1.5 rounded-full border px-3.5 text-xs font-semibold ${
+              screenSharing
+                ? 'border-[#f6cf78] bg-[#8B611E] text-[#FFFDF9]'
+                : 'border-[#d9b061]/45 bg-[#234950] text-[#f6e6c6]'
+            }`}
+          >
+            <MonitorUp size={14} aria-hidden="true" />
+            <span>{screenSharing ? 'Stop Share' : 'Share Screen'}</span>
+          </button>
+        )}
+      </div>
+
+      {mediaError && (
+        <p role="alert" className="mt-2 text-center text-[11px] font-medium text-[#f59f8b]">
+          {mediaError}
+        </p>
+      )}
+    </section>
+  ) : null;
 
   return (
     <main className="vowlet-shell" data-testid="perform-screen">
@@ -118,6 +309,8 @@ export function PerformScreen() {
                 {privatePrompt?.text ?? 'Unsealing your prompt…'}
               </p>
             </div>
+
+            {dareStageBlock}
 
             {/* Truth Answer Input (optional: answer aloud or type) */}
             {!isDare && (
@@ -211,6 +404,8 @@ export function PerformScreen() {
                 Watch closely — you&apos;ll vote once they finish.
               </p>
             </div>
+
+            {dareStageBlock}
 
             {!me?.spectator && (
               <div className="mt-auto w-full pt-4">

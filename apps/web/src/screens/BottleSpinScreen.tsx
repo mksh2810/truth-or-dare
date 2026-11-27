@@ -6,10 +6,11 @@ import { toMillis } from '../design/TimerRing';
 import {
   AmberBottleSvg,
   BotanicalLayer,
-  PlayerAvatarArtwork,
+  PlayerSeatAvatar,
   TopBar,
   WoodenTableSvg,
 } from '../design/VowletUiPrimitives';
+import { useMediaCall } from '../media/useMediaCall';
 import { useGameStore } from '../state/useGameStore';
 
 export function BottleSpinScreen() {
@@ -27,6 +28,12 @@ export function BottleSpinScreen() {
 
   const [landed, setLanded] = useState(false);
   const landedTurnRef = useRef<number>(-1);
+
+  const voiceJoined = useMediaCall((s) => s.voiceJoined);
+  const micMuted = useMediaCall((s) => s.micMuted);
+  const localStream = useMediaCall((s) => s.localStream);
+  const remoteStreams = useMediaCall((s) => s.remoteStreams);
+  const remoteMediaState = useMediaCall((s) => s.remoteMediaState);
 
   const activePlayers = useMemo(
     () =>
@@ -156,6 +163,11 @@ export function BottleSpinScreen() {
             const top = 50 + (Math.sin(angleRad) * ry * 100) / 320;
             const isOnline = presence[player.uid]?.online ?? true;
             const isChosen = landed && player.uid === turn.performerUid;
+            const isMe = player.uid === auth?.uid;
+            const seatStream = isMe ? localStream : (remoteStreams[player.uid] ?? null);
+            const isVoiceActive = isMe
+              ? voiceJoined && !micMuted
+              : Boolean(remoteMediaState[player.uid]?.voice);
 
             return (
               <div
@@ -163,10 +175,13 @@ export function BottleSpinScreen() {
                 className="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-0.5"
                 style={{ left: `${left}%`, top: `${top}%`, opacity: isOnline ? 1 : 0.45 }}
               >
-                <PlayerAvatarArtwork
+                <PlayerSeatAvatar
                   name={player.name}
+                  stream={seatStream}
+                  muted
+                  isVoiceActive={isVoiceActive}
                   size={44}
-                  className={`rounded-full transition-shadow ${
+                  className={`transition-shadow ${
                     isChosen ? 'halo-chosen' : 'shadow-[0_4px_10px_rgba(0,0,0,0.6)]'
                   }`}
                 />

@@ -7,6 +7,7 @@ import {
   tallyVotes,
   TurnAdvanceSchema,
 } from '@vowlet/shared';
+import { getEnvConfig } from '../_lib/env.js';
 import { withArbiterAuth } from '../_lib/middleware.js';
 import {
   assertExpectedState,
@@ -39,6 +40,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
 
       const turn = await tx.getTurn(body.roomCode);
       const nextVersion = room.turnVersion + 1;
+      const env = getEnvConfig();
+      const canForce = Boolean(
+        body.force && env.useMemoryStore && process.env.NODE_ENV !== 'production',
+      );
 
       switch (room.phase) {
         case 'WRITING': {
@@ -54,7 +59,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
           const deadlineMs = room.phaseDeadlineAt ?? null;
           const deadlineReached = deadlineMs !== null && nowMs >= deadlineMs;
 
-          if (!allSealed && !deadlineReached) {
+          if (!allSealed && !deadlineReached && !canForce) {
             throw new ArbiterError(
               409,
               'DEADLINE_NOT_REACHED',
@@ -113,7 +118,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
             throw new ArbiterError(409, 'VERSION_MISMATCH', 'No active SPIN turn');
           }
           const deadlineMs = toMillis(turn.deadlineAt);
-          if (deadlineMs !== null && nowMs < deadlineMs) {
+          if (deadlineMs !== null && nowMs < deadlineMs && !canForce) {
             throw new ArbiterError(
               409,
               'DEADLINE_NOT_REACHED',
@@ -157,7 +162,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
             throw new ArbiterError(409, 'VERSION_MISMATCH', 'No active CHOOSE turn');
           }
           const deadlineMs = toMillis(turn.deadlineAt);
-          if (deadlineMs !== null && nowMs < deadlineMs) {
+          if (deadlineMs !== null && nowMs < deadlineMs && !canForce) {
             throw new ArbiterError(
               409,
               'DEADLINE_NOT_REACHED',
@@ -227,7 +232,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
           const allVoted = witnesses.length > 0 && validVotes.length >= witnesses.length;
           const deadlineReached = deadlineMs !== null && nowMs >= deadlineMs;
 
-          if (!allVoted && !deadlineReached) {
+          if (!allVoted && !deadlineReached && !canForce) {
             throw new ArbiterError(
               409,
               'DEADLINE_NOT_REACHED',
@@ -313,7 +318,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
             uid === room.hostUid || (turn !== null && uid === turn.performerUid);
           const deadlineReached = deadlineMs === null || nowMs >= deadlineMs;
 
-          if (!deadlineReached && !isHostOrPerformer) {
+          if (!deadlineReached && !isHostOrPerformer && !canForce) {
             throw new ArbiterError(
               409,
               'DEADLINE_NOT_REACHED',
